@@ -1,25 +1,39 @@
 import PhotoCamera from '@material-ui/icons/PhotoCamera';
 import Videocam from '@material-ui/icons/Videocam';
 
+import * as AxiosUtil from './AxiosUtil';
+
 export const IMAGE = "IMAGE";
 export const VIDEO = "VIDEO";
 
 export function getMediaType(type) {
-  if (type.toLowerCase().includes('image')) {
-    return IMAGE;
-  } else if (type.toLowerCase().includes('video')) {
-    return VIDEO;
-  }
+  return type.toLowerCase() === 'v' ? VIDEO : IMAGE;
+}
+
+export function getMediaPathPart(type) {
+  const mediaType = getMediaType(type);
+  return mediaType === VIDEO ? 'video' : 'image';
 }
 
 export function getMediaIcon(type) {
-  console.log('searchType ', type);
   const mediaType = getMediaType(type);
-  if (mediaType === IMAGE) {
-    return <PhotoCamera color="secondary" />;
-  } else if (mediaType === VIDEO) {
-    return <Videocam color="secondary" />;
-  }
+  return mediaType === VIDEO ? <Videocam color="secondary" /> : <PhotoCamera color="secondary" />;
+}
+
+export function getMediaTypes() {
+  return [ { code: 'I', name: 'Images'}, { code: 'V', name: 'Videos'}];
+}
+
+export function getMediaTypeLabel(type) {
+  const mediaType = getMediaType(type);
+  return mediaType === VIDEO ? 'Videos' : 'Images';
+}
+
+export function getPlayer(type, id) {
+  const mediaType = getMediaType(type);
+  return mediaType === VIDEO
+      ? <video controls autoPlay src={getContentUrl(type, id)} width="100%" height={520} />
+      : <img src={getContentUrl(type, id)} width="100%" />
 }
 
 export function  prettifyFileSize(size) {
@@ -27,28 +41,10 @@ export function  prettifyFileSize(size) {
   return ( size / Math.pow(1024, i) ).toFixed(2) * 1 + ' ' + ['B', 'kB', 'MB', 'GB', 'TB'][i];
 }
 
-export function getQuality(code) {
-  if (code == 4) {
-    return "HD";
-  } else if (code == 3) {
-    return "HI";
-  } else if (code == 2) {
-    return "MD";
-  } else if (code == 1) {
-    return "LO";
-  }
-  return "MD";
+export function getContentUrl(type, id) {
+  return `${AxiosUtil.getHost()}/content/${type}/${id}`;
 }
 
-export function getQualityCode(val) {
-  if (val === 'HD') {
-    return 4;
-  } else if (val === 'HI') {
-    return 3;
-  } else if (val === 'MD') {
-    return 2;
-  } else if (val === 'LO') {
-    return 1;
-  }
-  return 2;
+export function getThumbnailUrl(type, id) {
+  return `${AxiosUtil.getHost()}/content/${type}/${id}/thumb`;
 }

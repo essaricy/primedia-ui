@@ -47,9 +47,7 @@ export default class Search extends React.Component {
   handleMediaUpdate = (type, id, field, val) => {
     MediaService.update(type, id, field, val)
     .then(response => {
-      if (field !== 'views') {
-        this.setState({ serviceMessage: `${field} updated successfully!` });
-      }
+      this.setState({ serviceMessage: `${field} updated successfully!` });
       // Update the search result
       var foundIndex = this.state.results.findIndex(x => x.id == response.id);
       this.state.results[foundIndex] = response;
@@ -63,8 +61,7 @@ export default class Search extends React.Component {
     return (
     <React.Fragment>
       <Typography variant="subtitle1" display="inline" style={{marginLeft: 20 }}>
-        {results.length === 0 ? 'No' : results.length}
-        {type === MediaUtil.IMAGE ? ' Images ' : ' Videos ' } found for : {' '}
+        { `${results.length === 0 ? 'No' : results.length} ${MediaUtil.getMediaTypeLabel(type)} found for ` }
         <Typography variant="button" display="inline" gutterBottom>{text}</Typography>
       </Typography>
 

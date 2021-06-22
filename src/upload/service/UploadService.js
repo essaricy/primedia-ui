@@ -2,15 +2,12 @@ import * as AxiosUtil from '../../app/util/AxiosUtil';
 import * as MediaUtil from '../../app/util/MediaUtil';
 
 export function upload(fileInfo, file) {
-  const mediaType = MediaUtil.getMediaType(fileInfo.type);
-  console.log("mediaType: ", mediaType);
-
-  const path = mediaType === MediaUtil.IMAGE ? 'image' : 'video';
+  const path = MediaUtil.getMediaPathPart(fileInfo.type);
   const formData = new FormData();
   formData.append('request', JSON.stringify({
     name: fileInfo.name,
     rating: fileInfo.rating,
-    quality: MediaUtil.getQuality(fileInfo.quality),
+    quality: fileInfo.quality,
     tags: fileInfo.tags,
     size: fileInfo.size
   }));

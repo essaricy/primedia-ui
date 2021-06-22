@@ -17,8 +17,6 @@ import Rate from '../../app/components/Rate';
 import Quality from '../../app/components/Quality';
 import ChipInput from "material-ui-chip-input";
 
-
-import * as AxiosUtil from '../util/AxiosUtil';
 import * as MediaUtil from '../util/MediaUtil';
 
 const useStyles = makeStyles((theme) => ({
@@ -86,17 +84,12 @@ export default function MediaPlayer(props) {
       {
         media && media.id &&
         <React.Fragment>
-          { media.type === MediaUtil.VIDEO
-            ? <video controls autoPlay
-                src={AxiosUtil.getContent(media.type, media.id)}
-                width="100%" height={520} />
-            : <img src={AxiosUtil.getContent(media.type, media.id)}
-                width="100%" />
-          }
+          { MediaUtil.getPlayer(media.type, media.id)}
+
           <Rate value={media.rating} style={{ ...leftFieldStyles, top: 70 }}
             onRatingChange={(val) => handleMediaUpdate('rating', val)} />
-          <Quality value={MediaUtil.getQualityCode(media.quality)} style={{ ...leftFieldStyles, top: 100 }}
-            onQualityChange={(val) => handleMediaUpdate('quality', MediaUtil.getQuality(val))} />
+          <Quality value={media.quality} style={{ ...leftFieldStyles, top: 100 }}
+            onQualityChange={(val) => handleMediaUpdate('quality', val)} />
           <ChipInput value={media.tags} style={{ ...leftFieldStyles, top: 130 }}
             onAdd={handleTagAdd}
             onDelete={handleTagDelete}

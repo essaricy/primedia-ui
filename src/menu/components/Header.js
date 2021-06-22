@@ -164,13 +164,13 @@ export default function Header() {
       PaperProps={{ style: { marginTop: 40, marginLeft: 10 } }}
       onClose={() => setSearchTypeAnchor(null)}>
       {
-        [MediaUtil.IMAGE, MediaUtil.VIDEO].map((option) => (
-          <MenuItem key={option} selected={option === searchType}
+        MediaUtil.getMediaTypes().map((option) => (
+          <MenuItem key={option} selected={option.code === searchType}
             onClick={() => {
-              setSearchType(option);
+              setSearchType(option.code);
               setSearchTypeAnchor(null);
             }}>
-            {option === MediaUtil.IMAGE ? 'Images' : 'Videos' }
+            {option.name}
           </MenuItem>
       ))}
     </Menu>;

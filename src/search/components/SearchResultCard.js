@@ -11,19 +11,18 @@ import LikesIcon from '@material-ui/icons/ThumbUp';
 
 import moment from "moment";
 
-import * as AxiosUtil from '../../app/util/AxiosUtil';
 import * as MediaUtil from '../../app/util/MediaUtil';
 
 export default function SearchResultCard(props) {
   const { media, onMediaClick } = props;
   const { id, name, type, views, likes, uploadDate, lastSeen } = media;
-  const src = AxiosUtil.getThumbnail(type, id);
 
   return (
     <Card style={{maxWidth: 250}}>
       <CardActionArea>
         <CardMedia style={{height: 140}}
-          src={src} title={name}
+          src={MediaUtil.getThumbnailUrl(type, id)}
+          title={name}
           component="img"
           onClick={onMediaClick}/>
         <CardContent>
