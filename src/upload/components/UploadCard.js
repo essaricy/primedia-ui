@@ -40,15 +40,13 @@ export default function UploadCard(props) {
   const { quality, onQualityChange } = props;
   const { tags, onTagAdd, onTagDelete } = props;
 
+  console.log('UploadCard file name', name);
   const [mediaName, setMediaName] = React.useState(name);
 
   const getContent = (type, src) => {
-    const mediaType = MediaUtil.getMediaType(type);
-    if (mediaType === MediaUtil.IMAGE) {
-      return <img className={classes.image} src={src} />;
-    } else if (mediaType === MediaUtil.VIDEO) {
-      return <video className={classes.image} src={src} />;
-    }
+    return type === MediaUtil.VIDEO
+        ? <video className={classes.image} src={src} />
+        : <img className={classes.image} src={src} />;
   }
 
   return (
@@ -60,7 +58,7 @@ export default function UploadCard(props) {
             <Grid item xs container direction="column" spacing={2}>
               <Grid item xs>
                 <FormControl fullWidth className={classes.formControl}>
-                  <TextField label="Name" value={mediaName}
+                  <TextField label="Name" defaultValue={name} value={mediaName}
                     onChange={(e) => {setMediaName(e.target.value)}}
                     onBlur={onNameChange} />
                 </FormControl>

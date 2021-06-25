@@ -10,9 +10,18 @@ export function getMediaType(type) {
   return type.toLowerCase() === 'v' ? VIDEO : IMAGE;
 }
 
+export function getIdentfiedType(type) {
+  if (type.toLowerCase().includes('video')) {
+    return VIDEO;
+  } else if (type.toLowerCase().includes('image')) {
+    return IMAGE;
+  };
+  return null;
+}
+
 export function getMediaPathPart(type) {
   const mediaType = getMediaType(type);
-  return mediaType === VIDEO ? 'video' : 'image';
+  return mediaType === VIDEO ? 'V' : 'I';
 }
 
 export function getMediaIcon(type) {

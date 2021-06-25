@@ -8,7 +8,7 @@ export function upload(fileInfo, file) {
     name: fileInfo.name,
     rating: fileInfo.rating,
     quality: fileInfo.quality,
-    tags: fileInfo.tags,
+    tags: fileInfo.tags === "" ? [] : fileInfo.tags,
     size: fileInfo.size
   }));
   formData.append('file', file);
@@ -18,5 +18,5 @@ export function upload(fileInfo, file) {
       'content-type': 'multipart/form-data'
     }
   }
-  return AxiosUtil.post(path, formData, config);
+  return AxiosUtil.post(`media/${path}`, formData, config);
 }

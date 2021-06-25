@@ -1,5 +1,4 @@
 import React from 'react';
-
 import './Upload.css';
 
 import LinearProgress from '@material-ui/core/LinearProgress';
@@ -8,6 +7,10 @@ import Snackbar from '@material-ui/core/Snackbar';
 
 import UploadCard from './UploadCard';
 import * as UploadService from '../service/UploadService';
+import * as ProgressService from '../../progress/service/ProgressService';
+
+import * as MediaUtil from '../../app/util/MediaUtil';
+import ThickProgressBar from '../../app/components/ThickProgressBar';
 
 export default class Upload extends React.Component {
   constructor(props) {
@@ -15,8 +18,6 @@ export default class Upload extends React.Component {
 
     this.state = {
       selectedFile: null,
-      progress: false,
-      uploadMessage: null,
       fileInfo: {
         name: '',
         type: '',
@@ -24,12 +25,21 @@ export default class Upload extends React.Component {
         rating: 3,
         quality: 3,
         tags: [ ]
-      }
+      },
+      isInProgress: false,
+      uploadMessage: null,
+      uploadQueue: []
     };
     this.selectFile = this.selectFile.bind(this);
     this.upload = this.upload.bind(this);
     this.makeMediaName = this.makeMediaName.bind(this);
-    //this.handleRatingChange = this.handleRatingChange.bind(this);
+  }
+
+  componentDidMount() {
+    ProgressService.getAll()
+    .then((response) => {
+      this.setState({uploadQueue: response})
+    });
   }
 
   makeMediaName(fileName) {
@@ -38,13 +48,20 @@ export default class Upload extends React.Component {
 
   selectFile(event) {
     const file = event.target.files[0];
-    this.setState({ selectedFile: file, fileInfo: {
-      ...this.state.fileInfo,
-      name: this.makeMediaName(file.name),
-      type: file.type,
-      size: file.size,
-      //tags: [this.makeMediaName(file.name)]
-    }});
+    if (file) {
+      const type = MediaUtil.getIdentfiedType(file.type);
+      if (type == null) {
+        this.setState({ uploadMessage: 'Select only image or video files' });
+      } else {
+        this.setState({ selectedFile: file, fileInfo: {
+          ...this.state.fileInfo,
+          name: this.makeMediaName(file.name),
+          type: type,
+          size: file.size,
+          //tags: [this.makeMediaName(file.name)]
+        }});
+      }
+    }
   }
 
   closeAlert = () => {
@@ -83,15 +100,17 @@ export default class Upload extends React.Component {
   }
 
   upload() {
-    this.setState({ progress: true });
+    this.setState({ isInProgress: true });
     const { fileInfo, selectedFile } = this.state;
     UploadService.upload(fileInfo, selectedFile)
-    .then(() => {
-      this.setState({ progress: false, uploadMessage: 'Uploaded Successfully!' });
+    .then((progress) => {
+      const uploadQueue = this.state.uploadQueue;
+      uploadQueue.push(progress);
+      this.setState({ isInProgress: false, uploadQueue: uploadQueue, uploadMessage: 'File added to upload queue' });
     })
     .catch(e => {
       console.log("Upload.js error: ", e);
-      this.setState({ progress: false, uploadMessage: e.message });
+      this.setState({ isInProgress: false, uploadMessage: e.message });
     });
   }
 
@@ -99,8 +118,9 @@ export default class Upload extends React.Component {
     const {
       selectedFile,
       fileInfo,
-      progress,
-      uploadMessage
+      isInProgress,
+      uploadMessage,
+      uploadQueue
     } = this.state;
     
     return (
@@ -111,7 +131,7 @@ export default class Upload extends React.Component {
             name="btn-upload"
             style={{ display: 'none' }}
             type="file"
-            disabled={progress}
+            disabled={isInProgress}
             onChange={this.selectFile} />
           <Button
             className="btn-choose"
@@ -126,12 +146,12 @@ export default class Upload extends React.Component {
           color="primary"
           variant="contained"
           component="span"
-          disabled={selectedFile == null || progress}
+          disabled={selectedFile == null || isInProgress}
           onClick={this.upload}>
           Upload
         </Button>
 
-        {progress && (
+        {isInProgress && (
           <Box className="mb25" display="flex" alignItems="center">
             <Box width="100%" mr={1}>
               <LinearProgress color="secondary" /> 
@@ -155,6 +175,9 @@ export default class Upload extends React.Component {
             onTagDelete={this.handleTagDelete}
           />
         )}
+
+        { uploadQueue.map((q) => <ThickProgressBar key={q.id} value={70} progress={q}/>) }
+
         {
         uploadMessage &&
         <Snackbar anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
