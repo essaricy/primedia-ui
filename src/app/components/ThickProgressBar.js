@@ -33,9 +33,9 @@ function LinearProgressWithLabel(props) {
 
 const progressValues = {
   "REQUESTED": { value: 25, style: { background: 'green' } },
-  "PROCESS_STARTED": { value: 50, style: { background: 'green' } },
-  "THUMBNAIL_GENERATED": { value: 75, style: { background: 'green' } },
-  "THUMBNAIL_FAILED": { value: 75, style: { background: 'red' } },
+  "PROC_START": { value: 50, style: { background: 'green' } },
+  "THUMB_DONE": { value: 75, style: { background: 'green' } },
+  "THUMB_FAIL": { value: 75, style: { background: 'red' } },
   "SAVE_DONE": { value: 100, style: { background: 'green' } },
   "SAVE_FAIL": { value: 100, style: { background: 'red' } }
 };
