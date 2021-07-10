@@ -19,7 +19,9 @@ export default function searchReducer(state = initialState, action) {
       return {
         ...state,
         text: action.payload,
-        inProgress: true
+        inProgress: true,
+        results: [],
+        error: null
       };
     case SearchActionTypes.SET_SEARCH_RESULTS:
       return { 
@@ -28,10 +30,12 @@ export default function searchReducer(state = initialState, action) {
         results: action.payload
       };
     case SearchActionTypes.SET_SEARCH_ERROR:
+      const { message } = action.payload;
+      const error = message === 'Network Error' ? 'Service is unavailable' : message;
       return { 
         ...state,
         inProgress: false,
-        error: action.payload
+        error: error
       };
     default:
       return state;

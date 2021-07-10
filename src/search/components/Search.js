@@ -23,6 +23,7 @@ class Search extends React.Component {
     this.handleMediaPlayerOpen = this.handleMediaPlayerOpen.bind(this);
     this.handleMediaPlayerClose = this.handleMediaPlayerClose.bind(this);
     this.handleMediaUpdate = this.handleMediaUpdate.bind(this);
+    this.getSearchResultText = this.getSearchResultText.bind(this);
   }
 
   handleMediaPlayerOpen = (media) => {
@@ -46,16 +47,30 @@ class Search extends React.Component {
     .catch(e => { this.setState({ serviceMessage: e.message }); });
   }
 
+  getSearchResultText() {
+    const { mode, text, results, inProgress, error } = this.props;
+    let message = '';
+    if (inProgress == true) {
+      message = `Searching for ${text}`;
+    } else if (error) {
+      message = error;
+    } else if (results.length === 0) {
+      message = `No ${MediaUtil.getMediaName(mode)} found for ${text}`;
+    } else {
+      message = `${results.length} ${MediaUtil.getMediaName(mode)} found for ${text}`;
+    }
+    return <Typography variant="subtitle1" display="inline" style={{marginLeft: 20 }}>
+      {message}
+    </Typography>;
+  }
+
   render() {
     const { openPlayer, selectedMedia } = this.state;
-    const { mode, text, results } = this.props;
+    const { results } = this.props;
 
     return (
     <React.Fragment>
-      <Typography variant="subtitle1" display="inline" style={{marginLeft: 20 }}>
-        { `${results.length === 0 ? 'No' : results.length} ${MediaUtil.getMediaName(mode)} found for ` }
-        <Typography variant="button" display="inline" gutterBottom>{text}</Typography>
-      </Typography>
+      {this.getSearchResultText()}
 
       <Grid container spacing={2} style={{flexGrow: 1, marginTop: 20, marginLeft: 20 }}>
         <Grid item xs={12}>

@@ -126,7 +126,7 @@ function Header(props) {
   const searchByText = (e) => {
     const value = e.target.value;
     if (e.key === 'Enter' && value.length >= 3) {
-      history.push('/search');
+      //history.push('/search');
       props.onSearchValueChange(searchMode, value);
     }
   }
