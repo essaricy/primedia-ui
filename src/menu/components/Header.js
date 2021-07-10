@@ -1,5 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import { useHistory } from "react-router-dom";
 import { fade, makeStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
@@ -25,7 +26,6 @@ import MailIcon from '@material-ui/icons/Mail'
 
 import { Link } from "react-router-dom";
 
-import history from '../../app/config/history';
 import * as MediaUtil from '../../app/util/MediaUtil';
 import * as SearchActions from '../../search/actions/SearchActions';
 import * as SearchSelectors from '../../search/selectors/SearchSelectors';
@@ -102,6 +102,7 @@ const useStyles = makeStyles((theme) => ({
 
 function Header(props) {
   const classes = useStyles();
+  const history = useHistory();
 
   const [ showSideMenu, setShowSideMenu ] = React.useState(false);
   const [ profileMenuAnchor, setProfileMenuAnchor ] = React.useState(null);
@@ -126,8 +127,8 @@ function Header(props) {
   const searchByText = (e) => {
     const value = e.target.value;
     if (e.key === 'Enter' && value.length >= 3) {
-      history.push('/search');
       props.onSearchValueChange(searchMode, value);
+      history.push('/search');
     }
   }
 
