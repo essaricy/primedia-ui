@@ -6,6 +6,25 @@ import * as AxiosUtil from './AxiosUtil';
 export const IMAGE = "IMAGE";
 export const VIDEO = "VIDEO";
 
+
+export function getMediaTypes() {
+  return [ { code: 'I', name: 'Images'}, { code: 'V', name: 'Videos'}];
+}
+
+export function getMediaIcon(code) {
+  return code === "V" ? <Videocam color="secondary" /> : <PhotoCamera color="secondary" />;
+}
+
+export function getMediaName(code) {
+  return getMediaTypes().find(m => m.code === code).name;
+}
+
+/////////////////////////////
+
+
+
+
+
 export function getMediaType(type) {
   return type.toLowerCase() === 'v' ? VIDEO : IMAGE;
 }
@@ -24,18 +43,10 @@ export function getMediaPathPart(type) {
   return mediaType === VIDEO ? 'V' : 'I';
 }
 
-export function getMediaIcon(type) {
-  const mediaType = getMediaType(type);
-  return mediaType === VIDEO ? <Videocam color="secondary" /> : <PhotoCamera color="secondary" />;
-}
 
-export function getMediaTypes() {
-  return [ { code: 'I', name: 'Images'}, { code: 'V', name: 'Videos'}];
-}
 
 export function getMediaTypeLabel(type) {
-  const mediaType = getMediaType(type);
-  return mediaType === VIDEO ? 'Videos' : 'Images';
+  return type === "V" || type == "VIDEO" ? 'Videos' : 'Images';
 }
 
 export function getPlayer(type, id) {

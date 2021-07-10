@@ -105,7 +105,7 @@ export default class Upload extends React.Component {
     UploadService.upload(fileInfo, selectedFile)
     .then((progress) => {
       const uploadQueue = this.state.uploadQueue;
-      uploadQueue.push(progress);
+      uploadQueue.unshift(progress);
       this.setState({ isInProgress: false, uploadQueue: uploadQueue, uploadMessage: 'File added to upload queue' });
     })
     .catch(e => {

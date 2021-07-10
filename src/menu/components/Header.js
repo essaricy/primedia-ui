@@ -1,4 +1,5 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import { fade, makeStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
@@ -21,12 +22,13 @@ import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import InboxIcon from '@material-ui/icons/MoveToInbox';
 import MailIcon from '@material-ui/icons/Mail'
-import ArrowDownIcon from '@material-ui/icons/ArrowDropDown';
 
 import { Link } from "react-router-dom";
 
 import history from '../../app/config/history';
 import * as MediaUtil from '../../app/util/MediaUtil';
+import * as SearchActions from '../../search/actions/SearchActions';
+import * as SearchSelectors from '../../search/selectors/SearchSelectors';
 
 const useStyles = makeStyles((theme) => ({
   grow: {
@@ -98,23 +100,36 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function Header() {
+function Header(props) {
   const classes = useStyles();
 
   const [ showSideMenu, setShowSideMenu ] = React.useState(false);
   const [ profileMenuAnchor, setProfileMenuAnchor ] = React.useState(null);
   const [ searchTypeAnchor, setSearchTypeAnchor ] = React.useState(null);
-  const [ searchType, setSearchType ] = React.useState(MediaUtil.IMAGE);
 
   const showProfileMenu = Boolean(profileMenuAnchor);
   const showSearchTypeDropDown = Boolean(searchTypeAnchor);
 
+  const { searchMode } = props;
   const toggleDrawer = (show) => (event) => {
     if (event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')) {
       return;
     }
     setShowSideMenu(show);
   };
+
+  const setSearchMode = (mode) => {
+    setSearchTypeAnchor(null);
+    props.onSearchModeChange(mode);
+  }
+
+  const searchByText = (e) => {
+    const value = e.target.value;
+    if (e.key === 'Enter' && value.length >= 3) {
+      history.push('/search');
+      props.onSearchValueChange(searchMode, value);
+    }
+  }
 
   const menuId = 'primary-search-account-menu';
   const renderMenu = (
@@ -157,7 +172,7 @@ export default function Header() {
     </div>
   );
 
-  const getSearchTypeMenu= () => {
+  const getSearchModes= () => {
     return <Menu id="search-type-menu" keepMounted
       open={showSearchTypeDropDown}
       anchorEl={searchTypeAnchor}
@@ -165,10 +180,9 @@ export default function Header() {
       onClose={() => setSearchTypeAnchor(null)}>
       {
         MediaUtil.getMediaTypes().map((option) => (
-          <MenuItem key={option} selected={option.code === searchType}
+          <MenuItem key={option} selected={option.code === searchMode}
             onClick={() => {
-              setSearchType(option.code);
-              setSearchTypeAnchor(null);
+              setSearchMode(option.code);
             }}>
             {option.name}
           </MenuItem>
@@ -190,7 +204,7 @@ export default function Header() {
             <MenuIcon />
           </IconButton>
           <MenuItem component={Link} to={'/'}>
-            <Typography className={classes.title} variant="h6" noWrap>MyVid</Typography>
+            <Typography className={classes.title} variant="h6" noWrap>Primedia</Typography>
           </MenuItem>
           <div className={classes.search}>
             <div className={classes.searchIcon}>
@@ -203,23 +217,13 @@ export default function Header() {
                 input: classes.inputInput,
               }}
               inputProps={{ 'aria-label': 'search' }}
-              onKeyDown={(e) => {
-                if (e.key === 'Enter') {
-                  const searchValue = e.target.value;
-                  if (searchValue.length >= 3) {
-                    history.push({
-                      pathname: '/search',
-                      state: { type: searchType, text: searchValue }
-                    });
-                  }
-                }
-              }}
+              onKeyDown={searchByText}
             />
             <IconButton aria-label="more" aria-controls="search-type-menu" aria-haspopup="true"
               onClick={(e) => setSearchTypeAnchor(e.currentTarget)}>
-              {MediaUtil.getMediaIcon(searchType)}
+              {MediaUtil.getMediaIcon(searchMode)}
             </IconButton>
-            {getSearchTypeMenu()}
+            {getSearchModes()}
           </div>
           <div className={classes.grow} />
           <div className={classes.sectionDesktop}>
@@ -252,3 +256,18 @@ export default function Header() {
     </div>
   );
 }
+
+const mapState = state => {
+  return {
+    searchMode: SearchSelectors.getSearchMode(state),
+    searchValue: SearchSelectors.getSearchText(state)
+  };
+};
+
+const mapActions = {
+  onSearchModeChange: SearchActions.onSearchMode,
+  onSearchValueChange: SearchActions.onSearchText
+};
+
+const HeaderContainer = connect(mapState, mapActions)(Header);
+export default HeaderContainer;

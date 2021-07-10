@@ -18,8 +18,10 @@
     "moment": "^2.29.1",
     "react": "latest",
     "react-dom": "latest",
+    "react-redux": "^7.2.4",
     "react-router-dom": "^5.2.0",
-    "react-scripts": "latest"
+    "react-scripts": "latest",
+    "redux-thunk": "^2.3.0"
   },
   "browserslist": {
     "production": [
