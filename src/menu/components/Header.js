@@ -205,6 +205,7 @@ function Header(props) {
             <MenuIcon />
           </IconButton>
           <MenuItem component={Link} to={'/'}>
+            <img src="logo.png" width={50} height={30} style={{marginLeft: -30}}/>
             <Typography className={classes.title} variant="h6" noWrap>Primedia</Typography>
           </MenuItem>
           <div className={classes.search}>

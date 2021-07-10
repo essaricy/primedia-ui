@@ -61,7 +61,7 @@ class Search extends React.Component {
     } else {
       message = `${results.length} ${MediaUtil.getMediaName(mode)} found for ${text}`;
     }
-    return <Typography variant="subtitle1" display="inline" style={{marginLeft: 20 }}>
+    return <Typography variant="subtitle1" display="inline" style={{marginLeft: 30, marginTop: 10 }}>
       {message}
     </Typography>;
   }
@@ -75,12 +75,12 @@ class Search extends React.Component {
       {this.getSearchResultText()}
 
       { inProgress && 
-      <Grid container spacing={2} style={{flexGrow: 1, marginTop: 0, marginLeft: 20 }}>
+      <Grid container spacing={2} style={{flexGrow: 1, marginTop: 20, marginLeft: 30 }}>
         {[...Array(10)].map((index) => (
-        <Box key={index} width={250} height={140} my={4}>
-          <Skeleton variant="rect" width={210} height={118} />
-          <Skeleton variant="text" width={210} />
-          <Skeleton variant="text" width={210} />
+        <Box key={index} width={250} height={140} marginRight={3} marginBottom={8}>
+          <Skeleton variant="rect" width={250} height={140} />
+          <Skeleton variant="text" width={250} />
+          <Skeleton variant="text" width={250} />
         </Box>))
         }
       </Grid>
