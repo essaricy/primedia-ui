@@ -11,6 +11,8 @@ import * as MediaUtil from '../../app/util/MediaUtil';
 
 import * as SearchSelectors from '../selectors/SearchSelectors';
 import * as SearchActions from '../actions/SearchActions';
+import { Skeleton } from '@material-ui/lab';
+import { Box } from '@material-ui/core';
 
 class Search extends React.Component {
   constructor(props) {
@@ -66,11 +68,23 @@ class Search extends React.Component {
 
   render() {
     const { openPlayer, selectedMedia } = this.state;
-    const { results } = this.props;
+    const { inProgress, results } = this.props;
 
     return (
     <React.Fragment>
       {this.getSearchResultText()}
+
+      { inProgress && 
+      <Grid container spacing={2} style={{flexGrow: 1, marginTop: 0, marginLeft: 20 }}>
+        {[...Array(10)].map((index) => (
+        <Box key={index} width={250} height={140} my={4}>
+          <Skeleton variant="rect" width={210} height={118} />
+          <Skeleton variant="text" width={210} />
+          <Skeleton variant="text" width={210} />
+        </Box>))
+        }
+      </Grid>
+      }
 
       <Grid container spacing={2} style={{flexGrow: 1, marginTop: 20, marginLeft: 20 }}>
         <Grid item xs={12}>

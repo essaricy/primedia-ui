@@ -1,5 +1,6 @@
 import * as SearchActionTypes from '../actiontypes/SearchActionTypes';
 import * as AxiosUtil from '../../app/util/AxiosUtil';
+import * as MediaUtil from '../../app/util/MediaUtil';
 
 const setSearchMode = (mode) => {
   return { type: SearchActionTypes.SET_SEARCH_MODE, payload: mode };
@@ -27,7 +28,7 @@ export function onSearchMode(mode) {
 export function onSearchText(mode, text) {
   return dispatch => {
     dispatch(setSearchText(text));
-    AxiosUtil.get(`media/${mode}?s=${text}`)
+    AxiosUtil.get(`media/${MediaUtil.getMediaPath(mode)}?s=${text}`)
     .then((results) => {
       dispatch(setSearchResults(results));
     })

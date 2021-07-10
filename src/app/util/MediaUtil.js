@@ -19,6 +19,10 @@ export function getMediaName(code) {
   return getMediaTypes().find(m => m.code === code).name;
 }
 
+export function getMediaPath(code) {
+  return code === "V" ? "video" : "image";
+}
+
 /////////////////////////////
 
 
