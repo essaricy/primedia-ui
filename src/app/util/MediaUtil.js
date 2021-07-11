@@ -57,7 +57,7 @@ export function getPlayer(type, id) {
   const mediaType = getMediaType(type);
   return mediaType === VIDEO
       ? <video controls autoPlay src={getContentUrl(type, id)} width="100%" height={520} />
-      : <img src={getContentUrl(type, id)} width="100%" />
+      : <img src={getContentUrl(type, id)} height={380} />
 }
 
 export function  prettifyFileSize(size) {

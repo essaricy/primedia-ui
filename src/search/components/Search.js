@@ -1,56 +1,28 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import { useHistory } from "react-router-dom";
 
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 
 import SearchResultCard from './SearchResultCard';
-import MediaPlayer from '../../app/components/MediaPlayer';
-import * as MediaService from '../../media/service/MediaService';
 import * as MediaUtil from '../../app/util/MediaUtil';
+import * as SkeletonUtil from '../../app/util/SkeletonUtil';
 
 import * as SearchSelectors from '../selectors/SearchSelectors';
 import * as SearchActions from '../actions/SearchActions';
-import { Skeleton } from '@material-ui/lab';
-import { Box } from '@material-ui/core';
+import * as WatchActions from '../../watch/actions/WatchActions';
 
-class Search extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      openPlayer: false,
-      selectedMedia: {},
-      serviceMessage: null,
-    }
-    this.handleMediaPlayerOpen = this.handleMediaPlayerOpen.bind(this);
-    this.handleMediaPlayerClose = this.handleMediaPlayerClose.bind(this);
-    this.handleMediaUpdate = this.handleMediaUpdate.bind(this);
-    this.getSearchResultText = this.getSearchResultText.bind(this);
+function Search(props) {
+  const history = useHistory();
+
+  const handleMediaClick = (media) => {
+    props.onMediaClick(media);
+    history.push('/watch');
   }
 
-  handleMediaPlayerOpen = (media) => {
-    media.views=media.views+1;
-    this.setState({ openPlayer: true, selectedMedia: media });
-    this.handleMediaUpdate(media.type, media.id, 'views', true);
-  }
-
-  handleMediaPlayerClose = () => {
-    this.setState({ openPlayer: false, selectedMedia: {} });
-  }
-
-  handleMediaUpdate = (type, id, field, val) => {
-    MediaService.update(type, id, field, val)
-    .then(response => {
-      this.setState({ serviceMessage: `${field} updated successfully!` });
-      // Update the search result
-      var foundIndex = this.state.results.findIndex(x => x.id == response.id);
-      this.state.results[foundIndex] = response;
-    })
-    .catch(e => { this.setState({ serviceMessage: e.message }); });
-  }
-
-  getSearchResultText() {
-    const { mode, text, results, inProgress, error } = this.props;
+  const getSearchResultText = () => {
+    const { mode, text, results, inProgress, error } = props;
     let message = '';
     if (inProgress == true) {
       message = `Searching for ${text}`;
@@ -66,50 +38,34 @@ class Search extends React.Component {
     </Typography>;
   }
 
-  render() {
-    const { openPlayer, selectedMedia } = this.state;
-    const { inProgress, results } = this.props;
-
-    return (
-    <React.Fragment>
-      {this.getSearchResultText()}
-
-      { inProgress && 
-      <Grid container spacing={2} style={{flexGrow: 1, marginTop: 20, marginLeft: 30 }}>
-        {[...Array(10)].map((index) => (
-        <Box key={index} width={250} height={140} marginRight={3} marginBottom={8}>
-          <Skeleton variant="rect" width={250} height={140} />
-          <Skeleton variant="text" width={250} />
-          <Skeleton variant="text" width={250} />
-        </Box>))
-        }
-      </Grid>
-      }
-
-      <Grid container spacing={2} style={{flexGrow: 1, marginTop: 20, marginLeft: 20 }}>
-        <Grid item xs={12}>
-          <Grid container spacing={3}>
-            {results.map((media) => (
-              <Grid key={media.id} item>
-                <SearchResultCard media={media}
-                  onMediaClick={() => this.handleMediaPlayerOpen(media)} />
-              </Grid>
-            ))}
-          </Grid>
+  const { inProgress, results } = props;
+  return (
+  <React.Fragment>
+    {getSearchResultText()}
+    { inProgress && SkeletonUtil.getBoxes(10) }
+    <Grid container spacing={2} style={{flexGrow: 1, marginTop: 20, marginLeft: 20 }}>
+      <Grid item xs={12}>
+        <Grid container spacing={3}>
+          {results.map((media) => (
+            <Grid key={media.id} item>
+              <SearchResultCard media={media}
+                onMediaClick={() => handleMediaClick(media)} />
+            </Grid>
+          ))}
         </Grid>
       </Grid>
-      <MediaPlayer open={openPlayer} media={selectedMedia}
-        onMediaPlayerClose={this.handleMediaPlayerClose}
-        onMediaUpdate={this.handleMediaUpdate}
-       />
-    </React.Fragment>);
-  }
+    </Grid>
+  </React.Fragment>);
 }
+
 const mapState = state => {
   return SearchSelectors.getSearch(state);
 };
+
 const mapActions = {
-  onLoad: SearchActions.onSearchText
+  onLoad: SearchActions.onSearchText,
+  onMediaClick: WatchActions.onWatchMedia
 }
+
 const SearchContainer = connect(mapState, mapActions)(Search);
 export default SearchContainer;

@@ -1,0 +1,36 @@
+import * as WatchActionTypes from '../actiontypes/WatchActionTypes';
+
+const initialState = {
+  id: null,
+  name: null,
+  type: null,
+  quality: 0,
+  size: 0,
+  rating: 0,
+  tags: [],
+  views: 0,
+  likes: 0,
+  uploadDate: null,
+  lastSeen: null
+};
+
+export default function watchReducer(state = initialState, action) {
+  switch (action.type) {
+    case WatchActionTypes.SET_MEDIA:
+      return { ...action.payload };
+    case WatchActionTypes.UPDATE_VIEW_COUNT:
+      return { ...state, views: state.views + 1 };
+    case WatchActionTypes.UPDATE_NAME:
+      return { ...state, name: action.payload };
+    case WatchActionTypes.SET_QUALITY:
+      return { ...state, quality: action.payload };
+    case WatchActionTypes.SET_RATING:
+      return { ...state, rating: action.payload };
+    case WatchActionTypes.SET_TAGS:
+      return { ...state, tags: action.payload };
+    case WatchActionTypes.ADD_LIKE:
+      return { ...state, likes: state.likes + 1 };
+    default:
+      return state;
+  }
+};

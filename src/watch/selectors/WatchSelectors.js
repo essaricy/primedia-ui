@@ -1,0 +1,1 @@
+export const getWatch = (state) => state.watch; 

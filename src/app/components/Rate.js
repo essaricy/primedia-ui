@@ -26,8 +26,8 @@ export default function Rate(props) {
   const { value, style } = props;
   const classes = useStyles();
 
-  const handleRatingChange = (e, rating) => {
-    props.onRatingChange && props.onRatingChange(rating);
+  const handleChange = (e, rating) => {
+    props.onChange && props.onChange(rating);
   }
 
   return (
@@ -35,7 +35,7 @@ export default function Rate(props) {
       <Rating size="small"
         defaultValue={value}
         icon={<FavoriteIcon fontSize="inherit" />}
-        onChange={handleRatingChange}
+        onChange={handleChange}
         onChangeActive={(event, newHover) => {
           setHover(newHover);
         }}

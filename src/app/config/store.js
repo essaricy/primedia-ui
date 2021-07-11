@@ -3,6 +3,7 @@ import thunk from "redux-thunk";
 
 import headerReducer from '../../menu/reducers/HeaderReducer';
 import searchReducer from '../../search/reducers/SearchReducer';
+import watchReducer from '../../watch/reducers/WatchReducer';
 
 function applyEnhancers() {
   // Setup devtools only during staging
@@ -40,7 +41,8 @@ const peristedState = loadState();
 let store = createStore(
   combineReducers({
     header: headerReducer,
-    search: searchReducer
+    search: searchReducer,
+    watch: watchReducer
   }),
   peristedState,
   applyEnhancers()

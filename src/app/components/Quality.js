@@ -25,8 +25,8 @@ export default function Quality(props) {
   const { value, style } = props;
   const classes = useStyles();
 
-  const handleQualityChange = (e, quality) => {
-    props.onQualityChange(quality);
+  const handleChange = (e, quality) => {
+    props.onChange && props.onChange(quality);
   }
 
   return (
@@ -35,7 +35,7 @@ export default function Quality(props) {
         value={value}
         max={4}
         icon={<CameraEnhance fontSize="inherit" />}
-        onChange={handleQualityChange}
+        onChange={handleChange}
         onChangeActive={(event, newHover) => {
           setHover(newHover);
         }}

@@ -19,7 +19,6 @@ const setSearchError = (e) => {
 };
 
 export function onSearchMode(mode) {
-  console.log("SearchMode: ", mode);
   return dispatch => {
     dispatch(setSearchMode(mode));
   }

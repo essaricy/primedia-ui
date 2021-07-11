@@ -5,6 +5,7 @@ import { Provider } from 'react-redux';
 import Home from './Home';
 import Header from '../../menu/components/Header';
 import SearchContainer from '../../search/components/Search';
+import WatchContainer from '../../watch/components/Watch';
 import Upload from '../../upload/components/Upload';
 
 import history from '../config/history'
@@ -17,6 +18,7 @@ export default function App() {
         <Header />
         <Route exact path="/" component={Home} />
         <Route path="/search" component={SearchContainer} />
+        <Route path="/watch" component={WatchContainer} />
         <Route path="/upload" component={Upload} />
       </BrowserRouter>
     </Provider>
