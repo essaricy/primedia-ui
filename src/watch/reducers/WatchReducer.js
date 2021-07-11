@@ -11,7 +11,8 @@ const initialState = {
   views: 0,
   likes: 0,
   uploadDate: null,
-  lastSeen: null
+  lastSeen: null,
+  isEditingName: false
 };
 
 export default function watchReducer(state = initialState, action) {
@@ -20,8 +21,12 @@ export default function watchReducer(state = initialState, action) {
       return { ...action.payload };
     case WatchActionTypes.UPDATE_VIEW_COUNT:
       return { ...state, views: state.views + 1 };
-    case WatchActionTypes.UPDATE_NAME:
-      return { ...state, name: action.payload };
+    case WatchActionTypes.SET_EDITING_NAME_START:
+      return { ...state, isEditingName: true };
+    case WatchActionTypes.SET_NAME:
+      return { ...state, isEditingName: true, name: action.payload };
+    case WatchActionTypes.SET_EDITING_NAME_END:
+      return { ...state, isEditingName: false, name: action.payload };
     case WatchActionTypes.SET_QUALITY:
       return { ...state, quality: action.payload };
     case WatchActionTypes.SET_RATING:

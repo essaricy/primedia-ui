@@ -6,6 +6,15 @@ const setWatchMedia = (media) => {
   return { type: WatchActionTypes.SET_MEDIA, payload: media };
 };
 
+const setEditingNameStart = () => {
+  return { type: WatchActionTypes.SET_EDITING_NAME_START };
+};
+const setName = () => {
+  return { type: WatchActionTypes.SET_NAME };
+};
+const setEditingNameEnd = (value) => {
+  return { type: WatchActionTypes.SET_EDITING_NAME_END, payload: value };
+};
 const setRating = (value) => {
   return { type: WatchActionTypes.SET_RATING, payload: value };
 };
@@ -31,20 +40,29 @@ export function onWatchMedia(media) {
     dispatch(setWatchMedia(media));
   }
 }
+export function updateNameStart() {
+  return dispatch => dispatch(setEditingNameStart());
+}
+export function updateName(id, val) {
+  return dispatch => dispatch(setName());
+}
+export function updateNameEnd(id, val) {
+  return dispatch => updateMedia(dispatch, id, 'name', val);
+}
 export function updateRating(id, val) {
-  return dispatch => updateMedia(dispatch, id, 'ratng', val)
+  return dispatch => updateMedia(dispatch, id, 'ratng', val);
 }
 export function updateQuality(id, val) {
-  return dispatch => updateMedia(dispatch, id, 'quality', val)
+  return dispatch => updateMedia(dispatch, id, 'quality', val);
 }
 export function updateTags(id, val) {
-  return dispatch => updateMedia(dispatch, id, 'tags', val)
+  return dispatch => updateMedia(dispatch, id, 'tags', val);
 }
 export function updateViews(id, val) {
-  return dispatch => updateMedia(dispatch, id, 'views', val)
+  return dispatch => updateMedia(dispatch, id, 'views', val);
 }
 export function updateLike(id, val) {
-  return dispatch => updateMedia(dispatch, id, 'likes', val)
+  return dispatch => updateMedia(dispatch, id, 'likes', val);
 }
 
 export function updateMedia(dispatch, id, field, val) {
@@ -59,6 +77,7 @@ export function updateMedia(dispatch, id, field, val) {
   let path = `media/${id}`;
   AxiosUtil.put(path, request)
   .then(() => {
+    if (field === 'name') dispatch(setEditingNameEnd(val));
     if (field === 'rating') dispatch(setRating(val));
     if (field === 'quality') dispatch(setQuality(val));
     if (field === 'tags') dispatch(setTags(val));

@@ -5,6 +5,8 @@ import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
 import ViewsIcon from '@material-ui/icons/Visibility';
 import LikesIcon from '@material-ui/icons/ThumbUp';
+import EditIcon from '@material-ui/icons/Edit';
+import CheckIcon from '@material-ui/icons/Check';
 
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
@@ -46,7 +48,10 @@ function Watch(props) {
   const greyText = grey[500];
   const yellow = amber[500];
   const { media, searchResults } = props;
-  const { id, name, type, views, rating, quality, size, likes, tags, uploadDate, lastSeen } = media;
+  const { id, name, type } = media;
+  const { views, rating, quality, size, likes, tags } = media;
+  const { uploadDate, lastSeen } = media;
+  const { isEditingName } = media;
 
   const classes = useStyles();
 
@@ -78,7 +83,17 @@ function Watch(props) {
               {MediaUtil.getPlayer(type, id)}
             </Grid>
             <Grid item xs={12}>
-              <Typography variant="h6">{name}</Typography>
+              {
+                isEditingName
+                ? <TextField fullWidth value={name}
+                    onChange={(e) => props.onEditName(e.target.value)}
+                    onBlur={(e) => props.onEditNameEnd(id, e.target.value)} />
+                : <React.Fragment>
+                    <Typography variant="h6" display="inline">{name} </Typography>
+                    <EditIcon style={{ fontSize: 20, color: greyText, cursor: "hand" }}
+                      onClick={props.onEditNameStart} />
+                  </React.Fragment>
+              }
             </Grid>
             <Grid item xs={3}>
               <Grid container alignItems="center">
@@ -132,6 +147,9 @@ const mapState = state => {
   }
 };
 const mapActions = {
+  onEditNameStart: WatchActions.updateNameStart,
+  onEditName: WatchActions.updateName,
+  onEditNameEnd: WatchActions.updateNameEnd,
   onRatingChange: WatchActions.updateRating,
   onQualityChange: WatchActions.updateQuality,
   onTagsChange: WatchActions.updateTags,
