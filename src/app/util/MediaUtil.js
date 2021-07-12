@@ -55,7 +55,7 @@ export function getMediaTypeLabel(type) {
 export function getPlayer(type, id) {
   const mediaType = getMediaType(type);
   return mediaType === VIDEO
-      ? <video controls autoPlay src={getContentUrl(type, id)} width="100%" height={520} />
+      ? <video controls autoPlay src={getContentUrl(type, id)} width="100%" height={380} />
       : <img src={getContentUrl(type, id)} height={380} />
 }
 
