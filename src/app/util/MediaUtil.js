@@ -1,26 +1,25 @@
 import PhotoCamera from '@material-ui/icons/PhotoCamera';
 import Videocam from '@material-ui/icons/Videocam';
-
 import * as AxiosUtil from './AxiosUtil';
 
 export const IMAGE = "IMAGE";
 export const VIDEO = "VIDEO";
 
-
 export function getMediaTypes() {
   return [ { code: 'I', name: 'Images'}, { code: 'V', name: 'Videos'}];
 }
-
 export function getMediaIcon(code) {
   return code === "V" ? <Videocam color="secondary" /> : <PhotoCamera color="secondary" />;
 }
-
 export function getMediaName(code) {
   return getMediaTypes().find(m => m.code === code).name;
 }
-
 export function getMediaPath(code) {
   return code === "V" ? "video" : "image";
+}
+export function  prettifyFileSize(size) {
+  var i = Math.floor( Math.log(size) / Math.log(1024) );
+  return ( size / Math.pow(1024, i) ).toFixed(2) * 1 + ' ' + ['B', 'kB', 'MB', 'GB', 'TB'][i];
 }
 
 /////////////////////////////
@@ -60,10 +59,6 @@ export function getPlayer(type, id) {
       : <img src={getContentUrl(type, id)} height={380} />
 }
 
-export function  prettifyFileSize(size) {
-  var i = Math.floor( Math.log(size) / Math.log(1024) );
-  return ( size / Math.pow(1024, i) ).toFixed(2) * 1 + ' ' + ['B', 'kB', 'MB', 'GB', 'TB'][i];
-}
 
 export function getContentUrl(type, id) {
   return `${AxiosUtil.getHost()}/content/${type}/${id}`;

@@ -42,7 +42,7 @@ function Search(props) {
   return (
   <React.Fragment>
     {getSearchResultText()}
-    { inProgress && SkeletonUtil.getBoxes(10) }
+    { inProgress && SkeletonUtil.getMediumSkeleton(10) }
     <Grid container spacing={2} style={{flexGrow: 1, marginTop: 20, marginLeft: 20 }}>
       <Grid item xs={12}>
         <Grid container spacing={3}>
