@@ -47,7 +47,7 @@ export function updateNameEnd(id, val) {
   return dispatch => updateMedia(dispatch, id, 'name', val);
 }
 export function updateRating(id, val) {
-  return dispatch => updateMedia(dispatch, id, 'ratng', val);
+  return dispatch => updateMedia(dispatch, id, 'rating', val);
 }
 export function updateQuality(id, val) {
   return dispatch => updateMedia(dispatch, id, 'quality', val);

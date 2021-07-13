@@ -6,7 +6,10 @@ export const IMAGE = "IMAGE";
 export const VIDEO = "VIDEO";
 
 export function getMediaTypes() {
-  return [ { code: 'I', name: 'Images'}, { code: 'V', name: 'Videos'}];
+  return [
+    { code: 'I', name: 'Images', path: 'image' },
+    { code: 'V', name: 'Videos', path: 'video'}
+  ];
 }
 export function getMediaIcon(code) {
   return code === "V" ? <Videocam color="secondary" /> : <PhotoCamera color="secondary" />;
@@ -15,11 +18,17 @@ export function getMediaName(code) {
   return getMediaTypes().find(m => m.code === code).name;
 }
 export function getMediaPath(code) {
-  return code === "V" ? "video" : "image";
+  return getMediaTypes().find(m => m.code === code).path;
 }
 export function  prettifyFileSize(size) {
   var i = Math.floor( Math.log(size) / Math.log(1024) );
   return ( size / Math.pow(1024, i) ).toFixed(2) * 1 + ' ' + ['B', 'kB', 'MB', 'GB', 'TB'][i];
+}
+export function getThumbnailUrl(type, id) {
+  return `${AxiosUtil.getHost()}/content/${getMediaPath(type)}/${id}/thumb`;
+}
+export function getContentUrl(type, id) {
+  return `${AxiosUtil.getHost()}/content/${getMediaPath(type)}/${id}`;
 }
 
 /////////////////////////////
@@ -57,13 +66,4 @@ export function getPlayer(type, id) {
   return mediaType === VIDEO
       ? <video controls autoPlay src={getContentUrl(type, id)} width="100%" height={380} />
       : <img src={getContentUrl(type, id)} height={380} />
-}
-
-
-export function getContentUrl(type, id) {
-  return `${AxiosUtil.getHost()}/content/${type}/${id}`;
-}
-
-export function getThumbnailUrl(type, id) {
-  return `${AxiosUtil.getHost()}/content/${type}/${id}/thumb`;
 }
