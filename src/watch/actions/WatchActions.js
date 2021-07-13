@@ -1,9 +1,9 @@
 import * as WatchActionTypes from '../actiontypes/WatchActionTypes';
 import * as AxiosUtil from '../../app/util/AxiosUtil';
-import * as MediaUtil from '../../app/util/MediaUtil';
 
 const setWatchMedia = (media) => {
-  return { type: WatchActionTypes.SET_MEDIA, payload: media };
+  const newMedia = { ...media, views: media.views + 1, lastSeen: new Date().getTime() };
+  return { type: WatchActionTypes.SET_MEDIA, payload: newMedia };
 };
 
 const setEditingNameStart = () => {
@@ -27,10 +27,6 @@ const setTags = (value) => {
   return { type: WatchActionTypes.SET_TAGS, payload: value };
 };
 
-const addView = () => {
-  return { type: WatchActionTypes.ADD_VIEW };
-};
-
 const addLike = () => {
   return { type: WatchActionTypes.ADD_LIKE };
 };
@@ -38,6 +34,7 @@ const addLike = () => {
 export function onWatchMedia(media) {
   return dispatch => {
     dispatch(setWatchMedia(media));
+    updateMedia(dispatch, media.id, 'views');
   }
 }
 export function updateNameStart() {
@@ -75,13 +72,12 @@ export function updateMedia(dispatch, id, field, val) {
     addLike: field === 'likes',
   };
   let path = `media/${id}`;
-  AxiosUtil.put(path, request)
+  return AxiosUtil.put(path, request)
   .then(() => {
     if (field === 'name') dispatch(setEditingNameEnd(val));
     if (field === 'rating') dispatch(setRating(val));
     if (field === 'quality') dispatch(setQuality(val));
     if (field === 'tags') dispatch(setTags(val));
-    if (field === 'views') dispatch(addView());
     if (field === 'likes') dispatch(addLike());
   });
 }

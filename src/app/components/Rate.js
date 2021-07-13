@@ -21,9 +21,15 @@ const useStyles = makeStyles({
   },
 });
 
+function getSize(size) {
+  if (size === "xs") {
+    return 12;
+  }
+  return 18;
+}
 export default function Rate(props) {
   const [hover, setHover] = React.useState(-1);
-  const { value, style } = props;
+  const { value, readOnly, size, style } = props;
   const classes = useStyles();
 
   const handleChange = (e, rating) => {
@@ -31,16 +37,18 @@ export default function Rate(props) {
   }
 
   return (
-    <div className={classes.root} style={style}>
-      <Rating size="small"
+    <div className={classes.root}>
+      <Rating
         defaultValue={value}
         icon={<FavoriteIcon fontSize="inherit" />}
         onChange={handleChange}
         onChangeActive={(event, newHover) => {
           setHover(newHover);
         }}
+        readOnly={readOnly}
+        style={{ fontSize: getSize(size), ...style}}
       />
-      {value !== null && <Box ml={2}>{labels[hover !== -1 ? hover : value]}</Box>}
+      {value !== null && !readOnly && <Box ml={2}>{labels[hover !== -1 ? hover : value]}</Box>}
     </div>
   );
 }

@@ -19,8 +19,6 @@ export default function watchReducer(state = initialState, action) {
   switch (action.type) {
     case WatchActionTypes.SET_MEDIA:
       return { ...action.payload };
-    case WatchActionTypes.UPDATE_VIEW_COUNT:
-      return { ...state, views: state.views + 1 };
     case WatchActionTypes.SET_EDITING_NAME_START:
       return { ...state, isEditingName: true };
     case WatchActionTypes.SET_NAME:

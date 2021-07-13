@@ -10,8 +10,6 @@ import EditIcon from '@material-ui/icons/Edit';
 
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
-import { amber, grey } from '@material-ui/core/colors';
-
 import moment from "moment";
 
 import Tags from '../../app/components/Tags';
@@ -21,41 +19,19 @@ import * as WatchActions from '../actions/WatchActions';
 import * as WatchSelectors from '../selectors/WatchSelectors';
 import * as SearchSelectors from '../../search/selectors/SearchSelectors';
 import * as MediaUtil from '../../app/util/MediaUtil';
-import * as SkeletonUtil from '../../app/util/SkeletonUtil';
-import { Skeleton } from '@material-ui/lab';
+import { greyText, watchStyles } from './WatchStyles';
 
-const useStyles = makeStyles((theme) => ({
-  root: {
-    flexGrow: 1,
-    marginLeft: 20,
-    marginTop: 10
-  },
-  paper: {
-    padding: theme.spacing(2),
-    textAlign: 'center',
-    marginBottom: 10,
-    color: theme.palette.text.secondary,
-  },
-  mediaGrid: {
-    marginTop: 10,
-    height: 400,
-    backgroundColor: "#000",
-    textAlign: 'center'
-  }
-}));
+const useStyles = makeStyles((theme) => watchStyles(theme));
 
 function Watch(props) {
   const history = useHistory();
+  const classes = useStyles();
 
-  const greyText = grey[500];
-  const yellow = amber[500];
   const { media, searchResults } = props;
   const { id, name, type } = media;
   const { views, rating, quality, size, likes, tags } = media;
   const { uploadDate, lastSeen } = media;
   const { isEditingName } = media;
-
-  const classes = useStyles();
 
   const getTypography = (label, value, color) => {
     return (
@@ -74,9 +50,11 @@ function Watch(props) {
   const handleTagDelete = (tag) => {
     props.onTagsChange(id, tags.filter(e => e !== tag));
   }
-  const handleSearchItemClick = (media) => {
-    props.onSearchItemClick(media);
-    history.push('/watch');
+  const handleSearchItemClick = (newMedia) => {
+    if (newMedia.id != media.id) {
+      props.onSearchItemClick(newMedia);
+      history.push('/watch');
+    }
   }
 
   return (
@@ -84,7 +62,7 @@ function Watch(props) {
       <Grid container spacing={1}>
         <Grid item xs={8}>
           <Grid container spacing={1}>
-            <Grid item xs={12} className={classes.mediaGrid}>
+            <Grid item xs={12} className={classes.mediaPlayer}>
               {MediaUtil.getPlayer(type, id)}
             </Grid>
             <Grid item xs={12}>
@@ -94,8 +72,7 @@ function Watch(props) {
                     onBlur={(e) => props.onEditNameEnd(id, e.target.value)} />
                 : <React.Fragment>
                     <Typography variant="h6" display="inline">{name} </Typography>
-                    <EditIcon style={{ fontSize: 20, color: greyText, cursor: "hand" }}
-                      onClick={props.onEditNameStart} />
+                    <EditIcon className={classes.mediumIconActive} onClick={props.onEditNameStart} />
                   </React.Fragment>
               }
             </Grid>
@@ -114,15 +91,14 @@ function Watch(props) {
             </Grid>
             <Grid item xs={1}>
               <Grid container alignItems="right">
-                <ViewsIcon style={{ fontSize: 20, color: greyText }}/>
-                <Typography style={{ color: greyText, marginLeft: 6 }} >{views}</Typography>
+                <ViewsIcon className={classes.mediumIconInactive}/>
+                <Typography className={classes.mediumIconLabel} >{views}</Typography>
               </Grid>
             </Grid>
             <Grid item xs={1}>
               <Grid container alignItems="right">
-                <LikesIcon style={{ fontSize: 20, color: yellow, cursor: "hand"}}
-                  onClick={() => props.onLike(id, true)} />
-                <Typography style={{ color: greyText, marginLeft: 6 }} >{likes}</Typography>
+                <LikesIcon className={classes.mediumIconActive} onClick={() => props.onLike(id, true)} />
+                <Typography className={classes.mediumIconLabel}>{likes}</Typography>
               </Grid>
             </Grid>
             <Grid item xs={4}>
@@ -135,25 +111,27 @@ function Watch(props) {
           </Grid>
         </Grid>
         <Grid item xs={4}>
-          <Card style={{ margin: 10, padding: 10, maxHeight: 466, overflow: 'auto' }}>
+          <Card className={classes.searchCard}>
             {searchResults && searchResults.map((item, index) => (
               <Grid key={'SearchGrid_Thumb_' + index} container
-                spacing={0} style={{flexGrow: 1, marginBottom: 6, cursor: "pointer" }}
-                onClick={() => handleSearchItemClick(item)}>
-                <Grid item xs={5} style={{ textAlign: 'center', backgroundColor: "#000", maxHeight: 80 }}>
+                spacing={0} className={classes.searchThumbGrid}>
+                <Grid item xs={5} className={classes.searchMediaGrid}
+                    onClick={() => handleSearchItemClick(item)}>
                   <img src={MediaUtil.getThumbnailUrl(item.type, item.id)}
-                    height={80} style={{ maxWidth: 140 }} />
+                    height={80}
+                    className={classes.searchMediaImage} />
                 </Grid>
-                <Grid item xs={7} style={{ paddingLeft: 5 }}>
+                <Grid item xs={7} className={classes.searchMediaContent}>
                   <Typography variant="caption" display="block" gutterBottom
-                    style={{ color: greyText }} >
+                    onClick={() => handleSearchItemClick(item)}>
                     {item.name}
                   </Typography>
-                  <Grid container alignItems="right">
-                    <ViewsIcon style={{ fontSize: 12, color: greyText }}/>
-                    <Typography style={{ fontSize: 10, color: greyText, marginLeft: 4 }}>{item.views}</Typography>
-                    <LikesIcon style={{ fontSize: 12, color: yellow, marginLeft: 14 }} />
-                    <Typography style={{ fontSize: 10, color: greyText, marginLeft: 4 }}>{item.likes}</Typography>
+                  <Rate value={item.rating} readOnly size="xs" />
+                  <Grid container alignItems="right" className={classes.iconsContainer}>
+                    <ViewsIcon className={classes.smallIconInactive} />
+                    <Typography className={classes.smallIconLabel}>{item.views}</Typography>
+                    <LikesIcon className={classes.smallIconInactive} />
+                    <Typography className={classes.smallIconLabel}>{item.likes}</Typography>
                   </Grid>
                 </Grid>
               </Grid>
