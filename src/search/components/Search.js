@@ -33,7 +33,7 @@ function Search(props) {
     } else {
       message = `${results.length} ${MediaUtil.getMediaName(mode)} found for ${text}`;
     }
-    return <Typography variant="subtitle1" display="inline" style={{marginLeft: 30, marginTop: 10 }}>
+    return <Typography variant="subtitle1" display="inline" style={{marginLeft: 20, marginTop: 10 }}>
       {message}
     </Typography>;
   }
@@ -43,9 +43,9 @@ function Search(props) {
   <React.Fragment>
     {getSearchResultText()}
     { inProgress && SkeletonUtil.getMediumSkeleton(10) }
-    <Grid container spacing={2} style={{flexGrow: 1, marginTop: 20, marginLeft: 20 }}>
+    <Grid container style={{flexGrow: 1, marginTop: 0, marginLeft: 10, marginRight: 10 }}>
       <Grid item xs={12}>
-        <Grid container spacing={3}>
+        <Grid container spacing={2}>
           {results.map((media) => (
             <Grid key={media.id} item>
               <SearchResultCard media={media}

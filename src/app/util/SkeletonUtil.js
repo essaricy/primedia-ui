@@ -5,12 +5,12 @@ import { Box } from '@material-ui/core';
 
 export function getMediumSkeleton(number) {
   return (
-    <Grid container spacing={2} style={{flexGrow: 1, marginTop: 20, marginLeft: 30 }}>
+    <Grid container spacing={2} style={{flexGrow: 1, marginTop: 10, marginLeft: 10 }}>
       {[...Array(number)].map((index) => (
-        <Box key={index} width={250} height={140} marginRight={3} marginBottom={8}>
-          <Skeleton variant="rect" width={250} height={140} />
-          <Skeleton variant="text" width={250} />
-          <Skeleton variant="text" width={250} />
+        <Box key={index} width={238} height={140} style={{ marginRight: 15 }} marginBottom={8}>
+          <Skeleton variant="rect" width={238} height={140} />
+          <Skeleton variant="text" width={238} />
+          <Skeleton variant="text" width={238} />
         </Box>))
       }
     </Grid>
