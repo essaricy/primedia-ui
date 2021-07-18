@@ -4,6 +4,7 @@ import thunk from "redux-thunk";
 import headerReducer from '../../menu/reducers/HeaderReducer';
 import searchReducer from '../../search/reducers/SearchReducer';
 import watchReducer from '../../watch/reducers/WatchReducer';
+import uploadReducer from '../../upload/reducers/UploadReducer';
 
 function applyEnhancers() {
   // Setup devtools only during staging
@@ -42,7 +43,8 @@ let store = createStore(
   combineReducers({
     header: headerReducer,
     search: searchReducer,
-    watch: watchReducer
+    watch: watchReducer,
+    upload: uploadReducer
   }),
   peristedState,
   applyEnhancers()

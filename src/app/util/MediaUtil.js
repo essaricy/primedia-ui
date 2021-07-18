@@ -7,8 +7,8 @@ export const VIDEO = "VIDEO";
 
 export function getMediaTypes() {
   return [
-    { code: 'I', name: 'Images', path: 'image' },
-    { code: 'V', name: 'Videos', path: 'video'}
+    { code: 'I', name: 'Images', path: 'image', mimeIncludes: 'image' },
+    { code: 'V', name: 'Videos', path: 'video', mimeIncludes: 'video'}
   ];
 }
 export function getMediaIcon(code) {
@@ -30,6 +30,10 @@ export function getThumbnailUrl(type, id) {
 export function getContentUrl(type, id) {
   return `${AxiosUtil.getHost()}/content/${getMediaPath(type)}/${id}`;
 }
+export function getIdentfiedType(fileType) {
+  const medidaType = getMediaTypes().find(m => fileType.includes(m.mimeIncludes));
+  return medidaType ? medidaType.code : null;
+}
 
 /////////////////////////////
 
@@ -41,14 +45,6 @@ export function getMediaType(type) {
   return type.toLowerCase() === 'v' ? VIDEO : IMAGE;
 }
 
-export function getIdentfiedType(type) {
-  if (type.toLowerCase().includes('video')) {
-    return VIDEO;
-  } else if (type.toLowerCase().includes('image')) {
-    return IMAGE;
-  };
-  return null;
-}
 
 export function getMediaPathPart(type) {
   const mediaType = getMediaType(type);
