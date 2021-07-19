@@ -2,9 +2,6 @@ import PhotoCamera from '@material-ui/icons/PhotoCamera';
 import Videocam from '@material-ui/icons/Videocam';
 import * as AxiosUtil from './AxiosUtil';
 
-export const IMAGE = "IMAGE";
-export const VIDEO = "VIDEO";
-
 export function getMediaTypes() {
   return [
     { code: 'I', name: 'Images', path: 'image', mimeIncludes: 'image' },
@@ -34,32 +31,13 @@ export function getIdentfiedType(fileType) {
   const medidaType = getMediaTypes().find(m => fileType.includes(m.mimeIncludes));
   return medidaType ? medidaType.code : null;
 }
-
-/////////////////////////////
-
-
-
-
-
-export function getMediaType(type) {
-  return type.toLowerCase() === 'v' ? VIDEO : IMAGE;
-}
-
-
-export function getMediaPathPart(type) {
-  const mediaType = getMediaType(type);
-  return mediaType === VIDEO ? 'V' : 'I';
-}
-
-
-
-export function getMediaTypeLabel(type) {
-  return type === "V" || type == "VIDEO" ? 'Videos' : 'Images';
-}
-
 export function getPlayer(type, id) {
-  const mediaType = getMediaType(type);
-  return mediaType === VIDEO
+  return type === "V"
       ? <video controls autoPlay src={getContentUrl(type, id)} width="100%" height={380} />
       : <img src={getContentUrl(type, id)} height={380} />
+}
+export function getLocalPlayer(type, url, className) {
+  return type === "V"
+      ? <video className={className} src={url} />
+      : <img className={className} src={url} />
 }
