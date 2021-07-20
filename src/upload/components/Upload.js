@@ -6,7 +6,6 @@ import Button from '@material-ui/core/Button';
 import Checkbox from '@material-ui/core/Checkbox';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Grid from '@material-ui/core/Grid';
-import LinearProgress from '@material-ui/core/LinearProgress';
 import Paper from '@material-ui/core/Paper';
 import Snackbar from '@material-ui/core/Snackbar';
 import TextField from '@material-ui/core/TextField';
@@ -18,6 +17,7 @@ import { uploadStyles } from './UploadStyles';
 import Rate from '../../app/components/Rate';
 import Quality from '../../app/components/Quality';
 import Tags from '../../app/components/Tags';
+import ProgressContainer from './Progress';
 
 import * as UploadActions from '../actions/UploadActions';
 import * as UploadSelectors from '../selectors/UploadSelectors';
@@ -34,7 +34,7 @@ function Upload(props) {
 
   return (
     <div className={classes.root}>
-      { isUploading && <LinearProgress color="secondary" /> }
+      { isUploading && <ProgressContainer /> }
       <Paper className={classes.paper}>
         <Grid container spacing={2}>
           <Grid item xs={6}>

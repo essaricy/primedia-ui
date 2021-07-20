@@ -1,6 +1,8 @@
 import * as UploadActionTypes from '../actiontypes/UploadActionTypes';
 import * as MediaUtil from '../../app/util/MediaUtil';
 
+const IN_PROGRESS_STATES = [ "REQUESTED", "PROC_START", "SAVE_DONE" ];
+
 const initialState = {
   fileUrl: null,
   type: null,
@@ -10,6 +12,12 @@ const initialState = {
   quality: 0,
   tags: [ ],
   isUploading: false,
+  progress: {
+    id: null,
+    status: null,
+    startTime: null,
+    endTime: null
+  },
   message: null,
   retainName: false
 };
@@ -60,23 +68,27 @@ export default function uploadReducer(state = initialState, action) {
         ...state,
         tags: state.tags.filter(t => t !== action.payload)
       };
-    case UploadActionTypes.SET_UPLOAD_START:
+    case UploadActionTypes.SET_UPLOAD_INIT:
       return {
         ...state,
-        isUploading: true,
-        message: null
+        isUploading: true
       }
-    case UploadActionTypes.SET_UPLOAD_END:
+    case UploadActionTypes.SET_UPLOAD_INIT_FAIL:
+        return {
+          ...state,
+          isUploading: false,
+          message: action.payload
+        }
+    case UploadActionTypes.SET_PROGRESS_STATUS:
+      const progress = action.payload;
+      const { status, startTime, endTime } = progress;
       return {
         ...state,
-        isUploading: false,
-        message: 'Upload successful!'
-      }
-    case UploadActionTypes.SET_UPLOAD_ERROR:
-      return {
-        ...state,
-        isUploading: false,
-        message: action.payload
+        progress: {
+          ...progress
+        },
+        isUploading: IN_PROGRESS_STATES.includes(status.code),
+        message: status.code === "SAVE_DONE" ? `Upload completed in ${endTime-startTime}ms` : status.description
       }
     default:
       return state;

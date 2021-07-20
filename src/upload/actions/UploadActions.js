@@ -20,14 +20,14 @@ const addTag = (tag) => {
 const deleteTag = (tag) => {
   return { type: UploadActionTypes.DELETE_TAG, payload: tag };
 };
-const setUploadStart = () => {
-  return { type: UploadActionTypes.SET_UPLOAD_START };
+const setUploadInit = () => {
+  return { type: UploadActionTypes.SET_UPLOAD_INIT };
 };
-const setUploadEnd = () => {
-  return { type: UploadActionTypes.SET_UPLOAD_END };
+const setUploadInitFail = (error) => {
+  return { type: UploadActionTypes.SET_UPLOAD_INIT_FAIL, payload: error };
 };
-const setUploadError = (error) => {
-  return { type: UploadActionTypes.SET_UPLOAD_ERROR, payload: error };
+const setProgressStatus = (progress) => {
+  return { type: UploadActionTypes.SET_PROGRESS_STATUS, payload: progress };
 };
 const setRetainName = (val) => {
   return { type: UploadActionTypes.SET_RETAIN_NAME, payload: val };
@@ -61,7 +61,7 @@ export function onTagDelete(val) {
 }
 export function onUpload({ file, name, type, size, rating, quality, tags }) {
   return dispatch => {
-    dispatch(setUploadStart());
+    dispatch(setUploadInit());
 
     const path = MediaUtil.getMediaPath(type);
     const formData = new FormData();
@@ -74,8 +74,19 @@ export function onUpload({ file, name, type, size, rating, quality, tags }) {
       }
     }
     return AxiosUtil.post(`media/${path}`, formData, config)
-      .then(r => dispatch(setUploadEnd()))
-      .catch(e => dispatch(setUploadError(e.message)));
+      .then(progress => {
+        dispatch(setProgressStatus(progress));
+      })
+      .catch(e => dispatch(setUploadInitFail(e.message)));
+  }
+}
+export function onPollProgress(id) {
+  return dispatch => {
+    return AxiosUtil.get(`progress/${id}`)
+    .then(progress => {
+      dispatch(setProgressStatus(progress));
+    })
+    .catch(e => dispatch(setUploadInitFail(e.message)));
   }
 }
 export function onRetainName(val) {
