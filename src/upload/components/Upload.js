@@ -7,12 +7,10 @@ import Checkbox from '@material-ui/core/Checkbox';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
-import Snackbar from '@material-ui/core/Snackbar';
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 
 import { uploadStyles } from './UploadStyles';
-//import * as ProgressService from '../../progress/service/ProgressService';
 
 import Rate from '../../app/components/Rate';
 import Quality from '../../app/components/Quality';
@@ -28,13 +26,13 @@ function Upload(props) {
   const useStyles = makeStyles((theme) => uploadStyles(theme));
   const classes = useStyles();
 
-  const { fileUrl, name, type, size, rating, quality, tags, isUploading, message, retainName } = props;
+  const { fileUrl, name, type, size, rating, quality, tags, isUploading, progress, retainName } = props;
   const { onFileSelect, onNameChange, onRatingChange, onQualityChange } = props;
   const { onTagAdd, onTagDelete, onUpload, onRetainName } = props;
 
   return (
     <div className={classes.root}>
-      { isUploading && <ProgressContainer /> }
+      { progress && progress.id && <ProgressContainer />}
       <Paper className={classes.paper}>
         <Grid container spacing={2}>
           <Grid item xs={6}>
@@ -88,9 +86,6 @@ function Upload(props) {
           }
         </Grid>
       </Paper>
-      { message &&
-        <Snackbar anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }} open={true} message={message} />
-      }
     </div>
   );
 }

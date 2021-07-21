@@ -75,8 +75,8 @@ function Header(props) {
       open={showProfileMenu}
       onClose={() => setProfileMenuAnchor(null)}
     >
-      <MenuItem onClick={() => setProfileMenuAnchor(null)}>Profile</MenuItem>
-      <MenuItem onClick={() => setProfileMenuAnchor(null)}>My account</MenuItem>
+      <MenuItem key="ProfileMenuItem" onClick={() => setProfileMenuAnchor(null)}>Profile</MenuItem>
+      <MenuItem key="AccountMenuItem" onClick={() => setProfileMenuAnchor(null)}>My account</MenuItem>
     </Menu>
   );
 

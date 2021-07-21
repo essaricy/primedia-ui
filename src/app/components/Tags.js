@@ -7,7 +7,7 @@ export default function Tags(props) {
     <ChipInput value={props.value}
       disableUnderline
       chipRenderer={({ text, handleDelete }, key) => {
-        return <Chip size="small" label={text.trim()}
+        return <Chip key={key} size="small" label={text.trim()}
           style={{ marginRight: 5 }}
           onDelete={handleDelete} />;
       }}

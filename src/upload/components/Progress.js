@@ -1,38 +1,55 @@
 import { React, useEffect } from 'react';
 import { connect } from 'react-redux';
 import { makeStyles } from '@material-ui/core/styles';
-
+import Grid from '@material-ui/core/Grid';
 import LinearProgress from '@material-ui/core/LinearProgress';
-import Paper from '@material-ui/core/Paper';
+import Typography from '@material-ui/core/Typography';
 
+import { progressStyles } from './ProgressStyles';
 import * as UploadActions from '../actions/UploadActions';
 import * as UploadSelectors from '../selectors/UploadSelectors';
-import * as MediaUtil from '../../app/util/MediaUtil';
+import * as UploadConstants from '../constants/UploadConstants';
 
-const STATUS_VALUES = {
-  "REQUESTED": { value: 20, color: "primary" },
-  "PROC_START": { value: 40, color: "primary" },
-  "THUMB_FAIL": { value: 50, color: "secondary" },
-  "THUMB_DONE": { value: 66, color: "primary" },
-  "SAVE_FAIL": { value: 85, color: "secondary" },
-  "SAVE_DONE": { value: 100, color: "primary" },
+function LinearProgressWithLabel(props) {
+  const useStyles = makeStyles((theme) => progressStyles(theme));
+  const classes = useStyles();
+
+  const { status, startTime, endTime } = props;
+  const attr = UploadConstants.STATUS_ATTIBUTES[ status.code ];
+  return (
+    <Grid container className={classes.root}>
+      { startTime && 
+      <Grid item xs={12}>
+        <Typography variant="body2" color="textSecondary">Started At: { new Date(startTime).toLocaleString() }</Typography>
+      </Grid>
+      }
+      <Grid item xs={12}>
+        <LinearProgress variant="determinate" value={attr.value} 
+          classes={
+            attr.color === "green"
+            ? { colorPrimary: classes.colorPrimary, barColorPrimary: classes.barColorPrimary }
+            : { colorPrimary: classes.colorSecondary, barColorPrimary: classes.barColorSecondary }
+          } />
+      </Grid>
+      <Grid item xs={12}>
+        <Typography variant="body2" color="textSecondary">{attr.label}</Typography>
+        {endTime && <Typography variant="body2" color="textSecondary">Ended At: { new Date(endTime).toLocaleString() }</Typography>}
+      </Grid>
+    </Grid>
+  );
 }
+
 function Progress(props) {
-  //const useStyles = makeStyles((theme) => uploadStyles(theme));
-  //const classes = useStyles();
-  const { id, mediaId, status, startTime, endTime, onPollProgress } = props;
-  const statusVal = STATUS_VALUES[status.code];
+  const { id, status, startTime, endTime, onPollProgress } = props;
 
   useEffect(() => {
-    //document.title = `You clicked ${count} times`;
-    const interval = setInterval(() => onPollProgress(id), 2000);
+    const interval = setInterval(() => onPollProgress(id, status.code), 2000);
     return () => {
       clearInterval(interval);
     };
   });
-
   return (
-    <LinearProgress variant="determinate" value={statusVal.value} color={statusVal.color} />
+    <LinearProgressWithLabel status={status} startTime={startTime} endTime={endTime} />
   );
 }
 const mapState = state => {

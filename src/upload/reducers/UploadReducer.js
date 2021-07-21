@@ -1,7 +1,6 @@
 import * as UploadActionTypes from '../actiontypes/UploadActionTypes';
+import * as UploadConstants from '../constants/UploadConstants';
 import * as MediaUtil from '../../app/util/MediaUtil';
-
-const IN_PROGRESS_STATES = [ "REQUESTED", "PROC_START", "SAVE_DONE" ];
 
 const initialState = {
   fileUrl: null,
@@ -18,7 +17,6 @@ const initialState = {
     startTime: null,
     endTime: null
   },
-  message: null,
   retainName: false
 };
 
@@ -32,7 +30,7 @@ export default function uploadReducer(state = initialState, action) {
         type: MediaUtil.getIdentfiedType(file.type),
         name: state.retainName ? state.name : file.name.split('.').slice(0, -1).join('.').replace(/([A-Z])/g, ' $1').trim(),
         size: file.size,
-        message: null
+        progress: initialState.progress
       };
     case UploadActionTypes.SET_RETAIN_NAME:
       return {
@@ -71,24 +69,29 @@ export default function uploadReducer(state = initialState, action) {
     case UploadActionTypes.SET_UPLOAD_INIT:
       return {
         ...state,
-        isUploading: true
+        isUploading: true,
+        progress: {
+          ...state.progress,
+          code: UploadConstants.INIT
+        }
       }
     case UploadActionTypes.SET_UPLOAD_INIT_FAIL:
         return {
           ...state,
           isUploading: false,
-          message: action.payload
+          progress: {
+            ...state.progress,
+            code: UploadConstants.INIT_FAIL
+          }
         }
     case UploadActionTypes.SET_PROGRESS_STATUS:
       const progress = action.payload;
-      const { status, startTime, endTime } = progress;
       return {
         ...state,
         progress: {
           ...progress
         },
-        isUploading: IN_PROGRESS_STATES.includes(status.code),
-        message: status.code === "SAVE_DONE" ? `Upload completed in ${endTime-startTime}ms` : status.description
+        isUploading: UploadConstants.isInProgress(progress.status.code)
       }
     default:
       return state;

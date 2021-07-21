@@ -1,4 +1,5 @@
 import * as UploadActionTypes from '../actiontypes/UploadActionTypes';
+import * as UploadConstants from '../constants/UploadConstants';
 import * as AxiosUtil from '../../app/util/AxiosUtil';
 import * as MediaUtil from '../../app/util/MediaUtil';
 
@@ -23,8 +24,8 @@ const deleteTag = (tag) => {
 const setUploadInit = () => {
   return { type: UploadActionTypes.SET_UPLOAD_INIT };
 };
-const setUploadInitFail = (error) => {
-  return { type: UploadActionTypes.SET_UPLOAD_INIT_FAIL, payload: error };
+const setUploadInitFail = () => {
+  return { type: UploadActionTypes.SET_UPLOAD_INIT_FAIL };
 };
 const setProgressStatus = (progress) => {
   return { type: UploadActionTypes.SET_PROGRESS_STATUS, payload: progress };
@@ -77,16 +78,23 @@ export function onUpload({ file, name, type, size, rating, quality, tags }) {
       .then(progress => {
         dispatch(setProgressStatus(progress));
       })
-      .catch(e => dispatch(setUploadInitFail(e.message)));
+      .catch(e => {
+        console.log(e);
+        dispatch(setUploadInitFail())
+      });
   }
 }
-export function onPollProgress(id) {
+export function onPollProgress(id, code) {
   return dispatch => {
-    return AxiosUtil.get(`progress/${id}`)
-    .then(progress => {
-      dispatch(setProgressStatus(progress));
-    })
-    .catch(e => dispatch(setUploadInitFail(e.message)));
+    if (UploadConstants.isInProgress(code)) {
+      return AxiosUtil.get(`progress/${id}`)
+      .then(progress => {
+        dispatch(setProgressStatus(progress));
+      })
+      .catch(e => {
+        console.log(e);
+      });
+    }
   }
 }
 export function onRetainName(val) {
