@@ -57,6 +57,7 @@ export default function uploadReducer(state = initialState, action) {
     case UploadActionTypes.ADD_TAG:
       const tags = state.tags;
       tags.push(action.payload);
+      // TOD: exclude words like and, with, then
       return {
         ...state,
         tags: tags

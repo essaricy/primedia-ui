@@ -5,12 +5,11 @@ const setWatchMedia = (media) => {
   const newMedia = { ...media, views: media.views + 1, lastSeen: new Date().getTime() };
   return { type: WatchActionTypes.SET_MEDIA, payload: newMedia };
 };
-
 const setEditingNameStart = () => {
   return { type: WatchActionTypes.SET_EDITING_NAME_START };
 };
 const setName = () => {
-  return { type: WatchActionTypes.SET_NAME };
+  return { type: WatchActionTypes.SET_MEDIA_NAME };
 };
 const setEditingNameEnd = (value) => {
   return { type: WatchActionTypes.SET_EDITING_NAME_END, payload: value };
@@ -18,15 +17,12 @@ const setEditingNameEnd = (value) => {
 const setRating = (value) => {
   return { type: WatchActionTypes.SET_RATING, payload: value };
 };
-
 const setQuality = (value) => {
   return { type: WatchActionTypes.SET_QUALITY, payload: value };
 };
-
 const setTags = (value) => {
   return { type: WatchActionTypes.SET_TAGS, payload: value };
 };
-
 const addLike = () => {
   return { type: WatchActionTypes.ADD_LIKE };
 };
@@ -40,8 +36,8 @@ export function onWatchMedia(media) {
 export function updateNameStart() {
   return dispatch => dispatch(setEditingNameStart());
 }
-export function updateName(id, val) {
-  return dispatch => dispatch(setName());
+export function updateName(val) {
+  return dispatch => dispatch(setName(val));
 }
 export function updateNameEnd(id, val) {
   return dispatch => updateMedia(dispatch, id, 'name', val);

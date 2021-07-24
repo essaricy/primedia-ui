@@ -36,7 +36,9 @@ function Upload(props) {
       <Paper className={classes.paper}>
         <Grid container spacing={2}>
           <Grid item xs={6}>
-            <Button variant="contained" component="label" disabled={isUploading}>
+            <Button variant="contained" component="label" 
+            //disabled={isUploading}
+            >
               Choose File
               <input type="file" hidden
                 onChange={(e) => {
@@ -47,7 +49,8 @@ function Upload(props) {
             </Button>
           </Grid>
           <Grid item xs={6} className={classes.uploadBtnGrid}>
-            <Button color="primary" variant="contained" disabled={isUploading}
+            <Button color="primary" variant="contained" 
+              //disabled={isUploading}
               onClick={() => onUpload({ file, name, type, size, rating, quality, tags })}>
               Upload
             </Button>

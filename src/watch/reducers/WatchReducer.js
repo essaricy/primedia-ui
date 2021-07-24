@@ -21,7 +21,7 @@ export default function watchReducer(state = initialState, action) {
       return { ...action.payload };
     case WatchActionTypes.SET_EDITING_NAME_START:
       return { ...state, isEditingName: true };
-    case WatchActionTypes.SET_NAME:
+    case WatchActionTypes.SET_MEDIA_NAME:
       return { ...state, isEditingName: true, name: action.payload };
     case WatchActionTypes.SET_EDITING_NAME_END:
       return { ...state, isEditingName: false, name: action.payload };

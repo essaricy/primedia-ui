@@ -11,6 +11,8 @@ import EditIcon from '@material-ui/icons/Edit';
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 import moment from "moment";
+import ImageGallery from 'react-image-gallery';
+import "react-image-gallery/styles/css/image-gallery.css";
 
 import Tags from '../../app/components/Tags';
 import Rate from '../../app/components/Rate';
@@ -19,10 +21,9 @@ import * as WatchActions from '../actions/WatchActions';
 import * as WatchSelectors from '../selectors/WatchSelectors';
 import * as SearchSelectors from '../../search/selectors/SearchSelectors';
 import * as MediaUtil from '../../app/util/MediaUtil';
-import { greyText, watchStyles } from './WatchStyles';
+import { styles } from './WatchStyles';
 
-const useStyles = makeStyles((theme) => watchStyles(theme));
-
+const useStyles = makeStyles((theme) => styles(theme));
 function Watch(props) {
   const history = useHistory();
   const classes = useStyles();
@@ -33,10 +34,10 @@ function Watch(props) {
   const { uploadDate, lastSeen } = media;
   const { isEditingName } = media;
 
-  const getTypography = (label, value, color) => {
+  const getTypography = (label, value) => {
     return (
       <Grid item xs={12}>
-        <Typography variant="caption" display="block" gutterBottom style={{ color: color}}>
+        <Typography variant="caption" display="block" gutterBottom className={classes.label}>
           {label ? label + ': ' : ''} {value}
         </Typography>
       </Grid>
@@ -50,93 +51,106 @@ function Watch(props) {
   const handleTagDelete = (tag) => {
     props.onTagsChange(id, tags.filter(e => e !== tag));
   }
-  const handleSearchItemClick = (newMedia) => {
-    if (newMedia.id != media.id) {
-      props.onSearchItemClick(newMedia);
-      history.push('/watch');
-    }
+  const handleThumbnailClick = (e, index) => {
+    props.onItemSelection(searchResults[index]);
+    history.push('/watch');
+  }
+
+  const getGallery = () => {
+    const gallery = [];
+    let index = 0;
+    searchResults.forEach((item, i) => {
+      gallery.push({
+        original: MediaUtil.getContentUrl(item.type, item.id),
+        thumbnail: MediaUtil.getThumbnailUrl(item.type, item.id),
+        description: item.name,
+        //originalHeight: 360,
+        //thumbnailClass: classes.thumbnail
+      });
+      if (item.id === media.id) {
+        index = i;
+      }
+    })
+    return (
+      <ImageGallery items={gallery} lazyLoad={true} thumbnailPosition="bottom" showBullets={false}
+        showPlayButton={false}
+        startIndex={index}
+        onThumbnailClick={handleThumbnailClick}
+        // renderLeftNav={(onClick, disabled) => {
+        //   return (
+        //     <button
+        //     type="button"
+        //     className="image-gallery-icon image-gallery-left-nav"
+        //     disabled={disabled}
+        //     onClick={onClick}
+        //     aria-label="Previous Slide"
+        //   >
+        //     <SVG icon="left" viewBox="6 0 12 24" />
+        //   </button>
+        //   )
+        // }}
+      />
+    );
   }
 
   return (
     <div className={classes.root}>
       <Grid container spacing={1}>
-        <Grid item xs={8}>
-          <Grid container spacing={1}>
-            <Grid item xs={12} className={classes.mediaPlayer}>
-              {MediaUtil.getPlayer(type, id)}
-            </Grid>
-            <Grid item xs={12}>
+        <Grid item xs={9} 
+        //className={ classes.galleryGrid }
+        >
+          {getGallery()}
+        </Grid>
+        <Grid item xs={3}>
+          <Grid container spacing={2}>
+            <Grid item xs={12} className={ classes.attributeGrid}>
               { isEditingName
                 ? <TextField fullWidth value={name}
-                    onChange={(e) => props.onEditName(e.target.value)}
+                    onChange={(e) => props.onEditName(e.target.value) }
                     onBlur={(e) => props.onEditNameEnd(id, e.target.value)} />
                 : <React.Fragment>
                     <Typography variant="h6" display="inline">{name} </Typography>
-                    <EditIcon className={classes.mediumIconActive} onClick={props.onEditNameStart} />
+                    <EditIcon className={classes.iconActive} onClick={props.onEditNameStart} />
                   </React.Fragment>
               }
             </Grid>
-            <Grid item xs={12}>
-              <Tags value={tags} onAdd={handleTagAdd} onDelete={handleTagDelete} />
-            </Grid>
-            <Grid item xs={3}>
+            <Grid item xs={12} className={classes.attributeGrid}>
               <Grid container alignItems="center">
                 <Rate value={rating} onChange={(val) => props.onRatingChange(id, val)} />
               </Grid>
             </Grid>
-            <Grid item xs={3}>
+            <Grid item xs={12} className={classes.attributeGrid}>
               <Grid container alignItems="center">
                 <Quality value={quality} onChange={(val) => props.onQualityChange(id, val)} />
               </Grid>
             </Grid>
-            <Grid item xs={1}>
-              <Grid container alignItems="right">
-                <ViewsIcon className={classes.mediumIconInactive}/>
-                <Typography className={classes.mediumIconLabel} >{views}</Typography>
-              </Grid>
+            <Grid item xs={12} className={classes.attributeGrid} style={{marginBottom: 10}}>
+              <Tags value={tags} onAdd={handleTagAdd} onDelete={handleTagDelete} />
             </Grid>
-            <Grid item xs={1}>
+            <Grid item xs={2} className={ classes.attributeGrid}>
               <Grid container alignItems="right">
-                <LikesIcon className={classes.mediumIconActive} onClick={() => props.onLike(id, true)} />
-                <Typography className={classes.mediumIconLabel}>{likes}</Typography>
+                <ViewsIcon className={classes.iconInactive}/>
+                <Typography className={classes.iconLabel} >{views}</Typography>
               </Grid>
             </Grid>
             <Grid item xs={4}>
               <Grid container alignItems="right">
-                { getTypography('Upload', moment(uploadDate).fromNow(), greyText) }
-                { lastSeen && getTypography('Last seen', moment(lastSeen).fromNow(), greyText) }
-                { getTypography(null, MediaUtil.prettifyFileSize(size), greyText) }
+                <LikesIcon className={classes.iconActive} onClick={() => props.onLike(id, true)} />
+                <Typography className={classes.iconLabel}>{likes}</Typography>
               </Grid>
             </Grid>
+            <Grid item xs={12} className={ classes.attributeGrid}>
+              { getTypography('Uploaded', moment(uploadDate).fromNow()) }
+            </Grid>
+            { lastSeen &&
+            <Grid item xs={12} className={ classes.attributeGrid}>
+              { getTypography('Last seen', moment(lastSeen).fromNow()) }
+            </Grid>
+            }
+            <Grid item xs={12} className={ classes.attributeGrid}>
+              { getTypography('Size', MediaUtil.prettifyFileSize(size)) }
+            </Grid>
           </Grid>
-        </Grid>
-        <Grid item xs={4}>
-          <Card className={classes.searchCard}>
-            {searchResults && searchResults.map((item, index) => (
-              <Grid key={'SearchGrid_Thumb_' + index} container
-                spacing={0} className={classes.searchThumbGrid}>
-                <Grid item xs={5} className={classes.searchMediaGrid}
-                    onClick={() => handleSearchItemClick(item)}>
-                  <img src={MediaUtil.getThumbnailUrl(item.type, item.id)}
-                    height={80}
-                    className={classes.searchMediaImage} />
-                </Grid>
-                <Grid item xs={7} className={classes.searchMediaContent}>
-                  <Typography variant="caption" display="block" gutterBottom
-                    onClick={() => handleSearchItemClick(item)}>
-                    {item.name}
-                  </Typography>
-                  <Rate value={item.rating} readOnly size="xs" />
-                  <Grid container alignItems="right" className={classes.iconsContainer}>
-                    <ViewsIcon className={classes.smallIconInactive} />
-                    <Typography className={classes.smallIconLabel}>{item.views}</Typography>
-                    <LikesIcon className={classes.smallIconInactive} />
-                    <Typography className={classes.smallIconLabel}>{item.likes}</Typography>
-                  </Grid>
-                </Grid>
-              </Grid>
-            ))}
-          </Card>
         </Grid>
       </Grid>
     </div>
@@ -157,7 +171,7 @@ const mapActions = {
   onQualityChange: WatchActions.updateQuality,
   onTagsChange: WatchActions.updateTags,
   onLike: WatchActions.updateLike,
-  onSearchItemClick: WatchActions.onWatchMedia
+  onItemSelection: WatchActions.onWatchMedia
 }
 
 const WatchContainer = connect(mapState, mapActions)(Watch);

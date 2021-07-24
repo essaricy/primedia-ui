@@ -2,6 +2,7 @@ import { compose, applyMiddleware, createStore, combineReducers } from 'redux';
 import thunk from "redux-thunk";
 
 import headerReducer from '../../menu/reducers/HeaderReducer';
+import dashboardReducer from '../../dashboard/reducers/DashboardReducer';
 import searchReducer from '../../search/reducers/SearchReducer';
 import watchReducer from '../../watch/reducers/WatchReducer';
 import uploadReducer from '../../upload/reducers/UploadReducer';
@@ -42,13 +43,16 @@ const peristedState = loadState();
 let store = createStore(
   combineReducers({
     header: headerReducer,
+    dashboard: dashboardReducer,
     search: searchReducer,
     watch: watchReducer,
-    upload: uploadReducer
+    upload: uploadReducer,
   }),
   peristedState,
+  //{},
   applyEnhancers()
 );
+
 store.subscribe(() => {
   saveState(store.getState());
 });

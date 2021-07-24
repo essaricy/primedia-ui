@@ -1,44 +1,41 @@
-import { amber, grey } from '@material-ui/core/colors';
+import { amber, grey, blue } from '@material-ui/core/colors';
 
-export const videoBgColor = grey[900];
-export const greyText = grey[500];
-export const yellow = amber[500];
-
-export const watchStyles = (theme) => ({
+export const styles = (theme) => ({
   root: {
     flexGrow: 1,
-    marginLeft: 20,
+    marginLeft: 14,
     marginTop: 10
   },
-  mediaPlayer: {
-    marginTop: 10,
-    height: 400,
-    backgroundColor: videoBgColor,
+  galleryGrid: {
+    height: 474,
+    backgroundColor: grey[900],
     textAlign: 'center'
   },
-  mediumIconActive: {
-    fontSize: 20,
-    color: yellow,
-    cursor: "pointer"
+  attributeGrid: {
+    marginLeft: 10,
   },
-  mediumIconInactive: {
+  iconActive: {
     fontSize: 20,
-    color: greyText,
+    color: blue[500],
+    cursor: "pointer"    
   },
-  mediumIconLabel: {
-    color: greyText,
+  iconInactive: {
+    fontSize: 20,
+    color: grey[500]
+  },
+  iconLabel: {
+    color: grey[500],
     marginLeft: 6
   },
-  smallIconInactive: {
-    fontSize: 12,
-    color: greyText,
+  label: {
+    color: grey[500],
   },
-  smallIconLabel: {
-    fontSize: 10,
-    color: greyText,
-    marginLeft: 4,
-    marginRight: 14
+  thumbnail: {
+    height: 80
   },
+
+
+  ///////////
   searchCard: {
     marginLeft: 10,
     padding: 10,
@@ -51,7 +48,7 @@ export const watchStyles = (theme) => ({
   },
   searchMediaGrid: {
     textAlign: 'center',
-    backgroundColor: videoBgColor,
+    backgroundColor: grey[900],
     maxHeight: 80,
     minHeight: 80,
     cursor: 'pointer'
@@ -64,5 +61,5 @@ export const watchStyles = (theme) => ({
   },
   iconsContainer: {
     marginTop: 5
-  }
+  },
 });
