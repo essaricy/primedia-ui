@@ -1,7 +1,7 @@
 import * as WatchActionTypes from '../actiontypes/WatchActionTypes';
 import * as AxiosUtil from '../../app/util/AxiosUtil';
 
-const setWatchMedia = (media) => {
+export const setWatchMedia = (media) => {
   const newMedia = { ...media, views: media.views + 1, lastSeen: new Date().getTime() };
   return { type: WatchActionTypes.SET_MEDIA, payload: newMedia };
 };

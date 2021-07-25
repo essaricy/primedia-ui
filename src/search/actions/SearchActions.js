@@ -10,7 +10,7 @@ const setSearchText = (value) => {
   return { type: SearchActionTypes.SET_SEARCH_TEXT, payload: value };
 };
 
-const setSearchResults = (results) => {
+export const setSearchResults = (results) => {
   return { type: SearchActionTypes.SET_SEARCH_RESULTS, payload: results };
 };
 

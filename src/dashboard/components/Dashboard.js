@@ -9,30 +9,44 @@ import Typography from '@material-ui/core/Typography';
 
 import { dashboardStyles } from './DashboardStyles';
 import SearchResultCard from '../../search/components/SearchResultCard';
-import * as WatchActions from '../../watch/actions/WatchActions';
+import * as DashboardConstants from '../constants/DashboardConstants';
 import * as DashboardActions from '../actions/DashboardActions';
 import * as DashboardSelectors from '../selectors/DashboardSelectors';
 import * as SkeletonUtil from '../../app/util/SkeletonUtil';
 
 class Dashboard extends React.Component {
 
-  handleMediaClick = (media) => {
-    this.props.onMediaClick(media);
+  componentDidMount() {
+    this.props.onLoad && this.props.onLoad();
+  }
+  handleMediaClick = (media, results) => {
+    this.props.onMediaClick(media, results);
     this.props.history.push('/watch');
   }
 
-  getStrip = (title, inProgress, results) => {
+  getStrip = (type) => {
     const { classes } = this.props;
+    const { title } = DashboardConstants.SECTIONS[type];
+    let results = [];
+    let inProgress = false;
+    if (type === DashboardConstants.MOST_RECENT) {
+      inProgress = this.props.mostRecentInProgress;
+      results = this.props.mostRecent;
+    } else if (type === DashboardConstants.MOST_VIEWED) {
+      inProgress = this.props.mostViewedInProgress;
+      results = this.props.mostViewed;
+    } else if (type === DashboardConstants.MOST_LIKED) {
+      inProgress = this.props.mostLikedInProgress;
+      results = this.props.mostLiked;
+    } else if (type === DashboardConstants.MOST_RATED) {
+      inProgress = this.props.mostRatedInProgress;
+      results = this.props.mostRated;
+    }
+
     return (
       <Grid item xs={12}>
         <Grid container className={classes.headerGrid}>
-          <Grid item xs={3}>
-            <Typography variant="h6" gutterBottom component="div">{title}</Typography>
-          </Grid>
-          <Grid item xs={5}></Grid>
-          <Grid item xs={4} className={classes.buttonGrid}>
-            <Button color="secondary">More</Button>
-          </Grid>
+          <Typography variant="h6" gutterBottom component="div">{title}</Typography>
         </Grid>
         { inProgress && SkeletonUtil.getMediumSkeleton(5) }
         <Grid container className={classes.stripGrid}>
@@ -41,7 +55,7 @@ class Dashboard extends React.Component {
               {results.map((media) => (
                 <Grid key={media.id} item>
                   <SearchResultCard media={media}
-                    onMediaClick={() => this.handleMediaClick(media)}
+                    onMediaClick={() => this.handleMediaClick(media, results)}
                     />
                 </Grid>
               ))}
@@ -53,28 +67,23 @@ class Dashboard extends React.Component {
   }
 
   render() {
-    const { mostRecentInProgress, mostViewedInProgress, mostLikedInProgress, mostRatedInProgress } = this.props;
-    const { mostRecent, mostViewed, mostLiked, mostRated } = this.props;
-
     return (
       <Grid container spacing={3}>
-        { this.getStrip('Most Recent', mostRecentInProgress, mostRecent) }
-        { this.getStrip('Most Viewed', mostViewedInProgress, mostViewed) }
-        { this.getStrip('Most Liked', mostLikedInProgress, mostLiked) }
-        { this.getStrip('Most Rated', mostRatedInProgress, mostRated) }
+        { this.getStrip(DashboardConstants.MOST_RECENT) }
+        { this.getStrip(DashboardConstants.MOST_VIEWED) }
+        { this.getStrip(DashboardConstants.MOST_LIKED) }
+        { this.getStrip(DashboardConstants.MOST_RATED) }
       </Grid>
     );  
   }
 }
 
 const mapState = state => {
-  return {
-    ...DashboardSelectors.getDashboard(state)
-  }
+  return DashboardSelectors.getDashboard(state);
 };
 const mapActions = {
   onLoad: DashboardActions.onLoad,
-  onMediaClick: WatchActions.onWatchMedia
+  onMediaClick: DashboardActions.onMediaClick
 }
 
 const DashboardContainer = connect(mapState, mapActions)(withStyles(dashboardStyles) (Dashboard));
