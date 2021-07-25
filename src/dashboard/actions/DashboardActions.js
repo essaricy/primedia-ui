@@ -17,9 +17,9 @@ export function loadMost(dispatch, resultActionType, progressActionType, url) {
 
 export function onLoad() {
     return dispatch => {
-        loadMost(dispatch, DashboardActionTypes.SET_MOST_RECENT, DashboardActionTypes.SET_MOST_RECENT_IN_PROGRESS, 'most/recent')
-        loadMost(dispatch, DashboardActionTypes.SET_MOST_VIEWED, DashboardActionTypes.SET_MOST_VIEWED_IN_PROGRESS, 'most/viewed')
-        loadMost(dispatch, DashboardActionTypes.SET_MOST_LIKED, DashboardActionTypes.SET_MOST_LIKED_IN_PROGRESS, 'most/liked')
-        loadMost(dispatch, DashboardActionTypes.SET_MOST_RATED, DashboardActionTypes.SET_MOST_RATED_IN_PROGRESS, 'most/rated')
+        loadMost(dispatch, DashboardActionTypes.SET_MOST_RECENT, DashboardActionTypes.SET_MOST_RECENT_IN_PROGRESS, 'recent/most')
+        loadMost(dispatch, DashboardActionTypes.SET_MOST_VIEWED, DashboardActionTypes.SET_MOST_VIEWED_IN_PROGRESS, 'viewed/most')
+        loadMost(dispatch, DashboardActionTypes.SET_MOST_LIKED, DashboardActionTypes.SET_MOST_LIKED_IN_PROGRESS, 'liked/most')
+        loadMost(dispatch, DashboardActionTypes.SET_MOST_RATED, DashboardActionTypes.SET_MOST_RATED_IN_PROGRESS, 'rated/most')
     }
 }

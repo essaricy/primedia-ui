@@ -1,4 +1,4 @@
-import { amber, grey, blue } from '@material-ui/core/colors';
+import { grey, blue } from '@material-ui/core/colors';
 
 export const styles = (theme) => ({
   root: {
@@ -7,7 +7,7 @@ export const styles = (theme) => ({
     marginTop: 10
   },
   galleryGrid: {
-    height: 474,
+    height: 507,
     backgroundColor: grey[900],
     textAlign: 'center'
   },
@@ -32,34 +32,5 @@ export const styles = (theme) => ({
   },
   thumbnail: {
     height: 80
-  },
-
-
-  ///////////
-  searchCard: {
-    marginLeft: 10,
-    padding: 10,
-    maxHeight: 520,
-    overflow: 'auto'
-  },
-  searchThumbGrid: {
-    flexGrow: 1,
-    marginBottom: 6
-  },
-  searchMediaGrid: {
-    textAlign: 'center',
-    backgroundColor: grey[900],
-    maxHeight: 80,
-    minHeight: 80,
-    cursor: 'pointer'
-  },
-  searchMediaImage: {
-    maxWidth: 140
-  },
-  searchMediaContent: {
-    paddingLeft: 5
-  },
-  iconsContainer: {
-    marginTop: 5
   },
 });

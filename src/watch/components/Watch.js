@@ -11,9 +11,8 @@ import EditIcon from '@material-ui/icons/Edit';
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 import moment from "moment";
-import ImageGallery from 'react-image-gallery';
-import "react-image-gallery/styles/css/image-gallery.css";
 
+import Gallery from './Gallery';
 import Tags from '../../app/components/Tags';
 import Rate from '../../app/components/Rate';
 import Quality from '../../app/components/Quality';
@@ -24,6 +23,7 @@ import * as MediaUtil from '../../app/util/MediaUtil';
 import { styles } from './WatchStyles';
 
 const useStyles = makeStyles((theme) => styles(theme));
+
 function Watch(props) {
   const history = useHistory();
   const classes = useStyles();
@@ -51,55 +51,17 @@ function Watch(props) {
   const handleTagDelete = (tag) => {
     props.onTagsChange(id, tags.filter(e => e !== tag));
   }
-  const handleThumbnailClick = (e, index) => {
+  const handleNavigation = (e, index, onClick) => {
     props.onItemSelection(searchResults[index]);
     history.push('/watch');
-  }
-
-  const getGallery = () => {
-    const gallery = [];
-    let index = 0;
-    searchResults.forEach((item, i) => {
-      gallery.push({
-        original: MediaUtil.getContentUrl(item.type, item.id),
-        thumbnail: MediaUtil.getThumbnailUrl(item.type, item.id),
-        description: item.name,
-        //originalHeight: 360,
-        //thumbnailClass: classes.thumbnail
-      });
-      if (item.id === media.id) {
-        index = i;
-      }
-    })
-    return (
-      <ImageGallery items={gallery} lazyLoad={true} thumbnailPosition="bottom" showBullets={false}
-        showPlayButton={false}
-        startIndex={index}
-        onThumbnailClick={handleThumbnailClick}
-        // renderLeftNav={(onClick, disabled) => {
-        //   return (
-        //     <button
-        //     type="button"
-        //     className="image-gallery-icon image-gallery-left-nav"
-        //     disabled={disabled}
-        //     onClick={onClick}
-        //     aria-label="Previous Slide"
-        //   >
-        //     <SVG icon="left" viewBox="6 0 12 24" />
-        //   </button>
-        //   )
-        // }}
-      />
-    );
+    onClick && onClick(e);
   }
 
   return (
     <div className={classes.root}>
       <Grid container spacing={1}>
-        <Grid item xs={9} 
-        //className={ classes.galleryGrid }
-        >
-          {getGallery()}
+        <Grid item xs={9} className={classes.galleryGrid}>
+          <Gallery items={searchResults} media={media} handleNavigation={handleNavigation} />
         </Grid>
         <Grid item xs={3}>
           <Grid container spacing={2}>
