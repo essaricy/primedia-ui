@@ -2,6 +2,7 @@ import * as UploadActionTypes from '../actiontypes/UploadActionTypes';
 import * as UploadConstants from '../constants/UploadConstants';
 import * as MediaUtil from '../../app/util/MediaUtil';
 
+const EXCLUDE_ITEMS = [ "and", "like", "near", "with", "then", "before"];
 const initialState = {
   fileUrl: null,
   type: null,
@@ -10,7 +11,6 @@ const initialState = {
   rating: 0,
   quality: 0,
   tags: [ ],
-  isUploading: false,
   progress: {
     id: null,
     status: null,
@@ -29,6 +29,7 @@ export default function uploadReducer(state = initialState, action) {
         fileUrl: URL.createObjectURL(file),
         type: MediaUtil.getIdentfiedType(file.type),
         name: state.retainName ? state.name : file.name.split('.').slice(0, -1).join('.').replace(/([A-Z])/g, ' $1').trim(),
+        //tags: file.name.match(/\b(\w+)\b/g).filter(el => el.length >=3),
         size: file.size,
         progress: initialState.progress
       };
@@ -55,9 +56,11 @@ export default function uploadReducer(state = initialState, action) {
         quality: action.payload
       };
     case UploadActionTypes.ADD_TAG:
+      const tag = action.payload;
       const tags = state.tags;
-      tags.push(action.payload);
-      // TOD: exclude words like and, with, then
+      if (!tags.includes(tag) && !EXCLUDE_ITEMS.includes(tag)) {
+        tags.push(action.payload);
+      }
       return {
         ...state,
         tags: tags
@@ -70,7 +73,6 @@ export default function uploadReducer(state = initialState, action) {
     case UploadActionTypes.SET_UPLOAD_INIT:
       return {
         ...state,
-        isUploading: true,
         progress: {
           ...state.progress,
           code: UploadConstants.INIT
@@ -79,7 +81,6 @@ export default function uploadReducer(state = initialState, action) {
     case UploadActionTypes.SET_UPLOAD_INIT_FAIL:
         return {
           ...state,
-          isUploading: false,
           progress: {
             ...state.progress,
             code: UploadConstants.INIT_FAIL
@@ -91,8 +92,7 @@ export default function uploadReducer(state = initialState, action) {
         ...state,
         progress: {
           ...progress
-        },
-        isUploading: UploadConstants.isInProgress(progress.status.code)
+        }
       }
     default:
       return state;

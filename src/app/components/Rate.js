@@ -46,7 +46,7 @@ export default function Rate(props) {
           setHover(newHover);
         }}
         readOnly={readOnly}
-        style={{ fontSize: getSize(size), ...style}}
+        style={{ fontSize: getSize(size), color: "#FF5733", ...style}}
       />
       {value !== null && !readOnly && <Box ml={2}>{labels[hover !== -1 ? hover : value]}</Box>}
     </div>

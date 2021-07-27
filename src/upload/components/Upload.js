@@ -26,19 +26,17 @@ function Upload(props) {
   const useStyles = makeStyles((theme) => uploadStyles(theme));
   const classes = useStyles();
 
-  const { fileUrl, name, type, size, rating, quality, tags, isUploading, progress, retainName } = props;
+  const { fileUrl, name, type, size, rating, quality, tags, progress, retainName } = props;
   const { onFileSelect, onNameChange, onRatingChange, onQualityChange } = props;
   const { onTagAdd, onTagDelete, onUpload, onRetainName } = props;
 
   return (
     <div className={classes.root}>
-      { progress && progress.id && <ProgressContainer />}
+      { progress && progress.status && <ProgressContainer />}
       <Paper className={classes.paper}>
         <Grid container spacing={2}>
           <Grid item xs={6}>
-            <Button variant="contained" component="label" 
-            //disabled={isUploading}
-            >
+            <Button variant="contained" component="label">
               Choose File
               <input type="file" hidden
                 onChange={(e) => {
@@ -50,7 +48,6 @@ function Upload(props) {
           </Grid>
           <Grid item xs={6} className={classes.uploadBtnGrid}>
             <Button color="primary" variant="contained" 
-              //disabled={isUploading}
               onClick={() => onUpload({ file, name, type, size, rating, quality, tags })}>
               Upload
             </Button>

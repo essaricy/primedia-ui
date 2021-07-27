@@ -3,11 +3,18 @@ import ImageGallery from 'react-image-gallery';
 import "react-image-gallery/styles/css/image-gallery.css";
 import LeftArrowIcon from '@material-ui/icons/ChevronLeft';
 import RightArrowIcon from '@material-ui/icons/ChevronRight';
+import FullscreenIcon from '@material-ui/icons/Fullscreen';
+import FullscreenExitIcon from '@material-ui/icons/FullscreenExit';
 
 import * as MediaUtil from '../../app/util/MediaUtil';
 
 function Gallery(props) {
   const { items, media, handleNavigation } = props;
+
+  const renderVideo = (item) => {
+    console.log("renderVideo", item);
+    return <video controls src={item.original} height={498} />;
+  }
 
   const gallery = [];
   let index = 0;
@@ -17,9 +24,9 @@ function Gallery(props) {
       thumbnail: MediaUtil.getThumbnailUrl(item.type, item.id),
       description: item.name,
       thumbnailHeight: 80,
+      renderItem: item.type === "V" ? renderVideo : null
       //thumbnailLabel: item.name,
-      //originalHeight: 360,
-      //thumbnailClass: classes.thumbnail
+      //originalHeight: 360
     });
     if (item.id === media.id) {
       index = i;
@@ -36,6 +43,7 @@ function Gallery(props) {
       showIndex={true}
       slideOnThumbnailOver={true}
       onThumbnailClick={handleNavigation}
+      showFullscreenButton={media.type==="I"}
       renderLeftNav={(onClick, disabled) => {
         return (
           <button
@@ -62,6 +70,17 @@ function Gallery(props) {
           </button>
         )
       }}
+      // renderFullscreenButton={(onClick, isFullscreen) => {
+      //   return (
+      //     <button
+      //       type='button'
+      //       className={"image-gallery-icon image-gallery-fullscreen-button"}
+      //       onClick={onClick}
+      //     >
+      //     { isFullscreen ? <FullscreenExitIcon /> : <FullscreenIcon /> }
+      //     </button>
+      //   );
+      // }}
     />
   );
 }

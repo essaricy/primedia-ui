@@ -12,7 +12,6 @@ import MenuItem from '@material-ui/core/MenuItem';
 import Menu from '@material-ui/core/Menu';
 import MenuIcon from '@material-ui/icons/Menu';
 import SearchIcon from '@material-ui/icons/Search';
-import AccountCircle from '@material-ui/icons/AccountCircle';
 import { Publish } from '@material-ui/icons';
 import NotificationsIcon from '@material-ui/icons/Notifications';
 import Drawer from '@material-ui/core/Drawer';
@@ -21,11 +20,9 @@ import Divider from '@material-ui/core/Divider';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
-import InboxIcon from '@material-ui/icons/MoveToInbox';
-import MailIcon from '@material-ui/icons/Mail'
 
 import { headerStyles } from './HeaderStyles';
-
+import * as MenuConstants from './MenuConstants';
 import * as MediaUtil from '../../app/util/MediaUtil';
 import * as SearchActions from '../../search/actions/SearchActions';
 import * as SearchSelectors from '../../search/selectors/SearchSelectors';
@@ -37,13 +34,10 @@ function Header(props) {
   const history = useHistory();
 
   const [ showSideMenu, setShowSideMenu ] = React.useState(false);
-  const [ profileMenuAnchor, setProfileMenuAnchor ] = React.useState(null);
   const [ searchTypeAnchor, setSearchTypeAnchor ] = React.useState(null);
-
-  const showProfileMenu = Boolean(profileMenuAnchor);
   const showSearchTypeDropDown = Boolean(searchTypeAnchor);
 
-  const { searchMode } = props;
+  const { searchMode, searchValue } = props;
   const toggleDrawer = (show) => (event) => {
     if (event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')) {
       return;
@@ -54,56 +48,36 @@ function Header(props) {
   const setSearchMode = (mode) => {
     setSearchTypeAnchor(null);
     props.onSearchModeChange(mode);
+    //searchByText(searchValue);
   }
 
-  const searchByText = (e) => {
-    const value = e.target.value;
-    if (e.key === 'Enter' && value.length >= 3) {
+  const searchByText = (value) => {
+    if (value.length >= 3) {
       props.onSearchValueChange(searchMode, value);
       history.push('/search');
     }
   }
 
-  const menuId = 'primary-search-account-menu';
-  const renderMenu = (
-    <Menu
-      anchorEl={profileMenuAnchor}
-      anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
-      id={menuId}
-      keepMounted
-      transformOrigin={{ vertical: 'top', horizontal: 'right' }}
-      open={showProfileMenu}
-      onClose={() => setProfileMenuAnchor(null)}
-    >
-      <MenuItem key="ProfileMenuItem" onClick={() => setProfileMenuAnchor(null)}>Profile</MenuItem>
-      <MenuItem key="AccountMenuItem" onClick={() => setProfileMenuAnchor(null)}>My account</MenuItem>
-    </Menu>
-  );
-
-  const listSideMenu = () => (
-    <div role="presentation"
+  const listSideMenu = () => {
+    const menuItems = [];
+    MenuConstants.MENU_ITEMS.forEach((item) => {
+      if (item.text === "-") {
+        menuItems.push(<Divider key={item.id}/>);
+      } else {
+        menuItems.push(
+          <ListItem button key={item.id}>
+            <ListItemIcon>{item.icon}</ListItemIcon>
+            <ListItemText primary={item.text} />
+          </ListItem>
+        );
+       }
+      }
+    )
+    return <div role="presentation"
       onClick={toggleDrawer(false)}
       onKeyDown={toggleDrawer(false)}
-    >
-      <List>
-        {['Inbox', 'Starred', 'Send email', 'Drafts'].map((text, index) => (
-          <ListItem button key={text}>
-            <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
-            <ListItemText primary={text} />
-          </ListItem>
-        ))}
-      </List>
-      <Divider />
-      <List>
-        {['All mail', 'Trash', 'Spam'].map((text, index) => (
-          <ListItem button key={text}>
-            <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
-            <ListItemText primary={text} />
-          </ListItem>
-        ))}
-      </List>
-    </div>
-  );
+    ><List>{menuItems}</List></div>
+  }
 
   const getSearchModes= () => {
     return <Menu id="search-type-menu" keepMounted
@@ -137,7 +111,6 @@ function Header(props) {
             <MenuIcon />
           </IconButton>
           <MenuItem component={Link} to={'/'}>
-            <img src="logo.png" width={50} height={30} style={{marginLeft: -30}}/>
             <Typography className={classes.title} variant="h6" noWrap>Primedia</Typography>
           </MenuItem>
           <div className={classes.search}>
@@ -151,7 +124,7 @@ function Header(props) {
                 input: classes.inputInput,
               }}
               inputProps={{ 'aria-label': 'search' }}
-              onKeyDown={searchByText}
+              onKeyDown={(e) => e.key === 'Enter' && searchByText(e.target.value)}
             />
             <IconButton aria-label="more" aria-controls="search-type-menu" aria-haspopup="true"
               onClick={(e) => setSearchTypeAnchor(e.currentTarget)}>
@@ -169,20 +142,9 @@ function Header(props) {
                 <NotificationsIcon />
               </Badge>
             </IconButton>
-            <IconButton
-              edge="end"
-              aria-label="account of current user"
-              aria-controls={menuId}
-              aria-haspopup="true"
-              onClick={(e) => setProfileMenuAnchor(e.currentTarget)}
-              color="inherit"
-            >
-              <AccountCircle />
-            </IconButton>
           </div>
         </Toolbar>
       </AppBar>
-      {renderMenu}
 
       <Drawer anchor="left" open={showSideMenu} onClose={toggleDrawer(false)}>
         {listSideMenu()}

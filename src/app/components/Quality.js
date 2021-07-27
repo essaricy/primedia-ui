@@ -3,7 +3,7 @@ import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Rating from '@material-ui/lab/Rating';
 import Box from '@material-ui/core/Box';
-import CameraEnhance from '@material-ui/icons/CameraEnhance';
+import PhotoCamera from '@material-ui/icons/PhotoCamera';
 
 const labels = {
   1: 'Low',
@@ -34,7 +34,8 @@ export default function Quality(props) {
       <Rating size="small"
         value={value}
         max={4}
-        icon={<CameraEnhance fontSize="inherit" />}
+        icon={<PhotoCamera fontSize="inherit" />}
+        style={{ color: "#34D80B"}}
         onChange={handleChange}
         onChangeActive={(event, newHover) => {
           setHover(newHover);
