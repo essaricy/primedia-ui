@@ -4,9 +4,12 @@ import { makeStyles } from '@material-ui/core/styles';
 
 import Button from '@material-ui/core/Button';
 import Checkbox from '@material-ui/core/Checkbox';
+import CloudUploadIcon from '@material-ui/icons/CloudUpload';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Grid from '@material-ui/core/Grid';
+import LinearProgress from '@material-ui/core/LinearProgress';
 import Paper from '@material-ui/core/Paper';
+import Snackbar from '@material-ui/core/Snackbar';
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 
@@ -26,17 +29,20 @@ function Upload(props) {
   const useStyles = makeStyles((theme) => uploadStyles(theme));
   const classes = useStyles();
 
-  const { fileUrl, name, type, size, rating, quality, tags, progress, retainName } = props;
+  const { fileUrl, name, type, size, rating, quality, tags, retainName } = props;
+  const { isUploading, uploadMessage, progress } = props;
   const { onFileSelect, onNameChange, onRatingChange, onQualityChange } = props;
   const { onTagAdd, onTagDelete, onUpload, onRetainName } = props;
 
   return (
     <div className={classes.root}>
-      { progress && progress.status && <ProgressContainer />}
+      {/* { progress && progress.status && <ProgressContainer />} */}
+      <ProgressContainer />
       <Paper className={classes.paper}>
         <Grid container spacing={2}>
           <Grid item xs={6}>
-            <Button variant="contained" component="label">
+            <Button variant="contained" component="label"
+              disabled={isUploading}>
               Choose File
               <input type="file" hidden
                 onChange={(e) => {
@@ -47,8 +53,11 @@ function Upload(props) {
             </Button>
           </Grid>
           <Grid item xs={6} className={classes.uploadBtnGrid}>
-            <Button color="primary" variant="contained" 
+            <Button color="primary" variant="contained"
+              disabled={isUploading}
+              startIcon={<CloudUploadIcon />}
               onClick={() => onUpload({ file, name, type, size, rating, quality, tags })}>
+              { isUploading && <LinearProgress color="primary" className={classes.linearProgress} /> }
               Upload
             </Button>
           </Grid>
@@ -86,6 +95,8 @@ function Upload(props) {
           }
         </Grid>
       </Paper>
+      { <Snackbar open={!isUploading && uploadMessage} message={uploadMessage}
+        ContentProps={{className: classes.snackbarStyleViaContentProps}} /> }
     </div>
   );
 }

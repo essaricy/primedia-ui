@@ -1,10 +1,11 @@
-export const SELECT_FILE = "SELECT_FILE";
-export const SET_NAME = "SET_NAME";
-export const SET_RATING = "SET_RATING";
-export const SET_QUALITY = "SET_QUALITY";
-export const ADD_TAG = "ADD_TAG";
-export const DELETE_TAG = "DELETE_TAG";
-export const SET_UPLOAD_INIT = "SET_UPLOAD_INIT";
-export const SET_UPLOAD_INIT_FAIL = "SET_UPLOAD_INIT_FAIL";
-export const SET_PROGRESS_STATUS = "SET_PROGRESS_STATUS";
-export const SET_RETAIN_NAME = "SET_RETAIN_NAME";
+export const SELECT_FILE = "upload/select-file";
+export const SET_MEDIA_NAME = "upload/set-media-name";
+export const SET_RATING = "upload/set-rating";
+export const SET_QUALITY = "upload/set-quality";
+export const ADD_TAG = "upload/add-tag";
+export const DELETE_TAG = "upload/delete-tag";
+export const SET_RETAIN_NAME = "upload/retain-name";
+
+export const SET_UPLOAD_ERROR = "upload/set-upload-error";
+export const SET_UPLOAD_START = "upload/start";
+export const SET_PROGRESS_STATUS = "upload/set-progress-status";

@@ -3,16 +3,26 @@ export const progressStyles = (theme) => ({
     flexGrow: 1,
     marginBottom: 10
   },
-  colorPrimary: {
+
+  // Primary color classes
+  color1: {
     backgroundColor: "#DDE0E3",
   },
-  barColorPrimary: {
-    backgroundColor: '#0FC62D',
+  barColor1: {
+    backgroundColor: '#069807',
   },
-  colorSecondary: {
+  dashedColor1: {
+    backgroundColor: '#C7F4C7',
+  },
+
+  // Secondary color classes
+  color2: {
     backgroundColor: "#DDE0E3",
   },
-  barColorSecondary: {
+  barColor2: {
     backgroundColor: '#F54822',
+  },
+  dashedColor2: {
+    backgroundColor: 'black',
   },
 });

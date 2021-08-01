@@ -26,5 +26,16 @@ export const uploadStyles = (theme) => ({
   infoGridItem: {
     paddingTop: 4,
     paddingBottom: 4
+  },
+  linearProgress: {
+    position: "absolute",
+    top: 0,
+    width: "100%",
+    height: "100%",
+    opacity: 0.5,
+    borderRadius: 4
+  },
+  snackbarStyleViaContentProps: {
+    backgroundColor: "#F63E29"
   }
 });

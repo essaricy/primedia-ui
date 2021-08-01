@@ -16,38 +16,29 @@ function LinearProgressWithLabel(props) {
 
   const { status, startTime, endTime } = props;
   const attr = UploadConstants.STATUS_ATTIBUTES[ status.code ];
+  //const attr = UploadConstants.STATUS_ATTIBUTES[ "THUMB_FAIL" ];
+
   return (
-    <Grid container className={classes.root}>
-      { startTime && 
-      <Grid item xs={12}>
-        <Typography variant="body2" color="textSecondary">Started At: { new Date(startTime).toLocaleString() }</Typography>
-      </Grid>
-      }
-      <Grid item xs={12}>
-        <LinearProgress variant="determinate" value={attr.value} 
+    <LinearProgress variant="buffer" value={attr.value} valueBuffer={attr.value+1}
           classes={
             attr.color === "green"
-            ? { colorPrimary: classes.colorPrimary, barColorPrimary: classes.barColorPrimary }
-            : { colorPrimary: classes.colorSecondary, barColorPrimary: classes.barColorSecondary }
-          } />
-      </Grid>
-      <Grid item xs={12}>
-        <Typography variant="body2" color="textSecondary">{attr.label}</Typography>
-        {endTime && <Typography variant="body2" color="textSecondary">Ended At: { new Date(endTime).toLocaleString() }</Typography>}
-      </Grid>
-    </Grid>
+            ? { colorPrimary: classes.color1, barColorPrimary: classes.barColor1, dashedColorPrimary: classes.dashedColor1 }
+            : { colorPrimary: classes.color2, barColorPrimary: classes.barColor2, dashedColorPrimary: classes.dashedColor2 }
+          }
+    >
+    </LinearProgress>
   );
 }
 
 function Progress(props) {
   const { id, status, startTime, endTime, onPollProgress } = props;
 
-  useEffect(() => {
-    const interval = setInterval(() => onPollProgress(id, status.code), 2000);
-    return () => {
-      clearInterval(interval);
-    };
-  });
+  // useEffect(() => {
+  //   const interval = setInterval(() => onPollProgress(id, status.code), 2000);
+  //   return () => {
+  //     clearInterval(interval);
+  //   };
+  // });
   return (
     <LinearProgressWithLabel status={status} startTime={startTime} endTime={endTime} />
   );
