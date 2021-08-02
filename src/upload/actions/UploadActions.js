@@ -12,11 +12,14 @@ const deleteTag = (tag) => { return { type: UploadActionTypes.DELETE_TAG, payloa
 const setRetainName = (val) => { return { type: UploadActionTypes.SET_RETAIN_NAME, payload: val }; };
 
 const setUploadMessage = (type, e) => {
+  console.log('setUploadMessage: ', e);
   let message = null;
   if (type === 'media') {
     message = UploadConstants.getMediaTypeError();
   } else if (type === 'upload') {
     message = UploadConstants.getUploadServiceError();
+  } else if (type === 'progress_expired') {
+    message = UploadConstants.getExpiredProgressError();
   } else if (type === 'progress') {
     message = UploadConstants.getUploadServiceError();
   }  
@@ -56,17 +59,18 @@ export function onUpload({ file, name, type, size, rating, quality, tags }) {
       .catch(e => dispatch(setUploadMessage('upload', e)));  
   }
 }
-export function onPollProgress(id, code) {
+export function onPollProgress(id) {
   return dispatch => {
-    if (UploadConstants.isInProgress(code)) {
-      return AxiosUtil.get(`progress/${id}`)
-      .then(progress => {
-        dispatch(setProgressStatus(progress));
-      })
-      .catch(e => {
-        console.log(e);
-        dispatch(setUploadMessage('progress', e))
-      });
-    }
+    return AxiosUtil.get(`progress/${id}`)
+    .then(progress => {
+      dispatch(setProgressStatus(progress));
+    })
+    .catch(e => {
+      if (e.response && e.response.status === 500) {
+        dispatch(setUploadMessage('progress_expired', e));
+      } else {
+        dispatch(setUploadMessage('progress', e));
+      }
+    });
   }
 }

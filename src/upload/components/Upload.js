@@ -36,13 +36,14 @@ function Upload(props) {
 
   return (
     <div className={classes.root}>
-      {/* { progress && progress.status && <ProgressContainer />} */}
-      <ProgressContainer />
+      { progress && progress.status && <ProgressContainer />}
       <Paper className={classes.paper}>
         <Grid container spacing={2}>
           <Grid item xs={6}>
-            <Button variant="contained" component="label"
-              disabled={isUploading}>
+            <Button variant="contained"
+              disabled={isUploading}
+              component="label"
+            >
               Choose File
               <input type="file" hidden
                 onChange={(e) => {
@@ -95,7 +96,7 @@ function Upload(props) {
           }
         </Grid>
       </Paper>
-      { <Snackbar open={!isUploading && uploadMessage} message={uploadMessage}
+      { <Snackbar open={uploadMessage} message={uploadMessage}
         ContentProps={{className: classes.snackbarStyleViaContentProps}} /> }
     </div>
   );

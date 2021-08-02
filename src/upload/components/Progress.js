@@ -16,7 +16,6 @@ function LinearProgressWithLabel(props) {
 
   const { status, startTime, endTime } = props;
   const attr = UploadConstants.STATUS_ATTIBUTES[ status.code ];
-  //const attr = UploadConstants.STATUS_ATTIBUTES[ "THUMB_FAIL" ];
 
   return (
     <LinearProgress variant="buffer" value={attr.value} valueBuffer={attr.value+1}
@@ -32,13 +31,14 @@ function LinearProgressWithLabel(props) {
 
 function Progress(props) {
   const { id, status, startTime, endTime, onPollProgress } = props;
-
-  // useEffect(() => {
-  //   const interval = setInterval(() => onPollProgress(id, status.code), 2000);
-  //   return () => {
-  //     clearInterval(interval);
-  //   };
-  // });
+  useEffect(() => {
+    if (UploadConstants.isInProgress(status.code)) {
+      const interval = setInterval(() => onPollProgress(id), 2000);
+      return () => {
+        clearInterval(interval);
+      };  
+    }
+  });
   return (
     <LinearProgressWithLabel status={status} startTime={startTime} endTime={endTime} />
   );

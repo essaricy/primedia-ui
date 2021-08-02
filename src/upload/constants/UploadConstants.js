@@ -28,11 +28,18 @@ export const isSuccessful = (code) => {
   return code === SAVE_DONE;
 }
 export const getLabel = (code) => {
-  return IN_PROGRESS_STATUSES[code].label;
+  console.log('getLabel: ', code);
+  return STATUS_ATTIBUTES[code].label;
 }
 export const getMediaTypeError = () => {
   return "Select only image or video files";
 }
 export const getUploadServiceError = () => {
   return "Upload service is down. try again after some time";
+}
+export const getExpiredProgressError = () => {
+  return "Progress id is either expired or is invalid";
+}
+export const getProgressServiceError = () => {
+  return "Progress service is down. try again after some time";
 }
