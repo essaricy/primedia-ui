@@ -26,7 +26,7 @@ export function onSearchValueChange(text) {
 }
 export function onSearch(mode, text, history) {
   return dispatch => {
-    if (text.length > 3) {
+    if (text.length >= 3) {
       dispatch(setStartSearch(text));
       AxiosUtil.get(`media/${MediaUtil.getMediaPath(mode)}?s=${text}`)
       .then((results) => {

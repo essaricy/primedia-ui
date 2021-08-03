@@ -11,6 +11,13 @@ export const searchCardStyles = (theme) => ({
     paddingRight: 10,
     paddingBottom: 5
   },
+  cardMediaLabel: {
+    position: 'absolute',
+    right: 0,
+    top: 118,
+    marginRight: 4,
+    color: '#FFFFFF'
+  },
   cardActions: {
     paddingTop: 0,
     paddingLeft: 10,
