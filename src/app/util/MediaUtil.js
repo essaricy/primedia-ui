@@ -10,7 +10,9 @@ export function getMediaTypes() {
   ];
 }
 export function getMediaIcon(code) {
-  return code === "V" ? <Videocam color="secondary" /> : <PhotoCamera color="secondary" />;
+  return code === "V"
+    ? <Videocam style={{marginRight: 5}} />
+    : <PhotoCamera style={{marginRight: 5}} />;
 }
 export function getMediaName(code) {
   return getMediaTypes().find(m => m.code === code).name;

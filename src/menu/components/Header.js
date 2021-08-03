@@ -37,7 +37,9 @@ function Header(props) {
   const [ searchTypeAnchor, setSearchTypeAnchor ] = React.useState(null);
   const showSearchTypeDropDown = Boolean(searchTypeAnchor);
 
-  const { searchMode, searchValue } = props;
+  const { searchMode, searchingText } = props.search;
+  const { onSearchModeChange, onSearchValueChange, onSearch } = props;
+
   const toggleDrawer = (show) => (event) => {
     if (event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')) {
       return;
@@ -46,15 +48,10 @@ function Header(props) {
   };
 
   const setSearchMode = (mode) => {
-    setSearchTypeAnchor(null);
-    props.onSearchModeChange(mode);
-    //searchByText(searchValue);
-  }
-
-  const searchByText = (value) => {
-    if (value.length >= 3) {
-      props.onSearchValueChange(searchMode, value);
-      history.push('/search');
+    if (searchMode !== mode) {
+      setSearchTypeAnchor(null);
+      onSearchModeChange(mode);
+      onSearch(mode, searchingText, history);
     }
   }
 
@@ -91,6 +88,7 @@ function Header(props) {
             onClick={() => {
               setSearchMode(option.code);
             }}>
+            {MediaUtil.getMediaIcon(option.code)}
             {option.name}
           </MenuItem>
       ))}
@@ -119,12 +117,14 @@ function Header(props) {
             </div>
             <InputBase
               placeholder="Search…"
+              value={searchingText}
               classes={{
                 root: classes.inputRoot,
                 input: classes.inputInput,
               }}
               inputProps={{ 'aria-label': 'search' }}
-              onKeyDown={(e) => e.key === 'Enter' && searchByText(e.target.value)}
+              onChange={(e) => onSearchValueChange(e.target.value)}
+              onKeyDown={(e) => e.key === 'Enter' && onSearch(searchMode, searchingText, history)}
             />
             <IconButton aria-label="more" aria-controls="search-type-menu" aria-haspopup="true"
               onClick={(e) => setSearchTypeAnchor(e.currentTarget)}>
@@ -155,14 +155,18 @@ function Header(props) {
 
 const mapState = state => {
   return {
-    searchMode: SearchSelectors.getSearchMode(state),
-    searchValue: SearchSelectors.getSearchText(state)
+    search: {
+      searchMode: SearchSelectors.getSearchMode(state),
+      searchingText: SearchSelectors.getSearchingText(state),
+      searchedText: SearchSelectors.getSearchedText(state),
+    }    
   };
 };
 
 const mapActions = {
   onSearchModeChange: SearchActions.onSearchMode,
-  onSearchValueChange: SearchActions.onSearchText
+  onSearchValueChange: SearchActions.onSearchValueChange,
+  onSearch: SearchActions.onSearch
 };
 
 const HeaderContainer = connect(mapState, mapActions)(Header);

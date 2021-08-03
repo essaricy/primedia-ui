@@ -22,7 +22,7 @@ function Search(props) {
   }
 
   const getSearchResultText = () => {
-    const { mode, text, results, inProgress, error } = props;
+    const { mode, searchedText:text, results, inProgress, error } = props;
     let message = '';
     if (inProgress == true) {
       message = `Searching for ${text}`;
@@ -63,7 +63,7 @@ const mapState = state => {
 };
 
 const mapActions = {
-  onLoad: SearchActions.onSearchText,
+  onLoad: SearchActions.onSearch,
   onMediaClick: WatchActions.onWatchMedia
 }
 

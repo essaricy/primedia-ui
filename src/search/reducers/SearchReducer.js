@@ -3,7 +3,8 @@ import * as WatchActionTypes from '../../watch/actiontypes/WatchActionTypes';
 
 const initialState = {
   mode: 'I',
-  text: null,
+  searchingText: null,
+  searchedText: null,
   inProgress: false,
   results: [],
   error: null
@@ -16,10 +17,15 @@ export default function searchReducer(state = initialState, action) {
         ...state,
         mode: action.payload
       };
-    case SearchActionTypes.SET_SEARCH_TEXT:
+    case SearchActionTypes.SET_SEARCHING_TEXT:
       return {
         ...state,
-        text: action.payload,
+        searchingText: action.payload
+      };
+    case SearchActionTypes.SET_START_SEARCH:
+      return {
+        ...state,
+        searchedText: state.searchingText,
         inProgress: true,
         results: [],
         error: null
@@ -38,15 +44,6 @@ export default function searchReducer(state = initialState, action) {
         inProgress: false,
         error: error
       };
-    // case WatchActionTypes.SET_MEDIA:
-    //   const searchResults = state.results;
-    //   const newMedia = action.payload;
-    //   const mediaToUpdate = searchResults[searchResults.findIndex((obj => obj.id == newMedia.id))];
-    //   mediaToUpdate.views = newMedia.views;
-    //   mediaToUpdate.lastSeen = newMedia.lastSeen;
-    //   return {
-    //     ...state
-    //   };
     default:
       return state;
   }
