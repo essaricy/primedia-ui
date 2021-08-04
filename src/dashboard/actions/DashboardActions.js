@@ -13,7 +13,7 @@ const setResults = (type, results) => {
 
 export function loadMost(dispatch, mode, resultActionType, progressActionType, urlPart) {
    dispatch(setInProgress(progressActionType, true));
-   return AxiosUtil.get(`media/${MediaUtil.getMediaPath(mode)}/${urlPart}`)
+   return AxiosUtil.get(`media/${MediaUtil.getMediaPath(mode)}/${urlPart}?max=5`)
    .then(results => dispatch(setResults(resultActionType, results)));
 }
 export function onLoad(mode) {

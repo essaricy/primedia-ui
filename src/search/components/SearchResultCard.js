@@ -11,6 +11,7 @@ import Link from '@material-ui/core/Link';
 import Typography from '@material-ui/core/Typography';
 import ViewsIcon from '@material-ui/icons/Visibility';
 import LikesIcon from '@material-ui/icons/ThumbUp';
+import { LazyLoadImage } from 'react-lazy-load-image-component';
 
 import moment from "moment";
 
@@ -27,10 +28,10 @@ export default function SearchResultCard(props) {
     <Card className={classes.searchCard}>
       <CardActionArea>
         <CardMedia style={{height: 140}}>
-          <img
-            className="MuiCardMedia-root MuiCardMedia-media MuiCardMedia-img" style={{height: 140}}
+          <LazyLoadImage height={140} width="100%"
             src={MediaUtil.getThumbnailUrl(type, id)}
-          />
+            className="MuiCardMedia-root MuiCardMedia-media MuiCardMedia-img"
+            effect="blur" />
           <Typography
             variant="button" display="block" gutterBottom
             className={classes.cardMediaLabel}>
