@@ -11,17 +11,21 @@ const setResults = (type, results) => {
   return { type: type, payload: results };
 };
 
-export function loadMost(dispatch, resultActionType, progressActionType, url) {
+export function loadMost(dispatch, mode, resultActionType, progressActionType, urlPart) {
    dispatch(setInProgress(progressActionType, true));
-   return AxiosUtil.get(`media/${url}`)
+   return AxiosUtil.get(`media/${MediaUtil.getMediaPath(mode)}/${urlPart}`)
    .then(results => dispatch(setResults(resultActionType, results)));
 }
-export function onLoad() {
+export function onLoad(mode) {
     return dispatch => {
-        loadMost(dispatch, DashboardActionTypes.SET_MOST_RECENT, DashboardActionTypes.SET_MOST_RECENT_IN_PROGRESS, 'recent/most')
-        loadMost(dispatch, DashboardActionTypes.SET_MOST_VIEWED, DashboardActionTypes.SET_MOST_VIEWED_IN_PROGRESS, 'viewed/most')
-        loadMost(dispatch, DashboardActionTypes.SET_MOST_LIKED, DashboardActionTypes.SET_MOST_LIKED_IN_PROGRESS, 'liked/most')
-        loadMost(dispatch, DashboardActionTypes.SET_MOST_RATED, DashboardActionTypes.SET_MOST_RATED_IN_PROGRESS, 'rated/most')
+        loadMost(dispatch, mode, DashboardActionTypes.SET_MOST_RECENT,
+          DashboardActionTypes.SET_MOST_RECENT_IN_PROGRESS, 'recent')
+        loadMost(dispatch, mode, DashboardActionTypes.SET_MOST_VIEWED,
+          DashboardActionTypes.SET_MOST_VIEWED_IN_PROGRESS, 'viewed')
+        loadMost(dispatch, mode, DashboardActionTypes.SET_MOST_LIKED,
+          DashboardActionTypes.SET_MOST_LIKED_IN_PROGRESS, 'liked')
+        loadMost(dispatch, mode, DashboardActionTypes.SET_MOST_RATED,
+          DashboardActionTypes.SET_MOST_RATED_IN_PROGRESS, 'rated')
     }
 }
 export function onMediaClick(media, results) {

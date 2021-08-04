@@ -10,12 +10,13 @@ import SearchResultCard from '../../search/components/SearchResultCard';
 import * as DashboardConstants from '../constants/DashboardConstants';
 import * as DashboardActions from '../actions/DashboardActions';
 import * as DashboardSelectors from '../selectors/DashboardSelectors';
+import * as SearchSelectors from '../../search/selectors/SearchSelectors';
 import * as SkeletonUtil from '../../app/util/SkeletonUtil';
 
 class Dashboard extends React.Component {
 
   componentDidMount() {
-    this.props.onLoad && this.props.onLoad();
+    this.props.onLoad && this.props.onLoad(this.props.mode);
   }
   handleMediaClick = (media, results) => {
     this.props.onMediaClick(media, results);
@@ -23,23 +24,24 @@ class Dashboard extends React.Component {
   }
 
   getStrip = (type) => {
-    const { classes } = this.props;
+    const { classes, dashboard } = this.props;
     const { title } = DashboardConstants.SECTIONS[type];
-    let results = [];
+    let results = null;
     let inProgress = false;
     if (type === DashboardConstants.MOST_RECENT) {
-      inProgress = this.props.mostRecentInProgress;
-      results = this.props.mostRecent;
+      inProgress = dashboard.mostRecentInProgress;
+      results = dashboard.mostRecent;
     } else if (type === DashboardConstants.MOST_VIEWED) {
-      inProgress = this.props.mostViewedInProgress;
-      results = this.props.mostViewed;
+      inProgress = dashboard.mostViewedInProgress;
+      results = dashboard.mostViewed;
     } else if (type === DashboardConstants.MOST_LIKED) {
-      inProgress = this.props.mostLikedInProgress;
-      results = this.props.mostLiked;
+      inProgress = dashboard.mostLikedInProgress;
+      results = dashboard.mostLiked;
     } else if (type === DashboardConstants.MOST_RATED) {
-      inProgress = this.props.mostRatedInProgress;
-      results = this.props.mostRated;
+      inProgress = dashboard.mostRatedInProgress;
+      results = dashboard.mostRated;
     }
+    results = results || [];
 
     return (
       <Grid item xs={12}>
@@ -47,6 +49,7 @@ class Dashboard extends React.Component {
           <Typography variant="h6" gutterBottom component="div">{title}</Typography>
         </Grid>
         { inProgress && SkeletonUtil.getMediumSkeleton(5) }
+        { !inProgress &&
         <Grid container className={classes.stripGrid}>
           <Grid item xs={12}>
             <Grid container spacing={2}>
@@ -60,6 +63,7 @@ class Dashboard extends React.Component {
             </Grid>
           </Grid>
         </Grid>
+        }
       </Grid>
     );
   }
@@ -77,7 +81,10 @@ class Dashboard extends React.Component {
 }
 
 const mapState = state => {
-  return DashboardSelectors.getDashboard(state);
+  return {
+    dashboard: DashboardSelectors.getDashboard(state),
+    mode: SearchSelectors.getSearchMode(state)
+  }
 };
 const mapActions = {
   onLoad: DashboardActions.onLoad,
