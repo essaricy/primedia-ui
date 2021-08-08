@@ -1,9 +1,7 @@
 import { React, useEffect } from 'react';
 import { connect } from 'react-redux';
 import { makeStyles } from '@material-ui/core/styles';
-import Grid from '@material-ui/core/Grid';
 import LinearProgress from '@material-ui/core/LinearProgress';
-import Typography from '@material-ui/core/Typography';
 
 import { progressStyles } from './ProgressStyles';
 import * as UploadActions from '../actions/UploadActions';
@@ -14,7 +12,7 @@ function LinearProgressWithLabel(props) {
   const useStyles = makeStyles((theme) => progressStyles(theme));
   const classes = useStyles();
 
-  const { status, startTime, endTime } = props;
+  const { status } = props;
   const attr = UploadConstants.STATUS_ATTIBUTES[ status.code ];
 
   return (

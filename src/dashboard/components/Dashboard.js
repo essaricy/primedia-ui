@@ -5,11 +5,13 @@ import { withStyles } from "@material-ui/core/styles";
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 
-import { dashboardStyles } from './DashboardStyles';
+import { styles } from './DashboardStyles';
 import SearchResultCard from '../../search/components/SearchResultCard';
 import * as DashboardConstants from '../constants/DashboardConstants';
 import * as DashboardActions from '../actions/DashboardActions';
 import * as DashboardSelectors from '../selectors/DashboardSelectors';
+
+import * as HeaderSelectors from '../../header/selectors/HeaderSelectors';
 import * as SearchSelectors from '../../search/selectors/SearchSelectors';
 import * as SkeletonUtil from '../../app/util/SkeletonUtil';
 
@@ -82,8 +84,8 @@ class Dashboard extends React.Component {
 
 const mapState = state => {
   return {
-    dashboard: DashboardSelectors.getDashboard(state),
-    mode: SearchSelectors.getSearchMode(state)
+    mode: HeaderSelectors.getMode(state),
+    dashboard: DashboardSelectors.getDashboard(state)
   }
 };
 const mapActions = {
@@ -91,5 +93,5 @@ const mapActions = {
   onMediaClick: DashboardActions.onMediaClick
 }
 
-const DashboardContainer = connect(mapState, mapActions)(withStyles(dashboardStyles) (Dashboard));
+const DashboardContainer = connect(mapState, mapActions)(withStyles(styles) (Dashboard));
 export default DashboardContainer;

@@ -64,7 +64,7 @@ function Watch(props) {
           <Gallery items={searchResults} media={media} handleNavigation={handleNavigation} />
         </Grid>
         <Grid item xs={3}>
-          <Grid container spacing={2}>
+          <Grid container spacing={1}>
             <Grid item xs={12} className={ classes.attributeGrid}>
               { isEditingName
                 ? <TextField fullWidth value={name}
@@ -86,7 +86,7 @@ function Watch(props) {
                 <Quality value={quality} onChange={(val) => props.onQualityChange(id, val)} />
               </Grid>
             </Grid>
-            <Grid item xs={12} className={classes.attributeGrid} style={{marginBottom: 10}}>
+            <Grid item xs={12} className={classes.attributeGrid} >
               <Tags value={tags} onAdd={handleTagAdd} onDelete={handleTagDelete} />
             </Grid>
             <Grid item xs={2} className={ classes.attributeGrid}>

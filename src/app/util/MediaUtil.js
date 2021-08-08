@@ -3,19 +3,20 @@ import Videocam from '@material-ui/icons/Videocam';
 import FullscreenIcon from '@material-ui/icons/Fullscreen';
 import * as AxiosUtil from './AxiosUtil';
 
+export const IMAGE = 'I';
+export const VIDEO = 'V';
+
 export function getMediaTypes() {
   return [
-    { code: 'I', name: 'Images', path: 'image', mimeIncludes: 'image' },
-    { code: 'V', name: 'Videos', path: 'video', mimeIncludes: 'video'}
+    { code: IMAGE, name: 'Images', color: '#1976d2', path: 'image', mimeIncludes: 'image' },
+    { code: VIDEO, name: 'Videos', color: '#e53935', path: 'video', mimeIncludes: 'video'}
   ];
-}
-export function getMediaIcon(code) {
-  return code === "V"
-    ? <Videocam style={{marginRight: 5}} />
-    : <PhotoCamera style={{marginRight: 5}} />;
 }
 export function getMediaName(code) {
   return getMediaTypes().find(m => m.code === code).name;
+}
+export function getMediaColor(code) {
+  return getMediaTypes().find(m => m.code === code).color;
 }
 export function getMediaPath(code) {
   return getMediaTypes().find(m => m.code === code).path;

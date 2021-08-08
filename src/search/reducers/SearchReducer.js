@@ -1,48 +1,60 @@
 import * as SearchActionTypes from '../actiontypes/SearchActionTypes';
-import * as WatchActionTypes from '../../watch/actiontypes/WatchActionTypes';
+import * as MediaUtil from '../../app/util/MediaUtil';
 
 const initialState = {
-  mode: 'I',
   searchingText: null,
   searchedText: null,
   inProgress: false,
   results: [],
-  error: null
+  message: null
 };
+
+function getSearchMessage(mode, inProgress, searchingText, results=[]) {
+  let message = '';
+  if (inProgress == true) {
+    message = `Searching for ${searchingText}`;
+  } else if (results.length === 0) {
+    message = `No ${MediaUtil.getMediaName(mode)} found for ${searchingText}`;
+  } else {
+    message = `${results.length} ${MediaUtil.getMediaName(mode)} found for ${searchingText}`;
+  }
+  return message;
+}
 
 export default function searchReducer(state = initialState, action) {
   switch (action.type) {
-    case SearchActionTypes.SET_SEARCH_MODE:
-      return {
-        ...state,
-        mode: action.payload
-      };
     case SearchActionTypes.SET_SEARCHING_TEXT:
       return {
         ...state,
         searchingText: action.payload
       };
     case SearchActionTypes.SET_START_SEARCH:
+      const { mode:searchMode1, text } = action.payload;
       return {
         ...state,
-        searchedText: state.searchingText,
         inProgress: true,
+        searchedText: text,
+        message: getSearchMessage(searchMode1, true, state.searchingText),
         results: [],
         error: null
       };
     case SearchActionTypes.SET_SEARCH_RESULTS:
+      const { mode:searchMode2, results } = action.payload;
       return { 
         ...state,
         inProgress: false,
-        results: action.payload
+        searchingText: null,
+        results: results,
+        message: getSearchMessage(searchMode2, false, state.searchingText, results)
       };
     case SearchActionTypes.SET_SEARCH_ERROR:
-      const { message } = action.payload;
-      const error = message === 'Network Error' ? 'Service is unavailable' : message;
+      const error = action.payload;
+      const message = error === 'Network Error' ? 'Service is unavailable' : error;
       return { 
         ...state,
         inProgress: false,
-        error: error
+        searchingText: null,
+        message: message
       };
     default:
       return state;

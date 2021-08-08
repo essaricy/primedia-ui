@@ -20,7 +20,6 @@ const useStyles = makeStyles({
     alignItems: 'center',
   },
 });
-
 function getSize(size) {
   if (size === "xs") {
     return 12;
@@ -29,7 +28,7 @@ function getSize(size) {
 }
 export default function Rate(props) {
   const [hover, setHover] = React.useState(-1);
-  const { value, readOnly, size, style } = props;
+  const { value, noLabel, readOnly, size, style } = props;
   const classes = useStyles();
 
   const handleChange = (e, rating) => {
@@ -48,7 +47,7 @@ export default function Rate(props) {
         readOnly={readOnly}
         style={{ fontSize: getSize(size), color: "#FF5733", ...style}}
       />
-      {value !== null && !readOnly && <Box ml={2}>{labels[hover !== -1 ? hover : value]}</Box>}
+      { !noLabel && value !== null && !readOnly && <Box ml={2}>{labels[hover !== -1 ? hover : value]}</Box>}
     </div>
   );
 }

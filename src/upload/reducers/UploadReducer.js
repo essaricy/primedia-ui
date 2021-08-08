@@ -1,3 +1,4 @@
+import moment from "moment";
 import * as UploadActionTypes from '../actiontypes/UploadActionTypes';
 import * as UploadConstants from '../constants/UploadConstants';
 import * as MediaUtil from '../../app/util/MediaUtil';
@@ -27,7 +28,12 @@ function getTagsFromName(name) {
     .filter(el => el.length >=3)
     .filter(el => !EXCLUDE_ITEMS.includes(el));
 }
-
+function getUploadedMessage(startTime, endTime) {
+  let mydate=new Date(endTime-startTime);
+  const minutes = mydate.getUTCMinutes();
+  const seconds = mydate.getUTCSeconds();
+  return 'Upload completed in ' + (minutes > 0 ? " minutes, " : "") + (seconds + " seconds");
+}
 export default function uploadReducer(state = initialState, action) {
   switch (action.type) {
     case UploadActionTypes.SELECT_FILE:
@@ -98,14 +104,13 @@ export default function uploadReducer(state = initialState, action) {
       }
     case UploadActionTypes.SET_PROGRESS_STATUS:
       const progress = action.payload;
-      console.log('UploadActionTypes.SET_PROGRESS_STATUS: ', progress);
       const { status, startTime, endTime } = progress;
       const { code } = status;
       return {
         ...state,
         isUploading: false,
         uploadMessage: UploadConstants.isSuccessful(code)
-            ? 'Upload successful in ' + (endTime-startTime) + ' ms'
+            ? getUploadedMessage(startTime, endTime)
             : UploadConstants.getLabel(code),
         progress: {
           ...progress

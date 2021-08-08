@@ -1,5 +1,7 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
+import moment from "moment";
+import { LazyLoadImage } from 'react-lazy-load-image-component';
 
 import Card from '@material-ui/core/Card';
 import CardActionArea from '@material-ui/core/CardActionArea';
@@ -9,16 +11,16 @@ import CardMedia from '@material-ui/core/CardMedia';
 import Grid from '@material-ui/core/Grid';
 import Link from '@material-ui/core/Link';
 import Typography from '@material-ui/core/Typography';
+import UploadIcon from '@material-ui/icons/CloudUpload';
 import ViewsIcon from '@material-ui/icons/Visibility';
+import LastSeenIcon from '@material-ui/icons/VisibilityOff';
 import LikesIcon from '@material-ui/icons/ThumbUp';
-import { LazyLoadImage } from 'react-lazy-load-image-component';
-
-import moment from "moment";
 
 import * as MediaUtil from '../../app/util/MediaUtil';
-import { searchCardStyles } from './SearchResultCardStyles';
+import { styles } from './SearchResultCardStyles';
 
-const useStyles = makeStyles((theme) => searchCardStyles(theme));
+const useStyles = makeStyles((theme) => styles(theme));
+
 export default function SearchResultCard(props) {
   const classes = useStyles();
   const { media, onMediaClick } = props;
@@ -31,7 +33,8 @@ export default function SearchResultCard(props) {
           <LazyLoadImage height={140} width="100%"
             src={MediaUtil.getThumbnailUrl(type, id)}
             className="MuiCardMedia-root MuiCardMedia-media MuiCardMedia-img"
-            effect="blur" />
+            effect="blur"
+            onClick={onMediaClick} />
           <Typography
             variant="button" display="block" gutterBottom
             className={classes.cardMediaLabel}>
@@ -39,26 +42,29 @@ export default function SearchResultCard(props) {
           </Typography>
         </CardMedia>
         <CardContent className={classes.cardContent}>
-          <Grid container>
-            <Grid item xs={12}>
-              <Link href="#" onClick={onMediaClick} variant="inherit">{name}</Link>
-            </Grid>
-            <Grid item xs={12}>
-              <Typography className={classes.subText}>Uploaded: {moment(uploadDate).fromNow()}</Typography>
-            </Grid>
-            <Grid item xs={12}>
-              <Typography className={classes.subText}>
-                Last seen: { lastSeen ? moment(lastSeen).fromNow() : 'Never' }</Typography>
-            </Grid>
-          </Grid>
+          <Link href="#" onClick={onMediaClick} variant="inherit">{name}</Link>
         </CardContent>
       </CardActionArea>
       <CardActions className={classes.cardActions}>
         <Grid container>
-          <ViewsIcon className={classes.icon} />
-          <Typography className={classes.iconLabel}>{views}</Typography>
-          <LikesIcon className={classes.icon} />
-          <Typography className={classes.iconLabel}>{likes}</Typography>
+          <Grid item xs={12}>
+            <Typography className={classes.subText}>
+              <Grid container>
+                <Grid item style={{marginRight: 4}}><UploadIcon className={classes.icon} /></Grid>
+                <Grid item style={{marginRight: 4}}>{moment(uploadDate).fromNow()}</Grid>
+                <Grid item style={{marginRight: 4}}><LastSeenIcon className={classes.icon} /></Grid>
+                <Grid item>{ lastSeen ? moment(lastSeen).fromNow() : 'Never' }</Grid>
+              </Grid>
+            </Typography>
+          </Grid>
+          <Grid item xs={12}>
+            <Grid container>
+              <Grid item><ViewsIcon className={classes.icon} /></Grid>
+              <Grid item><Typography className={classes.iconLabel}>{views}</Typography></Grid>
+              <Grid item><LikesIcon className={classes.icon} /></Grid>
+              <Grid item><Typography className={classes.iconLabel}>{likes}</Typography></Grid>
+            </Grid>
+          </Grid>
         </Grid>
       </CardActions>
     </Card>

@@ -1,4 +1,4 @@
-export const dashboardStyles = (theme) => ({
+export const styles = (theme) => ({
     headerGrid: {
         flexGrow: 1,
         marginTop: 10,

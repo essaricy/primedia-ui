@@ -1,71 +1,57 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { useHistory } from "react-router-dom";
+import { makeStyles } from '@material-ui/core/styles';
+import InputBase from '@material-ui/core/InputBase';
 
-import Grid from '@material-ui/core/Grid';
-import Typography from '@material-ui/core/Typography';
+import SearchIcon from '@material-ui/icons/Search';
 
-import SearchResultCard from './SearchResultCard';
-import * as MediaUtil from '../../app/util/MediaUtil';
-import * as SkeletonUtil from '../../app/util/SkeletonUtil';
+import { styles } from './SearchStyles';
+import * as SearchActions from '../../search/actions/SearchActions';
+import * as SearchSelectors from '../../search/selectors/SearchSelectors';
 
-import * as SearchSelectors from '../selectors/SearchSelectors';
-import * as SearchActions from '../actions/SearchActions';
-import * as WatchActions from '../../watch/actions/WatchActions';
+const useStyles = makeStyles((theme) => styles(theme));
 
 function Search(props) {
+  const classes = useStyles();
   const history = useHistory();
 
-  const handleMediaClick = (media) => {
-    props.onMediaClick(media);
-    history.push('/watch');
-  }
+  const { mode, searchingText } = props;
+  const { onSearchValueChange, onSearch } = props;
 
-  const getSearchResultText = () => {
-    const { mode, searchedText:text, results, inProgress, error } = props;
-    let message = '';
-    if (inProgress == true) {
-      message = `Searching for ${text}`;
-    } else if (error) {
-      message = error;
-    } else if (results.length === 0) {
-      message = `No ${MediaUtil.getMediaName(mode)} found for ${text}`;
-    } else {
-      message = `${results.length} ${MediaUtil.getMediaName(mode)} found for ${text}`;
-    }
-    return <Typography variant="subtitle1" display="inline" style={{marginLeft: 20, marginTop: 10 }}>
-      {message}
-    </Typography>;
-  }
+  const onChange = (e) => onSearchValueChange(e.target.value)
+  const onSubmit = (e) => e.key === 'Enter' && onSearch(mode, searchingText, history);
 
-  const { inProgress, results } = props;
   return (
-  <React.Fragment>
-    {getSearchResultText()}
-    { inProgress && SkeletonUtil.getMediumSkeleton(10) }
-    <Grid container style={{flexGrow: 1, marginTop: 0, marginLeft: 10, marginRight: 10 }}>
-      <Grid item xs={12}>
-        <Grid container spacing={2}>
-          {results.map((media) => (
-            <Grid key={media.id} item>
-              <SearchResultCard media={media}
-                onMediaClick={() => handleMediaClick(media)} />
-            </Grid>
-          ))}
-        </Grid>
-      </Grid>
-    </Grid>
-  </React.Fragment>);
+    <div className={classes.root}>
+      <div className={classes.icon}>
+        <SearchIcon />
+      </div>
+      <InputBase
+        placeholder="Search…"
+        value={searchingText}
+        classes={{
+          root: classes.inputRoot,
+          input: classes.inputInput,
+        }}
+        inputProps={{ 'aria-label': 'search' }}
+        onChange={onChange}
+        onKeyDown={onSubmit}
+      />
+    </div>
+  );
 }
 
 const mapState = state => {
-  return SearchSelectors.getSearch(state);
+  return {
+    searchingText: SearchSelectors.getSearchingText(state)
+  };
 };
 
 const mapActions = {
-  onLoad: SearchActions.onSearch,
-  onMediaClick: WatchActions.onWatchMedia
-}
+  onSearchValueChange: SearchActions.onSearchValueChange,
+  onSearch: SearchActions.onSearch
+};
 
 const SearchContainer = connect(mapState, mapActions)(Search);
 export default SearchContainer;

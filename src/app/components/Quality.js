@@ -19,10 +19,15 @@ const useStyles = makeStyles({
     alignItems: 'center',
   },
 });
-
+function getSize(size) {
+  if (size === "xs") {
+    return 12;
+  }
+  return 18;
+}
 export default function Quality(props) {
   const [hover, setHover] = React.useState(-1);
-  const { value, style } = props;
+  const { value, size, noLabel, style } = props;
   const classes = useStyles();
 
   const handleChange = (e, quality) => {
@@ -35,13 +40,13 @@ export default function Quality(props) {
         value={value}
         max={4}
         icon={<PhotoCamera fontSize="inherit" />}
-        style={{ color: "#34D80B"}}
+        style={{ fontSize: getSize(size), color: "#34D80B"}}
         onChange={handleChange}
         onChangeActive={(event, newHover) => {
           setHover(newHover);
         }}
       />
-      {value !== null && <Box ml={2}>{labels[hover !== -1 ? hover : value]}</Box>}
+      { !noLabel && value !== null && <Box ml={2}>{labels[hover !== -1 ? hover : value]}</Box>}
     </div>
 
   );

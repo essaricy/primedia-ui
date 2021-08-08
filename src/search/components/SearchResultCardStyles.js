@@ -1,7 +1,7 @@
 import { grey } from '@material-ui/core/colors';
 
 export const greyText = grey[500];
-export const searchCardStyles = (theme) => ({
+export const styles = (theme) => ({
   searchCard: {
     maxWidth: 238
   },

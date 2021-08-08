@@ -1,19 +1,7 @@
 import { fade, makeStyles } from '@material-ui/core/styles';
 
-export const headerStyles = (theme) => ({
-  grow: {
-    flexGrow: 1,
-  },
-  menuButton: {
-    marginRight: theme.spacing(2),
-  },
-  title: {
-    display: 'none',
-    [theme.breakpoints.up('sm')]: {
-      display: 'block',
-    },
-  },
-  search: {
+export const styles = (theme) => ({
+  root: {
     position: 'relative',
     borderRadius: theme.shape.borderRadius,
     backgroundColor: fade(theme.palette.common.white, 0.15),
@@ -28,7 +16,7 @@ export const headerStyles = (theme) => ({
       width: 'auto',
     },
   },
-  searchIcon: {
+  icon: {
     padding: theme.spacing(0, 2),
     height: '100%',
     position: 'absolute',
@@ -49,23 +37,5 @@ export const headerStyles = (theme) => ({
     [theme.breakpoints.up('md')]: {
       width: '20ch',
     },
-  },
-  sectionDesktop: {
-    display: 'none',
-    [theme.breakpoints.up('md')]: {
-      display: 'flex',
-    },
-  },
-  sectionMobile: {
-    display: 'flex',
-    [theme.breakpoints.up('md')]: {
-      display: 'none',
-    },
-  },
-  sideMenuList: {
-    width: 250,
-  },
-  sideMenuFullList: {
-    width: 'auto',
-  },
+  }
 });
