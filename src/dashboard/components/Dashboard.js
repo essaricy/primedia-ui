@@ -17,8 +17,19 @@ import * as SkeletonUtil from '../../app/util/SkeletonUtil';
 
 class Dashboard extends React.Component {
 
-  componentDidMount() {
-    this.props.onLoad && this.props.onLoad(this.props.mode);
+  constructor(props) {
+    super(props);
+    this.state = {
+      mode: this.props.mode
+    }
+  }
+
+  componentWillReceiveProps(nextProps) {
+    const newMode = nextProps.mode;
+    if (newMode !== this.state.mode) {
+      this.setState({ mode: newMode });
+      this.props.onLoad && this.props.onLoad(newMode);
+    }
   }
   handleMediaClick = (media, results) => {
     this.props.onMediaClick(media, results);

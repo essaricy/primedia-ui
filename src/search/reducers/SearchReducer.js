@@ -43,7 +43,7 @@ export default function searchReducer(state = initialState, action) {
       return { 
         ...state,
         inProgress: false,
-        searchingText: null,
+        //searchingText: null,
         results: results,
         message: getSearchMessage(searchMode2, false, state.searchingText, results)
       };
@@ -53,7 +53,7 @@ export default function searchReducer(state = initialState, action) {
       return { 
         ...state,
         inProgress: false,
-        searchingText: null,
+        //searchingText: null,
         message: message
       };
     default:

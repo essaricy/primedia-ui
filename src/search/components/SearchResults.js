@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import { useHistory } from "react-router-dom";
 
@@ -9,13 +9,23 @@ import SearchResultCard from './SearchResultCard';
 import * as SkeletonUtil from '../../app/util/SkeletonUtil';
 
 import * as SearchSelectors from '../selectors/SearchSelectors';
+import * as HeaderSelectors from '../../header/selectors/HeaderSelectors';
 import * as SearchActions from '../actions/SearchActions';
 import * as WatchActions from '../../watch/actions/WatchActions';
 
 function SearchResults(props) {
   const history = useHistory();
 
-  const { message, results, inProgress } = props;
+  const { mode, search, onSearch } = props;
+  const { message, searchedText, results, inProgress } = search;
+  const [ currentMode, setCurrentMode ] = useState(mode);
+
+  useEffect(() => {
+    if (mode !== currentMode) {
+      setCurrentMode(mode);
+      onSearch(mode, searchedText, history);
+    }
+  }, [mode]);
 
   const handleMediaClick = (media) => {
     props.onMediaClick(media);
@@ -45,11 +55,14 @@ function SearchResults(props) {
 }
 
 const mapState = state => {
-  return SearchSelectors.getSearch(state)
+  return {
+    mode: HeaderSelectors.getMode(state),
+    search: SearchSelectors.getSearch(state)
+  }
 };
 
 const mapActions = {
-  onLoad: SearchActions.onSearch,
+  onSearch: SearchActions.onSearch,
   onMediaClick: WatchActions.onWatchMedia
 }
 

@@ -86,7 +86,7 @@ function Watch(props) {
                 <Quality value={quality} onChange={(val) => props.onQualityChange(id, val)} />
               </Grid>
             </Grid>
-            <Grid item xs={12} className={classes.attributeGrid} >
+            <Grid item xs={12} className={classes.attributeGrid}>
               <Tags value={tags} onAdd={handleTagAdd} onDelete={handleTagDelete} />
             </Grid>
             <Grid item xs={2} className={ classes.attributeGrid}>
