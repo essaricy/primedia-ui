@@ -1,5 +1,3 @@
-import PhotoCamera from '@material-ui/icons/PhotoCamera';
-import Videocam from '@material-ui/icons/Videocam';
 import FullscreenIcon from '@material-ui/icons/Fullscreen';
 import * as AxiosUtil from './AxiosUtil';
 

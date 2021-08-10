@@ -1,9 +1,8 @@
-import moment from "moment";
 import * as UploadActionTypes from '../actiontypes/UploadActionTypes';
 import * as UploadConstants from '../constants/UploadConstants';
 import * as MediaUtil from '../../app/util/MediaUtil';
 
-const EXCLUDE_ITEMS = [ "and", "like", "near", "with", "then", "before"];
+const EXCLUDE_ITEMS = [ "and", "like", "near", "with", "then", "before", "the" ];
 const initialState = {
   fileUrl: null,
   type: null,

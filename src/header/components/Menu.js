@@ -1,4 +1,5 @@
 import React from 'react';
+import { useHistory } from "react-router-dom";
 
 import Divider from '@material-ui/core/Divider';
 import Drawer from '@material-ui/core/Drawer';
@@ -10,7 +11,12 @@ import ListItemText from '@material-ui/core/ListItemText';
 import * as MenuConstants from './MenuConstants';
 
 function Menu(props) {
+  const history = useHistory();
   const { show, toggleDrawer } = props;
+
+  const navigate = (nav) => {
+    history.push(nav);
+  }
 
   const listSideMenu = () => {
     const menuItems = [];
@@ -19,7 +25,7 @@ function Menu(props) {
         menuItems.push(<Divider key={item.id}/>);
       } else {
         menuItems.push(
-          <ListItem button key={item.id}>
+          <ListItem button key={item.id} onClick={() => navigate(item.nav)}>
             <ListItemIcon>{item.icon}</ListItemIcon>
             <ListItemText primary={item.text} />
           </ListItem>

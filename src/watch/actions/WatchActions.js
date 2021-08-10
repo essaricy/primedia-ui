@@ -1,18 +1,20 @@
 import * as WatchActionTypes from '../actiontypes/WatchActionTypes';
 import * as AxiosUtil from '../../app/util/AxiosUtil';
 
-export const setWatchMedia = (media) => {
-  const newMedia = { ...media, views: media.views + 1, lastSeen: new Date().getTime() };
-  return { type: WatchActionTypes.SET_MEDIA, payload: newMedia };
+const setWatchCollection = (collection) => {
+  return { type: WatchActionTypes.SET_WATCH_COLLECTION, payload: collection };
+};
+const setWatchMedia = (media) => {
+  return { type: WatchActionTypes.SET_WATCH_MEDIA, payload: media };
 };
 const setEditingNameStart = () => {
-  return { type: WatchActionTypes.SET_EDITING_NAME_START };
+  return { type: WatchActionTypes.SET_START_EDITING_NAME };
 };
 const setName = () => {
   return { type: WatchActionTypes.SET_MEDIA_NAME };
 };
 const setEditingNameEnd = (value) => {
-  return { type: WatchActionTypes.SET_EDITING_NAME_END, payload: value };
+  return { type: WatchActionTypes.SET_END_EDITING_NAME, payload: value };
 };
 const setRating = (value) => {
   return { type: WatchActionTypes.SET_RATING, payload: value };
@@ -27,6 +29,9 @@ const addLike = () => {
   return { type: WatchActionTypes.ADD_LIKE };
 };
 
+export function onWatchCollection(collection) {
+  return dispatch => dispatch(setWatchCollection(collection))
+}
 export function onWatchMedia(media) {
   return dispatch => {
     dispatch(setWatchMedia(media));

@@ -9,14 +9,13 @@ import { styles } from './DashboardStyles';
 import SearchResultCard from '../../search/components/SearchResultCard';
 import * as DashboardConstants from '../constants/DashboardConstants';
 import * as DashboardActions from '../actions/DashboardActions';
+import * as WatchActions from '../../watch/actions/WatchActions';
 import * as DashboardSelectors from '../selectors/DashboardSelectors';
 
 import * as HeaderSelectors from '../../header/selectors/HeaderSelectors';
-import * as SearchSelectors from '../../search/selectors/SearchSelectors';
 import * as SkeletonUtil from '../../app/util/SkeletonUtil';
 
 class Dashboard extends React.Component {
-
   constructor(props) {
     super(props);
     this.state = {
@@ -24,15 +23,23 @@ class Dashboard extends React.Component {
     }
   }
 
+  componentDidMount() {
+    const currentMode = this.state.mode;
+    this.setState({ mode: currentMode });
+    this.props.onLoad && this.props.onLoad(currentMode);
+  }
+
   componentWillReceiveProps(nextProps) {
     const newMode = nextProps.mode;
-    if (newMode !== this.state.mode) {
+    const currentMode = this.state.mode;
+    if (currentMode == null || newMode !== currentMode) {
       this.setState({ mode: newMode });
       this.props.onLoad && this.props.onLoad(newMode);
     }
   }
   handleMediaClick = (media, results) => {
-    this.props.onMediaClick(media, results);
+    this.props.onWatchCollection(results);
+    this.props.onWatchMedia(media);
     this.props.history.push('/watch');
   }
 
@@ -101,7 +108,8 @@ const mapState = state => {
 };
 const mapActions = {
   onLoad: DashboardActions.onLoad,
-  onMediaClick: DashboardActions.onMediaClick
+  onWatchCollection: WatchActions.onWatchCollection,
+  onWatchMedia: WatchActions.onWatchMedia
 }
 
 const DashboardContainer = connect(mapState, mapActions)(withStyles(styles) (Dashboard));

@@ -2,7 +2,6 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { useHistory } from "react-router-dom";
 import { makeStyles } from '@material-ui/core/styles';
-import Card from '@material-ui/core/Card';
 import Grid from '@material-ui/core/Grid';
 import ViewsIcon from '@material-ui/icons/Visibility';
 import LikesIcon from '@material-ui/icons/ThumbUp';
@@ -18,7 +17,6 @@ import Rate from '../../app/components/Rate';
 import Quality from '../../app/components/Quality';
 import * as WatchActions from '../actions/WatchActions';
 import * as WatchSelectors from '../selectors/WatchSelectors';
-import * as SearchSelectors from '../../search/selectors/SearchSelectors';
 import * as MediaUtil from '../../app/util/MediaUtil';
 import { styles } from './WatchStyles';
 
@@ -28,7 +26,8 @@ function Watch(props) {
   const history = useHistory();
   const classes = useStyles();
 
-  const { media, searchResults } = props;
+  const { watch } = props;
+  const { media, collection } = watch;
   const { id, name, type } = media;
   const { views, rating, quality, size, likes, tags } = media;
   const { uploadDate, lastSeen } = media;
@@ -52,8 +51,7 @@ function Watch(props) {
     props.onTagsChange(id, tags.filter(e => e !== tag));
   }
   const handleNavigation = (e, index, onClick) => {
-    props.onItemSelection(searchResults[index]);
-    history.push('/watch');
+    props.onWatchMedia(collection[index]);
     onClick && onClick(e);
   }
 
@@ -61,7 +59,7 @@ function Watch(props) {
     <div className={classes.root}>
       <Grid container spacing={1}>
         <Grid item xs={9} className={classes.galleryGrid}>
-          <Gallery items={searchResults} media={media} handleNavigation={handleNavigation} />
+          <Gallery items={collection} media={media} handleNavigation={handleNavigation} />
         </Grid>
         <Grid item xs={3}>
           <Grid container spacing={1}>
@@ -121,8 +119,7 @@ function Watch(props) {
 
 const mapState = state => {
   return {
-    searchResults: SearchSelectors.getSearchResults(state),
-    media: WatchSelectors.getWatch(state)
+    watch: WatchSelectors.getWatch(state)
   }
 };
 const mapActions = {
@@ -133,7 +130,7 @@ const mapActions = {
   onQualityChange: WatchActions.updateQuality,
   onTagsChange: WatchActions.updateTags,
   onLike: WatchActions.updateLike,
-  onItemSelection: WatchActions.onWatchMedia
+  onWatchMedia: WatchActions.onWatchMedia
 }
 
 const WatchContainer = connect(mapState, mapActions)(Watch);

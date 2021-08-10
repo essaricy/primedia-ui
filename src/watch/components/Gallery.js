@@ -3,8 +3,6 @@ import ImageGallery from 'react-image-gallery';
 import "react-image-gallery/styles/css/image-gallery.css";
 import LeftArrowIcon from '@material-ui/icons/ChevronLeft';
 import RightArrowIcon from '@material-ui/icons/ChevronRight';
-import FullscreenIcon from '@material-ui/icons/Fullscreen';
-import FullscreenExitIcon from '@material-ui/icons/FullscreenExit';
 
 import * as MediaUtil from '../../app/util/MediaUtil';
 
@@ -41,7 +39,7 @@ function Gallery(props) {
       showPlayButton={false}
       startIndex={index}
       showIndex={true}
-      slideOnThumbnailOver={true}
+      //slideOnThumbnailOver={true}
       onThumbnailClick={handleNavigation}
       showFullscreenButton={media.type==="I"}
       renderLeftNav={(onClick, disabled) => {

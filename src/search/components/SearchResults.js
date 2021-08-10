@@ -28,7 +28,8 @@ function SearchResults(props) {
   }, [mode]);
 
   const handleMediaClick = (media) => {
-    props.onMediaClick(media);
+    props.onWatchCollection(results);
+    props.onWatchMedia(media);
     history.push('/watch');
   }
 
@@ -63,7 +64,8 @@ const mapState = state => {
 
 const mapActions = {
   onSearch: SearchActions.onSearch,
-  onMediaClick: WatchActions.onWatchMedia
+  onWatchCollection: WatchActions.onWatchCollection,
+  onWatchMedia: WatchActions.onWatchMedia
 }
 
 const SearchResultsContainer = connect(mapState, mapActions)(SearchResults);

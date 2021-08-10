@@ -7,7 +7,7 @@ import UploadIcon from '@material-ui/icons/Publish';
 import HistoryIcon from '@material-ui/icons/History';
 
 export const MENU_ITEMS = [
-  { id: "HOME",         text: "Home",           icon: <HomeIcon /> },
+  { id: "HOME",         text: "Home",           icon: <HomeIcon />, nav: '/' },
   { id: "Divider_1",    text: "-"                                   },
   { id: "MOST_RECENT",  text: "Most Recent",    icon: <RecentIcon /> },
   { id: "MOST_VIEWED",  text: "Most Viewed",    icon: <VisibilityIcon /> },

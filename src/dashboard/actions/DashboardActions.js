@@ -1,8 +1,6 @@
 import * as DashboardActionTypes from '../actiontypes/DashboardActionTypes';
 import * as AxiosUtil from '../../app/util/AxiosUtil';
 import * as MediaUtil from '../../app/util/MediaUtil';
-import * as SearchActions from '../../search/actions/SearchActions';
-import * as WatchActions from '../../watch/actions/WatchActions';
 
 const setInProgress = (type, val) => {
   return { type: type, payload: val };
@@ -27,10 +25,4 @@ export function onLoad(mode) {
         loadMost(dispatch, mode, DashboardActionTypes.SET_MOST_RATED,
           DashboardActionTypes.SET_MOST_RATED_IN_PROGRESS, 'rated')
     }
-}
-export function onMediaClick(media, results) {
-  return dispatch => {
-    dispatch(WatchActions.setWatchMedia(media));
-    dispatch(SearchActions.setSearchResults(results));
-  }
 }

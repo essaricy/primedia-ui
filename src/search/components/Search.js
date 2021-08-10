@@ -3,7 +3,6 @@ import { connect } from 'react-redux';
 import { useHistory } from "react-router-dom";
 import { makeStyles } from '@material-ui/core/styles';
 import InputBase from '@material-ui/core/InputBase';
-
 import SearchIcon from '@material-ui/icons/Search';
 
 import { styles } from './SearchStyles';
