@@ -13,7 +13,7 @@ export const MENU_ITEMS = [
   { id: "MOST_VIEWED",  text: "Most Viewed",    icon: <VisibilityIcon /> },
   { id: "MOST_LIKED",   text: "Most Liked",     icon: <LikeIcon /> },
   { id: "MOST_RATED",   text: "Most Rated",     icon: <RateIcon /> },
-  { id: "Divider_1",    text: "-"                                   },
-  { id: "UPLOAD",       text: "Upload",         icon: <UploadIcon /> },
-  { id: "HISTORY",      text: "Upload History", icon: <HistoryIcon /> },
+  { id: "Divider_2",    text: "-"                                   },
+  { id: "UPLOAD",       text: "Upload",         icon: <UploadIcon />, nav: '/upload' },
+  { id: "HISTORY",      text: "Upload History", icon: <HistoryIcon />, nav: '/upload-history' },
 ];

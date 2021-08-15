@@ -9,3 +9,5 @@ export const SET_RETAIN_NAME = "upload/retain-name";
 export const SET_UPLOAD_ERROR = "upload/set-upload-error";
 export const SET_UPLOAD_START = "upload/start";
 export const SET_PROGRESS_STATUS = "upload/set-progress-status";
+
+export const SET_UPLOAD_HISTORY = "upload/set-history";

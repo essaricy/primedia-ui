@@ -1,11 +1,8 @@
 import { React, useEffect } from 'react';
-import { connect } from 'react-redux';
 import { makeStyles } from '@material-ui/core/styles';
 import LinearProgress from '@material-ui/core/LinearProgress';
 
 import { progressStyles } from './ProgressStyles';
-import * as UploadActions from '../actions/UploadActions';
-import * as UploadSelectors from '../selectors/UploadSelectors';
 import * as UploadConstants from '../constants/UploadConstants';
 
 function LinearProgressWithLabel(props) {
@@ -41,14 +38,4 @@ function Progress(props) {
     <LinearProgressWithLabel status={status} startTime={startTime} endTime={endTime} />
   );
 }
-const mapState = state => {
-  return {
-    ...UploadSelectors.getProgress(state)
-  }
-};
-const mapActions = {
-  onPollProgress: UploadActions.onPollProgress
-}
-
-const ProgressContainer = connect(mapState, mapActions)(Progress);
-export default ProgressContainer;
+export default Progress;

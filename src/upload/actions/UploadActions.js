@@ -26,7 +26,15 @@ const setUploadMessage = (type, e) => {
   return { type: UploadActionTypes.SET_UPLOAD_ERROR, payload: message }
 };
 const setUploadStart = () => { return { type: UploadActionTypes.SET_UPLOAD_START } };
-const setProgressStatus = (progress) => { return { type: UploadActionTypes.SET_PROGRESS_STATUS, payload: progress } };
+const setProgressStatus = (progress) => {
+  return { type: UploadActionTypes.SET_PROGRESS_STATUS, payload: progress }
+};
+const setUploadHistory = (history) => {
+  return {
+    type: UploadActionTypes.SET_UPLOAD_HISTORY,
+    payload: history
+  }
+}
 
 export function onNameChange(val) { return dispatch => dispatch(setName(val)) }
 export function onRatingChange(val) { return dispatch => dispatch(setRating(val)) }
@@ -34,7 +42,6 @@ export function onQualityChange(val) { return dispatch => dispatch(setQuality(va
 export function onTagAdd(val) { return dispatch => dispatch(addTag(val)) }
 export function onTagDelete(val) { return dispatch => dispatch(deleteTag(val)) }
 export function onRetainName(val) { return dispatch => dispatch(setRetainName(val)) }
-
 export function onFileSelect(file) {
   return dispatch => {
     const type = MediaUtil.getIdentfiedType(file.type);
@@ -43,7 +50,6 @@ export function onFileSelect(file) {
     : dispatch(setSelectedFile(file));
   }
 }
-
 export function onUpload({ file, name, type, size, rating, quality, tags }) {
   return dispatch => {
     dispatch(setUploadStart());
@@ -61,7 +67,7 @@ export function onUpload({ file, name, type, size, rating, quality, tags }) {
 }
 export function onPollProgress(id) {
   return dispatch => {
-    return AxiosUtil.get(`progress/${id}`)
+    return AxiosUtil.get(`progress/id/${id}`)
     .then(progress => {
       dispatch(setProgressStatus(progress));
     })
@@ -71,6 +77,16 @@ export function onPollProgress(id) {
       } else {
         dispatch(setUploadMessage('progress', e));
       }
+    });
+  }
+}
+export function onLoadUploadHistory(mode) {
+  return dispatch => {
+    return AxiosUtil.get(`progress/${MediaUtil.getMediaPath(mode)}`)
+    .then(history => dispatch(setUploadHistory(history)))
+    .catch(e => {
+      console.log(e);
+      alert(e);
     });
   }
 }

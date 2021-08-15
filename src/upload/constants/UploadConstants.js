@@ -28,7 +28,6 @@ export const isSuccessful = (code) => {
   return code === SAVE_DONE;
 }
 export const getLabel = (code) => {
-  console.log('getLabel: ', code);
   return STATUS_ATTIBUTES[code].label;
 }
 export const getMediaTypeError = () => {
@@ -43,3 +42,13 @@ export const getExpiredProgressError = () => {
 export const getProgressServiceError = () => {
   return "Progress service is down. try again after some time";
 }
+
+
+
+export const UPLOAD_STEPS = [
+  { code: "INIT",       label: "Upload File" },
+  { code: "REQUESTED",  label: "Request Processing" },
+  { code: "PROC_START", label: "Process file" },
+  { code: "THUMB_DONE", label: "Generate thumbnail", failCode: "THUMB_FAIL" },
+  { code: "SAVE_DONE",  label: "Store media", failCode: "SAVE_FAIL" }
+];

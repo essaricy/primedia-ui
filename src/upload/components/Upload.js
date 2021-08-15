@@ -18,10 +18,11 @@ import { uploadStyles } from './UploadStyles';
 import Rate from '../../app/components/Rate';
 import Quality from '../../app/components/Quality';
 import Tags from '../../app/components/Tags';
-import ProgressContainer from './Progress';
+import StepperProgress from '../../app/components/StepperProgress';
 
 import * as UploadActions from '../actions/UploadActions';
 import * as UploadSelectors from '../selectors/UploadSelectors';
+import * as UploadConstants from '../constants/UploadConstants';
 import * as MediaUtil from '../../app/util/MediaUtil';
 
 function Upload(props) {
@@ -33,10 +34,12 @@ function Upload(props) {
   const { isUploading, uploadMessage, progress } = props;
   const { onFileSelect, onNameChange, onRatingChange, onQualityChange } = props;
   const { onTagAdd, onTagDelete, onUpload, onRetainName } = props;
+  const { onPollProgress } = props;
 
   return (
     <div className={classes.root}>
-      { progress && progress.status && <ProgressContainer />}
+      <StepperProgress steps={UploadConstants.UPLOAD_STEPS} progress={progress}
+        onPollProgress={onPollProgress} />
       <Paper className={classes.paper}>
         <Grid container spacing={2}>
           <Grid item xs={6}>
@@ -114,7 +117,8 @@ const mapActions = {
   onTagAdd: UploadActions.onTagAdd,
   onTagDelete: UploadActions.onTagDelete,
   onUpload: UploadActions.onUpload,
-  onRetainName: UploadActions.onRetainName
+  onRetainName: UploadActions.onRetainName,
+  onPollProgress: UploadActions.onPollProgress
 }
 
 const UploadContainer = connect(mapState, mapActions)(Upload);

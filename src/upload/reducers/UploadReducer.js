@@ -20,6 +20,7 @@ const initialState = {
     startTime: null,
     endTime: null
   },
+  history: []
 };
 
 function getTagsFromName(name) {
@@ -114,6 +115,11 @@ export default function uploadReducer(state = initialState, action) {
         progress: {
           ...progress
         }
+      }
+    case UploadActionTypes.SET_UPLOAD_HISTORY:
+      return {
+        ...state,
+        history: action.payload
       }
     default:
       return state;
