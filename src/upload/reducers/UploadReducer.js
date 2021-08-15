@@ -99,19 +99,18 @@ export default function uploadReducer(state = initialState, action) {
         isUploading: true,
         uploadMessage: null,
         progress: {
-          ...UploadConstants.getInitProgress()
+          ...UploadConstants.getFirstStep()
         }
       }
     case UploadActionTypes.SET_PROGRESS_STATUS:
       const progress = action.payload;
       const { status, startTime, endTime } = progress;
-      const { code } = status;
       return {
         ...state,
         isUploading: false,
-        uploadMessage: UploadConstants.isSuccessful(code)
+        uploadMessage: UploadConstants.isCompleted(status)
             ? getUploadedMessage(startTime, endTime)
-            : UploadConstants.getLabel(code),
+            : null,
         progress: {
           ...progress
         }

@@ -18,28 +18,36 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+export const getStatusInfo = (steps, status) => {
+  if (status == null) {
+    return null;
+  }
+  let index = steps.findIndex(el => status === el.sCode);
+  if (index == -1) {
+    index = steps.findIndex(el => status === el.fCode);
+    return index == -1 ? null : { index };
+  } else {
+    return { isSuccess: true, index: index + 1 };
+  }
+}
+
 function getStepStatus(steps, status) {
-  if (status == null || status.code == null) {
-      return { active: -1 };
-  }
-  let index = steps.findIndex(el => el.code === status.code);
-  if (index != -1) {
-      return { active: index+1 };
-  }
-  index = steps.findIndex(el => el.failCode === status.code);
-  return index == -1 ? { active: -1 } : { active: index, isFail: true };
+  const statusInfo = getStatusInfo(steps, status);
+  console.log(statusInfo);
+  return statusInfo
+    ? { index: statusInfo.index, isFailure: statusInfo.isFailure }
+    : { index: -1 };
 }
 
 export default function StepperProgress(props) {
   const classes = useStyles();
   const { steps, progress, onPollProgress } = props;
-  const status = progress == null ? null : progress.status;
-  const { id } = progress;
+  const { id, status } = progress;
   const stepStatus = getStepStatus(steps, status);
-  const { active, isFail } = stepStatus;
+  const { index, isSuccess } = stepStatus;
 
   useEffect(() => {
-    if (active != -1 && !isFail && active != steps.length) {
+    if (index != -1 && isSuccess && index != steps.length) {
       const interval = setInterval(() => onPollProgress(id), 2000);
       return () => {
         clearInterval(interval);
@@ -49,13 +57,13 @@ export default function StepperProgress(props) {
 
   return (
     <div className={classes.root}>
-      <Stepper activeStep={stepStatus.active} alternativeLabel>
+      <Stepper activeStep={stepStatus.index} alternativeLabel>
         {steps.map((step, index) => (
-          <Step key={step.code}>
+          <Step key={step.sCode}>
             <StepLabel>
               <Typography variant="caption"
-                color={stepStatus.isFail && stepStatus.active === index ? "error": ""}>
-                {step.label}
+                color={stepStatus.isFail && stepStatus.index === index ? "error": ""}>
+                {stepStatus.isFail && stepStatus.index === index ? step.fLabel : step.sLabel }
               </Typography>
             </StepLabel>
           </Step>
