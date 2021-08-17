@@ -19,15 +19,18 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export const getStatusInfo = (steps, status) => {
+  const NOT_FOUND = -1;
   if (status == null) {
     return null;
   }
   let index = steps.findIndex(el => status === el.sCode);
-  if (index == -1) {
+  console.log('sCode index: ', index);
+  if (index == NOT_FOUND) {
     index = steps.findIndex(el => status === el.fCode);
-    return index == -1 ? null : { index };
+    console.log('fCode index: ', index);
+    return index == NOT_FOUND ? null : { isFailure: true, index };
   } else {
-    return { isSuccess: true, index: index + 1 };
+    return { index: index + 1 };
   }
 }
 
@@ -44,10 +47,10 @@ export default function StepperProgress(props) {
   const { steps, progress, onPollProgress } = props;
   const { id, status } = progress;
   const stepStatus = getStepStatus(steps, status);
-  const { index, isSuccess } = stepStatus;
+  const { index, isFailure } = stepStatus;
 
   useEffect(() => {
-    if (index != -1 && isSuccess && index != steps.length) {
+    if (index != -1 && !isFailure && index != steps.length) {
       const interval = setInterval(() => onPollProgress(id), 2000);
       return () => {
         clearInterval(interval);

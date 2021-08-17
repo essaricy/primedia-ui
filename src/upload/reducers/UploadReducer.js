@@ -99,7 +99,8 @@ export default function uploadReducer(state = initialState, action) {
         isUploading: true,
         uploadMessage: null,
         progress: {
-          ...UploadConstants.getFirstStep()
+          ...state.progress,
+          status: UploadConstants.getFirstStep()
         }
       }
     case UploadActionTypes.SET_PROGRESS_STATUS:
