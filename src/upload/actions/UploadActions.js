@@ -10,31 +10,11 @@ const setQuality = (quality) => { return { type: UploadActionTypes.SET_QUALITY, 
 const addTag = (tag) => { return { type: UploadActionTypes.ADD_TAG, payload: tag } };
 const deleteTag = (tag) => { return { type: UploadActionTypes.DELETE_TAG, payload: tag } };
 const setRetainName = (val) => { return { type: UploadActionTypes.SET_RETAIN_NAME, payload: val }; };
+const setUploadMessage = (message) => { return { type: UploadActionTypes.SET_UPLOAD_ERROR, payload: message } };
 
-const setUploadMessage = (type, e) => {
-  console.log('setUploadMessage: ', e);
-  let message = null;
-  if (type === 'media') {
-    message = UploadConstants.getMediaTypeError();
-  } else if (type === 'upload') {
-    message = UploadConstants.getUploadServiceError();
-  } else if (type === 'progress_expired') {
-    message = UploadConstants.getExpiredProgressError();
-  } else if (type === 'progress') {
-    message = UploadConstants.getUploadServiceError();
-  }  
-  return { type: UploadActionTypes.SET_UPLOAD_ERROR, payload: message }
-};
 const setUploadStart = () => { return { type: UploadActionTypes.SET_UPLOAD_START } };
-const setProgressStatus = (progress) => {
-  return { type: UploadActionTypes.SET_PROGRESS_STATUS, payload: progress }
-};
-const setUploadHistory = (history) => {
-  return {
-    type: UploadActionTypes.SET_UPLOAD_HISTORY,
-    payload: history
-  }
-}
+const setProgressStatus = (progress) => { return { type: UploadActionTypes.SET_PROGRESS_STATUS, payload: progress } };
+const setUploadHistory = (history) => { return { type: UploadActionTypes.SET_UPLOAD_HISTORY, payload: history } };
 
 export function onNameChange(val) { return dispatch => dispatch(setName(val)) }
 export function onRatingChange(val) { return dispatch => dispatch(setRating(val)) }
@@ -46,12 +26,17 @@ export function onFileSelect(file) {
   return dispatch => {
     const type = MediaUtil.getIdentfiedType(file.type);
     type == null
-    ? dispatch(setUploadMessage('media'))
+    ? dispatch(setUploadMessage(UploadConstants.MEDIA_SELECTION_ERROR))
     : dispatch(setSelectedFile(file));
   }
 }
 export function onUpload({ file, name, type, size, rating, quality, tags }) {
   return dispatch => {
+
+    if (!file) {
+      dispatch(setUploadMessage(UploadConstants.SELECT_FILE_ERROR));
+      return;
+    }
     dispatch(setUploadStart());
 
     const path = MediaUtil.getMediaPath(type);
@@ -62,7 +47,7 @@ export function onUpload({ file, name, type, size, rating, quality, tags }) {
 
     return AxiosUtil.post(`media/${path}`, formData, config)
       .then(progress => dispatch(setProgressStatus(progress)))
-      .catch(e => dispatch(setUploadMessage('upload', e)));  
+      .catch(e => dispatch(setUploadMessage(UploadConstants.UPLOAD_SERVICE_ERROR)));  
   }
 }
 export function onPollProgress(id) {
@@ -73,9 +58,9 @@ export function onPollProgress(id) {
     })
     .catch(e => {
       if (e.response && e.response.status === 500) {
-        dispatch(setUploadMessage('progress_expired', e));
+        dispatch(setUploadMessage(UploadConstants.EXPIRED_PROGRESS_ERROR));
       } else {
-        dispatch(setUploadMessage('progress', e));
+        dispatch(setUploadMessage(UploadConstants.PROGRESS_SERVICE_ERROR, e));
       }
     });
   }
