@@ -11,6 +11,8 @@ import Typography from '@material-ui/core/Typography';
 import SyncDownIcon from '@material-ui/icons/GetApp';
 import SyncUpIcon from '@material-ui/icons/Publish';
 import { styles } from './UtilityStyles';
+import ActivityProgress from '../../app/components/ActivityProgress';
+import MultiColorProgressBar from '../../app/components/MultiColorProgressBar';
 
 const useStyles = makeStyles((theme) => styles(theme));
 
@@ -31,10 +33,15 @@ export default function UtilityContainer() {
         id="panel1bh-header"
       >
         <Typography className={classes.heading}>File System</Typography>
-        <Typography className={classes.secondaryHeading}>Sync Up and Down utilites</Typography>
+        <Typography className={classes.secondaryHeading}>Sync files to and from the database</Typography>
       </AccordionSummary>
       <AccordionDetails>
         <Grid container spacing={2}>
+          <ActivityProgress values={{total: 100, success: 40, skipped: 30, failed: 20}} />
+
+          <MultiColorProgressBar values={{total: 200, success: 70, skipped: 10, failed: 20}}
+/>
+
           <Grid item md={10}>
             <Typography className={classes.secondaryHeading}>
               To sync the media files from the permanent storage to the file system.
