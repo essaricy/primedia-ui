@@ -52,7 +52,7 @@ export function onUpload({ file, name, type, size, rating, quality, tags }) {
 }
 export function onPollProgress(id) {
   return dispatch => {
-    return AxiosUtil.get(`progress/id/${id}`)
+    return AxiosUtil.get(`progress/upload/id/${id}`)
     .then(progress => {
       dispatch(setProgressStatus(progress));
     })
@@ -67,7 +67,7 @@ export function onPollProgress(id) {
 }
 export function onLoadUploadHistory(mode) {
   return dispatch => {
-    return AxiosUtil.get(`progress/${MediaUtil.getMediaPath(mode)}`)
+    return AxiosUtil.get(`progress/upload/${MediaUtil.getMediaPath(mode)}`)
     .then(history => dispatch(setUploadHistory(history)))
     .catch(e => {
       console.log(e);

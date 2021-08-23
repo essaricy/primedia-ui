@@ -47,22 +47,30 @@ export default function SearchResultCard(props) {
       </CardActionArea>
       <CardActions className={classes.cardActions}>
         <Grid container>
-          <Grid item xs={12}>
+          <Grid item xs={12} key="SerachResult_Row1">
             <Typography className={classes.subText}>
               <Grid container>
-                <Grid item style={{marginRight: 4}}><UploadIcon className={classes.icon} /></Grid>
-                <Grid item style={{marginRight: 4}}>{moment(uploadDate).fromNow()}</Grid>
-                <Grid item style={{marginRight: 4}}><LastSeenIcon className={classes.icon} /></Grid>
-                <Grid item>{ lastSeen ? moment(lastSeen).fromNow() : 'Never' }</Grid>
+                <Grid item key="UploadIconGrid" style={{marginRight: 4}}>
+                  <UploadIcon className={classes.icon} />
+                </Grid>
+                <Grid item key="UploadDateGrid" style={{marginRight: 4}}>
+                  {moment(uploadDate).fromNow()}
+                </Grid>
+                <Grid item key="LastSeenIconGrid" style={{marginRight: 4}}>
+                  <LastSeenIcon className={classes.icon} />
+                </Grid>
+                <Grid item key="LastSeenDateGrid">
+                  { lastSeen ? moment(lastSeen).fromNow() : 'Never' }
+                </Grid>
               </Grid>
             </Typography>
           </Grid>
-          <Grid item xs={12}>
+          <Grid item xs={12} key="SerachResult_Row2">
             <Grid container>
-              <Grid item><ViewsIcon className={classes.icon} /></Grid>
-              <Grid item><Typography className={classes.iconLabel}>{views}</Typography></Grid>
-              <Grid item><LikesIcon className={classes.icon} /></Grid>
-              <Grid item><Typography className={classes.iconLabel}>{likes}</Typography></Grid>
+              <Grid item key="ViewsIconGrid"><ViewsIcon className={classes.icon} /></Grid>
+              <Grid item key="ViewsGrid"><Typography className={classes.iconLabel}>{views}</Typography></Grid>
+              <Grid item key="LikesIconGrid"><LikesIcon className={classes.icon} /></Grid>
+              <Grid item key="LikesGrid"><Typography className={classes.iconLabel}>{likes}</Typography></Grid>
             </Grid>
           </Grid>
         </Grid>

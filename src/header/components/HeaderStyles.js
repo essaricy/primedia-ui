@@ -1,5 +1,3 @@
-import { fade } from '@material-ui/core/styles';
-
 export const styles = (theme) => ({
   appBarImage: {
     background: '#1976d2'

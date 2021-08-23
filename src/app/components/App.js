@@ -8,7 +8,7 @@ import SearchResultsContainer from '../../search/components/SearchResults';
 import WatchContainer from '../../watch/components/Watch';
 import UploadContainer from '../../upload/components/Upload';
 import UploadHistoryContainer from '../../upload/components/UploadHistory';
-import SettingsContainer from '../../settings/components/SettingsContainer';
+import UtilityContainer from '../../utils/components/UtilityContainer';
 
 import history from '../config/history';
 import store from '../config/store';
@@ -23,7 +23,7 @@ export default function App() {
         <Route path="/watch" component={WatchContainer} />
         <Route path="/upload" component={UploadContainer} />
         <Route path="/upload-history" component={UploadHistoryContainer} />
-        <Route path="/settings" component={SettingsContainer} />
+        <Route path="/utils" component={UtilityContainer} />
       </BrowserRouter>
     </Provider>
   );

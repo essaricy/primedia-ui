@@ -65,12 +65,12 @@ class Dashboard extends React.Component {
 
     return (
       <Grid item xs={12}>
-        <Grid container className={classes.headerGrid}>
+        <Grid container key="HeaderGrid" className={classes.headerGrid}>
           <Typography variant="h6" gutterBottom component="div">{title}</Typography>
         </Grid>
         { inProgress && SkeletonUtil.getMediumSkeleton(5) }
         { !inProgress &&
-        <Grid container className={classes.stripGrid}>
+        <Grid container key="ItemsGrid" className={classes.stripGrid}>
           <Grid item xs={12}>
             <Grid container spacing={2}>
               {results.map((media) => (
