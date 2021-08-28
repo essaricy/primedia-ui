@@ -1,4 +1,4 @@
-import React from 'react';
+import { React, useEffect } from 'react';
 import './MultiColorProgressBar.css';
 
 const TYPES = [
@@ -9,13 +9,25 @@ const TYPES = [
 ];
 
 function MultiColorProgressBar(props) {
+  const { values, onPollProgress } = props;
+  console.log('values', values)
+  const { progressId, inProgress, total } = values;
 
-  const { values } = props;
-  const { success, skipped, failed, total } = values;
+  useEffect(() => {
+    if (progressId && inProgress) {
+      const interval = setInterval(() => onPollProgress(progressId), 2000);
+      return () => {
+        clearInterval(interval);
+      };  
+    }
+  });
 
   const getPercentage = (field) => {
-    const value = field === 'remaining' ? total - success - skipped - failed : values[field];
-    return total == 0 ? 0 : ((value/total) * 100 | 0);
+    if (field === 'remaining') {
+      return total == 0 ? values[field] : ((values[field]/total) * 100 | 0);
+    } else {
+      return total == 0 ? 0 : ((values[field]/total) * 100 | 0);
+    }
   }
 
   const getBar = (field) => {
@@ -49,7 +61,7 @@ function MultiColorProgressBar(props) {
       </div>
       <div className="legends">
         { TYPES.map((type) => 
-          <div className="legend" key={`Legend_${type.name}`}>
+          <div className="legend" key={`Legend_${type.label}`}>
             <span className="dot" style={{ color: type.color }}>●</span>
             <span className="label">{type.label}</span>
           </div>

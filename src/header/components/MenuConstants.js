@@ -5,7 +5,7 @@ import LikeIcon from '@material-ui/icons/ThumbUp';
 import RateIcon from '@material-ui/icons/Grade';
 import UploadIcon from '@material-ui/icons/Publish';
 import HistoryIcon from '@material-ui/icons/History';
-import UtilityIcon from '@material-ui/icons/Build';
+import ActivityIcon from '@material-ui/icons/LocalActivity';
 
 export const MENU_ITEMS = [
   { id: "HOME",         text: "Home",             icon: <HomeIcon />,   nav: '/'                  },
@@ -18,5 +18,5 @@ export const MENU_ITEMS = [
   { id: "UPLOAD",       text: "Upload",           icon: <UploadIcon />,   nav: '/upload'          },
   { id: "HISTORY",      text: "Upload History",   icon: <HistoryIcon />,  nav: '/upload-history'  },
   { id: "Divider_3",    text: "-"                                                                 },
-  { id: "UTILITY",     text: "Utilities",         icon: <UtilityIcon />, nav: '/utils'        },
+  { id: "ACTIVITY",     text: "Activity",         icon: <ActivityIcon />, nav: '/activity'        },
 ];

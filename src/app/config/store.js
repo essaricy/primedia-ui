@@ -6,6 +6,7 @@ import dashboardReducer from '../../dashboard/reducers/DashboardReducer';
 import searchReducer from '../../search/reducers/SearchReducer';
 import watchReducer from '../../watch/reducers/WatchReducer';
 import uploadReducer from '../../upload/reducers/UploadReducer';
+import activityReducer from '../../activity/reducers/ActivityReducer';
 
 function applyEnhancers() {
   // Setup devtools only during staging
@@ -47,6 +48,7 @@ let store = createStore(
     search: searchReducer,
     watch: watchReducer,
     upload: uploadReducer,
+    activity: activityReducer,
   }),
   peristedState,
   applyEnhancers()
