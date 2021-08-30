@@ -1,6 +1,6 @@
 export const UPLOAD_STEPS = [
   { sCode: "UPLOADED", sLabel: "Upload File" },
-  { sCode: "INIT", sLabel: "Initializing" },
+  // { sCode: "INIT", sLabel: "Initializing" },
   { sCode: "THUMB_DONE", sLabel: "Generate thumbnail", fCode: "THUMB_FAIL", fLabel: "Generating thumbnail failed!" },
   { sCode: "DB_DONE", sLabel: "Save to database", fCode: "DB_FAIL", fLabel: "Saving to database failed!" },
   { sCode: "FILE_DONE", sLabel: "Save to file system", fCode: "FILE_FAIL", fLabel: "Saving to file system failed!" },

@@ -1,5 +1,9 @@
 import { grey, blue } from '@material-ui/core/colors';
 
+const grey900 = grey[900];
+const grey500 = grey[500];
+const blue400 = blue[400];
+
 export const styles = (theme) => ({
   root: {
     flexGrow: 1,
@@ -7,27 +11,30 @@ export const styles = (theme) => ({
     marginTop: 10
   },
   galleryGrid: {
-    backgroundColor: grey[900],
+    backgroundColor: grey900,
     textAlign: 'center'
   },
   attributeGrid: {
-    marginLeft: 10,
+  },
+  title: {
+    //color: grey500,
+    fontSize: 20,
   },
   iconActive: {
     fontSize: 20,
-    color: blue[500],
+    color: blue400,
     cursor: "pointer"    
   },
   iconInactive: {
     fontSize: 20,
-    color: grey[500]
+    color: grey500
   },
   iconLabel: {
-    color: grey[500],
+    color: grey500,
     marginLeft: 6
   },
   label: {
-    color: grey[500],
+    color: grey500,
   },
   thumbnail: {
     height: 80

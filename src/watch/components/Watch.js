@@ -2,14 +2,13 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { useHistory } from "react-router-dom";
 import { makeStyles } from '@material-ui/core/styles';
-import Grid from '@material-ui/core/Grid';
-import ViewsIcon from '@material-ui/icons/Visibility';
-import LikesIcon from '@material-ui/icons/ThumbUp';
-import EditIcon from '@material-ui/icons/Edit';
+import moment from "moment";
 
+import Grid from '@material-ui/core/Grid';
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
-import moment from "moment";
+import LikesIcon from '@material-ui/icons/ThumbUp';
+import ViewsIcon from '@material-ui/icons/Visibility';
 
 import Gallery from './Gallery';
 import Tags from '../../app/components/Tags';
@@ -63,36 +62,39 @@ function Watch(props) {
         </Grid>
         <Grid item xs={12}>
           <Grid container spacing={1}>
-            <Grid item xs={12} className={ classes.attributeGrid}>
+            <Grid item xs={12}>
               { isEditingName
                 ? <TextField fullWidth value={name}
                     onChange={(e) => props.onEditName(e.target.value) }
                     onBlur={(e) => props.onEditNameEnd(id, e.target.value)} />
-                : <React.Fragment>
-                    <Typography variant="h6" display="inline">{name} </Typography>
-                    <EditIcon className={classes.iconActive} onClick={props.onEditNameStart} />
-                  </React.Fragment>
+                : <Typography className={classes.title} onClick={props.onEditNameStart}>
+                    {name}
+                  </Typography>
               }
             </Grid>
-            <Grid item xs={12} className={classes.attributeGrid}>
-              <Grid container alignItems="center">
+            <Grid container xs={12}>
+              <Grid item xs={3}>
+                <Grid container alignItems="right">
+                  <ViewsIcon className={classes.iconInactive}/>
+                  <Typography className={classes.iconLabel} >{views}</Typography>
+                </Grid>
+              </Grid>
+              <Grid item xs={4}>
+                <Grid container alignItems="right">
+                  <LikesIcon className={classes.iconActive} onClick={() => props.onLike(id, true)} />
+                  <Typography className={classes.iconLabel}>{likes}</Typography>
+                </Grid>
+              </Grid>
+            </Grid>
+            <Grid item xs={12}>
+              <Tags value={tags} onAdd={handleTagAdd} onDelete={handleTagDelete} />
+            </Grid>
+            <Grid container xs={12}>
+              <Grid item xs={6}>
                 <Rate value={rating} onChange={(val) => props.onRatingChange(id, val)} />
+              </Grid>
+              <Grid item xs={6}>
                 <Quality value={quality} onChange={(val) => props.onQualityChange(id, val)} />
-                <Tags value={tags} onAdd={handleTagAdd} onDelete={handleTagDelete} />
-              </Grid>
-            </Grid>
-            <Grid item xs={12} className={classes.attributeGrid}>
-            </Grid>
-            <Grid item xs={2} className={ classes.attributeGrid}>
-              <Grid container alignItems="right">
-                <ViewsIcon className={classes.iconInactive}/>
-                <Typography className={classes.iconLabel} >{views}</Typography>
-              </Grid>
-            </Grid>
-            <Grid item xs={4}>
-              <Grid container alignItems="right">
-                <LikesIcon className={classes.iconActive} onClick={() => props.onLike(id, true)} />
-                <Typography className={classes.iconLabel}>{likes}</Typography>
               </Grid>
             </Grid>
             <Grid item xs={12} className={ classes.attributeGrid}>

@@ -3,6 +3,7 @@ import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Rating from '@material-ui/lab/Rating';
 import Box from '@material-ui/core/Box';
+import Typography from '@material-ui/core/Typography';
 import PhotoCamera from '@material-ui/icons/PhotoCamera';
 
 const labels = {
@@ -46,7 +47,13 @@ export default function Quality(props) {
           setHover(newHover);
         }}
       />
-      { !noLabel && value !== null && <Box ml={2}>{labels[hover !== -1 ? hover : value]}</Box>}
+      { !noLabel && value !== null &&
+        <Box ml={2}>
+          <Typography style={{ color: "#BBB" }}>
+            {labels[hover !== -1 ? hover : value]}
+          </Typography>
+        </Box>
+      }
     </div>
 
   );

@@ -9,10 +9,14 @@ import * as MediaUtil from '../../app/util/MediaUtil';
 function Gallery(props) {
   const { items, media, handleNavigation } = props;
 
-  const renderVideo = (item) => {
-    console.log("renderVideo", item);
-    return <video controls src={item.original} height={498} />;
+  const renderImage = (item) => {
+    return <img src={item.original} 
+    style={ { maxWidth: "90vw", maxHeight: "80vh" }}/>
   }
+
+  const renderVideo = (item) => <video controls src={item.original}
+    style={ { maxWidth: "90vw", maxHeight: "80vh" }}
+  />
 
   const gallery = [];
   let index = 0;
@@ -22,9 +26,7 @@ function Gallery(props) {
       thumbnail: MediaUtil.getThumbnailUrl(item.type, item.id),
       description: item.name,
       thumbnailHeight: 80,
-      renderItem: item.type === "V" ? renderVideo : null,
-      //thumbnailWidth: 100,
-      thumbnailHeight: 80,
+      renderItem: item.type === "V" ? renderVideo : renderImage,
       //thumbnailLabel: item.name,
     });
     if (item.id === media.id) {
