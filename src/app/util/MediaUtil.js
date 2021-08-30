@@ -24,10 +24,10 @@ export function  prettifyFileSize(size) {
   return ( size / Math.pow(1024, i) ).toFixed(2) * 1 + ' ' + ['B', 'kB', 'MB', 'GB', 'TB'][i];
 }
 export function getThumbnailUrl(type, id) {
-  return `${AxiosUtil.getHost()}content/${getMediaPath(type)}/${id}/thumb`;
+  return `${AxiosUtil.getHost()}content/v3/${getMediaPath(type)}/${id}/thumb`;
 }
 export function getContentUrl(type, id) {
-  return `${AxiosUtil.getHost()}content/${getMediaPath(type)}/${id}`;
+  return `${AxiosUtil.getHost()}content/v3/${getMediaPath(type)}/${id}`;
 }
 export function getIdentfiedType(fileType) {
   const medidaType = getMediaTypes().find(m => fileType.includes(m.mimeIncludes));

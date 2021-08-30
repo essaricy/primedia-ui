@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
+import { makeStyles } from '@material-ui/core/styles';
 import { connect } from 'react-redux';
 import { useHistory } from "react-router-dom";
 
+import Container from '@material-ui/core/Container';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 
@@ -13,11 +15,26 @@ import * as HeaderSelectors from '../../header/selectors/HeaderSelectors';
 import * as SearchActions from '../actions/SearchActions';
 import * as WatchActions from '../../watch/actions/WatchActions';
 
+import { styles } from './SearchResultsStyles';
+
+const useStyles = makeStyles((theme) => styles(theme));
+
+function StyledTypo(props) {
+  return (
+    <Typography component={props.div ? "div" : ""}
+      variant="overline"
+      className={props.className}>
+      {props.value}
+    </Typography>
+  );
+}
+
 function SearchResults(props) {
   const history = useHistory();
+  const classes = useStyles();
 
   const { mode, search, onSearch } = props;
-  const { message, searchedText, results, inProgress } = search;
+  const { searchedText, results, inProgress, error } = search;
   const [ currentMode, setCurrentMode ] = useState(mode);
 
   useEffect(() => {
@@ -27,6 +44,35 @@ function SearchResults(props) {
     }
   }, [mode]);
 
+  const getErrorContent = () => {
+    return (
+      <Grid align="center">
+        <StyledTypo div className={classes.errorTitle1} value="Something went wrong!" />
+        <StyledTypo div className={classes.errorTitle2} value={error} />
+      </Grid>
+    );
+  }
+
+  const getNoResultsContent = () => {
+    return (
+      <Grid align="center">
+        <StyledTypo div className={classes.errorTitle1} value="There is nothing to show for" />
+        <StyledTypo div className={classes.errorTitle2} value={searchedText} />
+      </Grid>
+    );
+  }
+
+  const getResultsContent = () => {
+    return (
+      <Grid>
+        <StyledTypo className={classes.resultsTitle1} value="Here are " />
+        <StyledTypo className={classes.resultsTitle2} value={results.length} />
+        <StyledTypo className={classes.resultsTitle1} value=" results found for " />
+        <StyledTypo className={classes.resultsTitle2} value={searchedText} />
+      </Grid>
+    );
+  }
+
   const handleMediaClick = (media) => {
     props.onWatchCollection(results);
     props.onWatchMedia(media);
@@ -34,25 +80,27 @@ function SearchResults(props) {
   }
 
   return (
-  <React.Fragment>
-    <Typography variant="subtitle1" display="inline" style={{marginLeft: 20, marginTop: 10 }}>
-      {message}
-    </Typography>
-
-    { inProgress && SkeletonUtil.getMediumSkeleton(10) }
-    <Grid container style={{flexGrow: 1, marginTop: 0, marginLeft: 10, marginRight: 10 }}>
-      <Grid item xs={12}>
-        <Grid container spacing={2}>
-          {results.map((media) => (
-            <Grid key={media.id} item>
-              <SearchResultCard media={media}
-                onMediaClick={() => handleMediaClick(media)} />
+    error
+      ? getErrorContent()
+      : inProgress
+        ? SkeletonUtil.getMediumSkeleton(10)
+        : results.length == 0
+          ? getNoResultsContent()
+          : (
+            <Grid container className={classes.resultsGrid}>
+              {getResultsContent()}
+              <Grid item xs={12}>
+                <Grid container spacing={2}>
+                  {results.map((media) => (
+                    <Grid key={media.id} item>
+                      <SearchResultCard media={media} onMediaClick={() => handleMediaClick(media)} />
+                    </Grid>
+                  ))}
+                </Grid>
+              </Grid>
             </Grid>
-          ))}
-        </Grid>
-      </Grid>
-    </Grid>
-  </React.Fragment>);
+          )
+  );
 }
 
 const mapState = state => {

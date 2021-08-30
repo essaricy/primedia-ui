@@ -58,10 +58,10 @@ function Watch(props) {
   return (
     <div className={classes.root}>
       <Grid container spacing={1}>
-        <Grid item xs={9} className={classes.galleryGrid}>
+        <Grid item xs={12} className={classes.galleryGrid}>
           <Gallery items={collection} media={media} handleNavigation={handleNavigation} />
         </Grid>
-        <Grid item xs={3}>
+        <Grid item xs={12}>
           <Grid container spacing={1}>
             <Grid item xs={12} className={ classes.attributeGrid}>
               { isEditingName
@@ -77,15 +77,11 @@ function Watch(props) {
             <Grid item xs={12} className={classes.attributeGrid}>
               <Grid container alignItems="center">
                 <Rate value={rating} onChange={(val) => props.onRatingChange(id, val)} />
-              </Grid>
-            </Grid>
-            <Grid item xs={12} className={classes.attributeGrid}>
-              <Grid container alignItems="center">
                 <Quality value={quality} onChange={(val) => props.onQualityChange(id, val)} />
+                <Tags value={tags} onAdd={handleTagAdd} onDelete={handleTagDelete} />
               </Grid>
             </Grid>
             <Grid item xs={12} className={classes.attributeGrid}>
-              <Tags value={tags} onAdd={handleTagAdd} onDelete={handleTagDelete} />
             </Grid>
             <Grid item xs={2} className={ classes.attributeGrid}>
               <Grid container alignItems="right">
@@ -101,13 +97,7 @@ function Watch(props) {
             </Grid>
             <Grid item xs={12} className={ classes.attributeGrid}>
               { getTypography('Uploaded', moment(uploadDate).fromNow()) }
-            </Grid>
-            { lastSeen &&
-            <Grid item xs={12} className={ classes.attributeGrid}>
-              { getTypography('Last seen', moment(lastSeen).fromNow()) }
-            </Grid>
-            }
-            <Grid item xs={12} className={ classes.attributeGrid}>
+              { lastSeen && getTypography('Last seen', moment(lastSeen).fromNow()) }
               { getTypography('Size', MediaUtil.prettifyFileSize(size)) }
             </Grid>
           </Grid>

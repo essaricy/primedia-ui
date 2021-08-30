@@ -7,7 +7,6 @@ export const styles = (theme) => ({
     marginTop: 10
   },
   galleryGrid: {
-    height: 507,
     backgroundColor: grey[900],
     textAlign: 'center'
   },

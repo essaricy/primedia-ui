@@ -22,9 +22,10 @@ function Gallery(props) {
       thumbnail: MediaUtil.getThumbnailUrl(item.type, item.id),
       description: item.name,
       thumbnailHeight: 80,
-      renderItem: item.type === "V" ? renderVideo : null
+      renderItem: item.type === "V" ? renderVideo : null,
+      //thumbnailWidth: 100,
+      thumbnailHeight: 80,
       //thumbnailLabel: item.name,
-      //originalHeight: 360
     });
     if (item.id === media.id) {
       index = i;
@@ -34,6 +35,7 @@ function Gallery(props) {
     <ImageGallery
       items={gallery}
       lazyLoad={true}
+      //showThumbnails={false}
       thumbnailPosition="bottom"
       showBullets={false}
       showPlayButton={false}
