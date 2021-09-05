@@ -22,12 +22,11 @@ import { styles } from './WatchStyles';
 const useStyles = makeStyles((theme) => styles(theme));
 
 function Watch(props) {
-  const history = useHistory();
   const classes = useStyles();
 
   const { watch } = props;
   const { media, collection } = watch;
-  const { id, name, type } = media;
+  const { id, name } = media;
   const { views, rating, quality, size, likes, tags } = media;
   const { uploadDate, lastSeen } = media;
   const { isEditingName } = media;

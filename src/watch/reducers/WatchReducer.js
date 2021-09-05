@@ -65,7 +65,7 @@ export default function watchReducer(state = initialState, action) {
       return {
         ...state,
         media: {
-          ...state.madia,
+          ...state.media,
           quality: action.payload
         }
       };

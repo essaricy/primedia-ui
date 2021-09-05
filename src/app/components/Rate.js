@@ -2,17 +2,7 @@ import React from 'react';
 
 import { makeStyles } from '@material-ui/core/styles';
 import Rating from '@material-ui/lab/Rating';
-import Box from '@material-ui/core/Box';
-import Typography from '@material-ui/core/Typography';
 import FavoriteIcon from '@material-ui/icons/Favorite';
-
-const labels = {
-  1: 'Useless',
-  2: 'OK!',
-  3: 'Good!',
-  4: 'Excellent!!',
-  5: 'Favorite!!!',
-};
 
 const useStyles = makeStyles({
   root: {
@@ -28,33 +18,22 @@ function getSize(size) {
   return 18;
 }
 export default function Rate(props) {
-  const [hover, setHover] = React.useState(-1);
-  const { value, noLabel, readOnly, size, style } = props;
+  const { value, readOnly, size, style } = props;
   const classes = useStyles();
 
   const handleChange = (e, rating) => {
-    props.onChange && props.onChange(rating);
+    rating && props.onChange && props.onChange(rating);
   }
 
   return (
     <div className={classes.root}>
       <Rating
         defaultValue={value}
-        icon={<FavoriteIcon fontSize="inherit" />}
-        onChange={handleChange}
-        onChangeActive={(event, newHover) => {
-          setHover(newHover);
-        }}
         readOnly={readOnly}
-        style={{ fontSize: getSize(size), color: "#FF5733", ...style}}
+        icon={<FavoriteIcon fontSize="inherit" />}
+        style={{ fontSize: getSize(size), color: "#ff5cad", ...style}}
+        onChange={handleChange}
       />
-      { !noLabel && value !== null && !readOnly &&
-        <Box ml={2}>
-          <Typography style={{ color: "#BBB" }}>
-            {labels[hover !== -1 ? hover : value]}
-          </Typography>
-        </Box>
-      }
     </div>
   );
 }

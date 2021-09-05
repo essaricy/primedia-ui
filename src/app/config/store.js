@@ -1,12 +1,13 @@
 import { compose, applyMiddleware, createStore, combineReducers } from 'redux';
 import thunk from "redux-thunk";
 
-import headerReducer from '../../header/reducers/HeaderReducer';
-import dashboardReducer from '../../dashboard/reducers/DashboardReducer';
-import searchReducer from '../../search/reducers/SearchReducer';
-import watchReducer from '../../watch/reducers/WatchReducer';
-import uploadReducer from '../../upload/reducers/UploadReducer';
 import activityReducer from '../../activity/reducers/ActivityReducer';
+import dashboardReducer from '../../dashboard/reducers/DashboardReducer';
+import headerReducer from '../../header/reducers/HeaderReducer';
+import searchReducer from '../../search/reducers/SearchReducer';
+import uploadReducer from '../../upload/reducers/UploadReducer';
+import uploadHistoryReducer from '../../upload/reducers/UploadHistoryReducer';
+import watchReducer from '../../watch/reducers/WatchReducer';
 
 function applyEnhancers() {
   // Setup devtools only during staging
@@ -43,12 +44,13 @@ const saveState = (state) => {
 const peristedState = loadState();
 let store = createStore(
   combineReducers({
-    header: headerReducer,
-    dashboard: dashboardReducer,
-    search: searchReducer,
-    watch: watchReducer,
-    upload: uploadReducer,
     activity: activityReducer,
+    dashboard: dashboardReducer,
+    header: headerReducer,
+    search: searchReducer,
+    upload: uploadReducer,
+    uploadHistory: uploadHistoryReducer,
+    watch: watchReducer,
   }),
   peristedState,
   applyEnhancers()

@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-export const HOST = 'http://192.168.0.108:9211/';
+export const HOST = 'http://192.168.0.5:9211/';
 
 export function getHost() {
   return HOST;

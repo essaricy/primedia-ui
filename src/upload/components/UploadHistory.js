@@ -2,18 +2,19 @@ import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 import moment from "moment";
 
-import List from '@material-ui/core/List';
-import Typography from '@material-ui/core/Typography';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemText from '@material-ui/core/ListItemText';
-import ListItemAvatar from '@material-ui/core/ListItemAvatar';
 import Avatar from '@material-ui/core/Avatar';
 import SuccessIcon from '@material-ui/icons/CheckCircle';
 import FailIcon from '@material-ui/icons/HighlightOff';
 
-import * as UploadActions from '../actions/UploadActions';
+import { DataGrid } from '@material-ui/data-grid';
+
+import Rate from '../../app/components/Rate';
+import Quality from '../../app/components/Quality';
+import Tags from '../../app/components/Tags';
+
 import * as UploadConstants from '../constants/UploadConstants';
-import * as UploadSelectors from '../selectors/UploadSelectors';
+import * as UploadHistoryActions from '../actions/UploadHistoryActions';
+import * as UploadHistorySelectors from '../selectors/UploadHistorySelectors';
 import * as HeaderSelectors from '../../header/selectors/HeaderSelectors';
 import * as MediaUtil from '../../app/util/MediaUtil';
 
@@ -35,42 +36,110 @@ function UploadHistory(props) {
   const { mode, history, onLoad } = props;
   useEffect(() => onLoad(mode), [mode]);
 
-  return (
-    <List>
-      { history.map(item => {
-        const { media } = item;
-        const statusInfo = getStatusInfo(item.status);
+  const handleTagAdd = (id, tags, tag) => {
+    tags.push(tag);
+    props.onTagsChange(id, tags);
+  }
+  const handleTagDelete = (id, tags, tag) => {
+    props.onTagsChange(id, tags.filter(e => e !== tag));
+  }
 
-        return media ?
-        <ListItem key={item.id}>
-          <ListItemAvatar>
-            <Avatar src={MediaUtil.getThumbnailUrl(mode, media.id)} />
-          </ListItemAvatar>
-          <ListItemText primary={media.name}
-            secondary={
-              <Typography variant="body2" color="textSecondary">
-                { moment(media.uploadDate).fromNow() }
-                { statusInfo && statusInfo.isSuccess
-                    ? <SuccessIcon style={{color: 'green'}}>{statusInfo.label}</SuccessIcon>
-                    : <FailIcon style={{color: 'red'}}>{statusInfo.label}</FailIcon>
-                }
-              </Typography>
-            }
-            />
-        </ListItem>
-        : "";
-      })}
-    </List>
+  const columns = [
+    {
+      field: 'id',
+      width: 40,
+      renderCell: (params) => params.row.id
+    },
+    {
+      field: 'Thumb',
+      width: 130,
+      renderCell: (params) => <Avatar src={MediaUtil.getThumbnailUrl(mode, params.row.id)} />
+    },
+    {
+      field: 'name',
+      headerName: 'Name',
+      width: 260,
+    },
+    {
+      field: 'rating',
+      headerName: 'Rating',
+      width: 120,
+      renderCell: (params) => <Rate noLabel
+          id={params.row.id}
+          value={params.row.rating}
+          onChange={(val) => props.onRatingChange(params.row.id, val)}
+          />
+    },
+    {
+      field: 'quality',
+      headerName: 'Quality',
+      width: 130,
+      renderCell: (params) => <Quality noLabel
+        value={params.row.quality}
+        onChange={(val) => props.onQualityChange(params.row.id, val)}
+      />
+    },
+    {
+      field: 'tags',
+      headerName: 'Tags',
+      width: 340,
+      renderCell: (params) => <Tags value={params.row.tags}
+        onAdd={(tag) => handleTagAdd(params.row.id, params.row.tags, tag)}
+        onDelete={(tag) => handleTagDelete(params.row.id, params.row.tags, tag)} />
+    },
+    {
+      field: 'uploadDate',
+      headerName: 'Date',
+      width: 120,
+      renderCell: (params) => moment(params.row.uploadDate).fromNow()
+    },
+    // {
+    //   field: 'status',
+    //   headerName: 'Status',
+    //   width: 120,
+    //   renderCell: (params) => { 
+    //     const statusInfo = getStatusInfo(params.row.status);
+    //     return statusInfo && statusInfo.isSuccess
+    //     ? <SuccessIcon style={{color: 'green'}}>{statusInfo.label}</SuccessIcon>
+    //     : <FailIcon style={{color: 'red'}}>{statusInfo.label}</FailIcon>
+    //   }
+    // },
+  ];
+
+  const rows = [];
+  history.forEach(item => rows.push({
+      id: item.id,
+      name: item.name,
+      quality: item.quality,
+      rating: item.rating,
+      tags: item.tags,
+      size: item.size,
+      uploadDate: item.uploadDate,
+      //status: item.status
+    })
+  );
+
+  return (
+    <div style={{ height: "90vh", width: '98vw' }}>
+      <DataGrid
+        rows={rows}
+        columns={columns}
+        pageSize={7}
+      />
+    </div>
   );
 }
 const mapState = state => {
   return {
     mode: HeaderSelectors.getMode(state),
-    history: UploadSelectors.getHistory(state)
+    history: UploadHistorySelectors.getHistory(state)
   }
 };
 const mapActions = {
-  onLoad: UploadActions.onLoadUploadHistory
+  onLoad: UploadHistoryActions.onLoadUploadHistory,
+  onRatingChange: UploadHistoryActions.updateRating,
+  onQualityChange: UploadHistoryActions.updateQuality,
+  onTagsChange: UploadHistoryActions.updateTags,
 }
 
 const UploadHistoryContainer = connect(mapState, mapActions)(UploadHistory);

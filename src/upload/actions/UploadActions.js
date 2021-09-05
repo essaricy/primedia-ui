@@ -14,7 +14,6 @@ const setUploadMessage = (message) => { return { type: UploadActionTypes.SET_UPL
 
 const setUploadStart = () => { return { type: UploadActionTypes.SET_UPLOAD_START } };
 const setProgressStatus = (progress) => { return { type: UploadActionTypes.SET_PROGRESS_STATUS, payload: progress } };
-const setUploadHistory = (history) => { return { type: UploadActionTypes.SET_UPLOAD_HISTORY, payload: history } };
 
 export function onNameChange(val) { return dispatch => dispatch(setName(val)) }
 export function onRatingChange(val) { return dispatch => dispatch(setRating(val)) }
@@ -65,13 +64,4 @@ export function onPollProgress(id) {
     });
   }
 }
-export function onLoadUploadHistory(mode) {
-  return dispatch => {
-    return AxiosUtil.get(`progress/upload/${MediaUtil.getMediaPath(mode)}`)
-    .then(history => dispatch(setUploadHistory(history)))
-    .catch(e => {
-      console.log(e);
-      alert(e);
-    });
-  }
-}
+
