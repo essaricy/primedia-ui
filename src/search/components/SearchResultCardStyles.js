@@ -1,6 +1,6 @@
 import { grey } from '@material-ui/core/colors';
 
-export const greyText = grey[500];
+export const grey500 = grey[500];
 export const styles = (theme) => ({
   searchCard: {
     maxWidth: 238
@@ -26,15 +26,15 @@ export const styles = (theme) => ({
   },
   subText: {
     fontSize: 10,
-    color: greyText
+    color: grey500
   },
   icon: {
     fontSize: 14,
-    color: greyText
+    color: grey500
   },
   iconLabel: {
     fontSize: 10,
-    color: greyText,
+    color: grey500,
     marginLeft: 4,
     marginRight: 14
   },

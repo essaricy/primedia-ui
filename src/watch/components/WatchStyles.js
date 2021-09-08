@@ -11,32 +11,57 @@ export const styles = (theme) => ({
     marginTop: 10
   },
   galleryGrid: {
+    position: "relative",
     backgroundColor: grey900,
-    textAlign: 'center'
-  },
-  attributeGrid: {
+    textAlign: 'center',
+    maxHeight: '60vh',
+    marginRight: 14
   },
   title: {
-    //color: grey500,
-    fontSize: 20,
+    fontSize: 17,
+    marginTop: 5,
+    marginBottom: 5
   },
-  iconActive: {
+  subText: {
+    color: grey500,
+    fontSize: 14
+  },
+  icon: {
     fontSize: 20,
     color: blue400,
-    cursor: "pointer"    
-  },
-  iconInactive: {
-    fontSize: 20,
-    color: grey500
+    cursor: "pointer"
   },
   iconLabel: {
     color: grey500,
-    marginLeft: 6
   },
-  label: {
-    color: grey500,
+  player: {
+    maxWidth: "94vw",
+    maxHeight: "inherit"
   },
-  thumbnail: {
-    height: 80
+  fullScreenIcon: {
+    position: "absolute",
+    bottom: 2,
+    right: 2,
+    color: "#FFF",
+    cursor: "pointer"
   },
+
+  playlistRoot: {
+    display: 'flex',
+    marginBottom: 5
+  },
+  playlistDetails: {
+    display: 'flex',
+    flexDirection: 'column',
+  },
+  playlistContent: {
+    flex: '1 0 auto',
+  },
+  playlistCover: {
+    minWidth: 151,
+  },
+  playlistTitle: {
+    fontSize: 10,
+    color: grey500
+  }
 });

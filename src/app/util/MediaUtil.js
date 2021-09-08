@@ -33,14 +33,10 @@ export function getIdentfiedType(fileType) {
   const medidaType = getMediaTypes().find(m => fileType.includes(m.mimeIncludes));
   return medidaType ? medidaType.code : null;
 }
-export function getPlayer(type, id) {
+export function getInlinePlayer(type, id, classes) {
   return type === "V"
-      ? <video controls autoPlay src={getContentUrl(type, id)} width="100%" height={380} />
-      : (<div style={{ position: "relative" }}>
-          <img src={getContentUrl(type, id)} height={380} />
-          <FullscreenIcon color="primary" style={{ position: "absolute", bottom: 0, right: 0 }} />
-        </div>
-        )
+      ? <video controls autoPlay src={getContentUrl(type, id)} className={classes} />
+      : <img src={getContentUrl(type, id)} className={classes} />
 }
 export function getLocalPlayer(type, url, className) {
   return type === "V"
