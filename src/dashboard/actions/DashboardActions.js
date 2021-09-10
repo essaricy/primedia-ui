@@ -1,4 +1,5 @@
 import * as DashboardActionTypes from '../actiontypes/DashboardActionTypes';
+import * as DashboardConstants from '../constants/DashboardConstants';
 import * as AxiosUtil from '../../app/util/AxiosUtil';
 import * as MediaUtil from '../../app/util/MediaUtil';
 
@@ -25,4 +26,29 @@ export function onLoad(mode) {
         loadMost(dispatch, mode, DashboardActionTypes.SET_MOST_RATED,
           DashboardActionTypes.SET_MOST_RATED_IN_PROGRESS, 'rated')
     }
+}
+export function onViewAll(mode, type) {
+  return dispatch => {
+    const urlPart = type === DashboardConstants.MOST_RECENT
+      ? "recent"
+      : type === DashboardConstants.MOST_VIEWED
+        ? "viewed"
+        : type === DashboardConstants.MOST_LIKED
+          ? "liked"
+          : type === DashboardConstants.MOST_RATED
+            ? "rated"
+            : "";
+    const resultActionType = type === DashboardConstants.MOST_RECENT
+      ? DashboardActionTypes.SET_MOST_RECENT
+      : type === DashboardConstants.MOST_VIEWED
+        ? DashboardActionTypes.SET_MOST_VIEWED
+        : type === DashboardConstants.MOST_LIKED
+          ? DashboardActionTypes.SET_MOST_LIKED
+          : type === DashboardConstants.MOST_RATED
+            ? DashboardActionTypes.SET_MOST_RATED
+            : "";
+    return AxiosUtil.get(`media/${MediaUtil.getMediaPath(mode)}/${urlPart}?max=500`)
+   .then(results => dispatch(setResults(resultActionType, results)));
+    //history.push('/search');
+  }
 }

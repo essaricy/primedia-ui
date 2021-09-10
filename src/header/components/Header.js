@@ -16,7 +16,7 @@ import Publish from '@material-ui/icons/Publish';
 
 import { styles } from './HeaderStyles';
 import Menu from './Menu';
-import ModeSwitch from './ModeSwitch';
+import Mode from './Mode';
 import SearchContainer from '../../search/components/Search';
 
 import * as HeaderActions from '../actions/HeaderActions';
@@ -54,7 +54,7 @@ function Header(props) {
             <MenuIcon />
           </IconButton>
 
-          <ModeSwitch mode={mode} onModeChange={onModeChange} />
+          <Mode mode={mode} onModeChange={onModeChange} />
           <MenuItem component={Link} to={'/'}>
             <Typography className={classes.title} variant="h6" noWrap>Primedia</Typography>
           </MenuItem>

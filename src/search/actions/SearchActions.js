@@ -27,7 +27,7 @@ export function onSearch(mode, text, history) {
         dispatch(setSearchResults(mode, results));
       })
       .catch(e => dispatch(setSearchError(e)));
-      }
-      history.push('/search');
+    }
+    history.push('/search');
   }
 }

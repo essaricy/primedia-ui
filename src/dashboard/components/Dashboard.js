@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { withStyles } from "@material-ui/core/styles";
 
 import Grid from '@material-ui/core/Grid';
+import Link from '@material-ui/core/Link';
 import Typography from '@material-ui/core/Typography';
 
 import { styles } from './DashboardStyles';
@@ -42,6 +43,10 @@ class Dashboard extends React.Component {
     this.props.onWatchMedia(media);
     this.props.history.push('/watch');
   }
+  handleViewAll = (e, type) => {
+    e.preventDefault();
+    this.props.onViewAll(this.state.mode, type, this.props.history);
+  }
 
   getStrip = (type) => {
     const { classes, dashboard } = this.props;
@@ -66,7 +71,12 @@ class Dashboard extends React.Component {
     return (
       <Grid item xs={12}>
         <Grid container key="HeaderGrid" className={classes.headerGrid}>
-          <Typography variant="h6" gutterBottom component="div">{title}</Typography>
+          <Grid item xs={11}>
+            <Typography gutterBottom component="div">{title}</Typography>
+          </Grid>
+          <Grid item xs={1}>
+            <Link href="#" onClick={(e) => this.handleViewAll(e, type)} variant="inherit">View All</Link>
+          </Grid>
         </Grid>
         { inProgress && SkeletonUtil.getMediumSkeleton(5) }
         { !inProgress &&
@@ -108,8 +118,9 @@ const mapState = state => {
 };
 const mapActions = {
   onLoad: DashboardActions.onLoad,
+  onViewAll: DashboardActions.onViewAll,
   onWatchCollection: WatchActions.onWatchCollection,
-  onWatchMedia: WatchActions.onWatchMedia
+  onWatchMedia: WatchActions.onWatchMedia,
 }
 
 const DashboardContainer = connect(mapState, mapActions)(withStyles(styles) (Dashboard));
