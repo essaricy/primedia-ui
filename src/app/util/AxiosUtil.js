@@ -1,6 +1,7 @@
 import axios from 'axios';
 
-export const HOST = 'http://192.168.0.5:9211/';
+export const HOST = process.env.REACT_APP_API_URL;
+console.log('HOST: ', HOST);
 
 export function getHost() {
   return HOST;
