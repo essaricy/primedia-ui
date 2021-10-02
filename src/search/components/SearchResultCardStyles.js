@@ -3,7 +3,7 @@ import { grey } from '@material-ui/core/colors';
 export const grey500 = grey[500];
 export const styles = (theme) => ({
   searchCard: {
-    maxWidth: 238
+    maxWidth: 220
   },
   cardContent: {
     paddingTop: 5,

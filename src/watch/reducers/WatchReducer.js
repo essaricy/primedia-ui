@@ -90,7 +90,7 @@ export default function watchReducer(state = initialState, action) {
         ...state,
         media: {
           ...state.media,
-          likes: state.likes + 1
+          likes: state.media.likes + 1
         }
       };
     default:

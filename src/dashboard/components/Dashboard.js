@@ -5,6 +5,10 @@ import { withStyles } from "@material-ui/core/styles";
 import Grid from '@material-ui/core/Grid';
 import Link from '@material-ui/core/Link';
 import Typography from '@material-ui/core/Typography';
+import Accordion from '@material-ui/core/Accordion';
+import AccordionSummary from '@material-ui/core/AccordionSummary';
+import AccordionDetails from '@material-ui/core/AccordionDetails';
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 
 import { styles } from './DashboardStyles';
 import SearchResultCard from '../../search/components/SearchResultCard';
@@ -70,20 +74,24 @@ class Dashboard extends React.Component {
 
     return (
       <Grid item xs={12}>
-        <Grid container key="HeaderGrid" className={classes.headerGrid}>
-          <Grid item xs={11}>
-            <Typography gutterBottom component="div">{title}</Typography>
-          </Grid>
-          <Grid item xs={1}>
-            <Link href="#" onClick={(e) => this.handleViewAll(e, type)} variant="inherit">View All</Link>
-          </Grid>
-        </Grid>
-        { inProgress && SkeletonUtil.getMediumSkeleton(5) }
-        { !inProgress &&
-        <Grid container key="ItemsGrid" className={classes.stripGrid}>
-          <Grid item xs={12}>
+        <Accordion className={classes.accordion} square={true} disableGutters={true}>
+          <AccordionSummary className={classes.title}
+            expandIcon={<ExpandMoreIcon />}
+            aria-controls="panel1a-content"
+            id="panel1a-header">
+            <Grid container>
+              <Grid item xs={9}>
+                <Typography gutterBottom component="div">{title}</Typography>
+              </Grid>
+              <Grid item xs={3} align="right">
+                <Link href="#" onClick={(e) => this.handleViewAll(e, type)} variant="inherit">View All</Link>
+              </Grid>
+            </Grid>
+          </AccordionSummary>
+          <AccordionDetails>
+            { inProgress && SkeletonUtil.getMediumSkeleton(5) }
             <Grid container spacing={2}>
-              {results.map((media) => (
+            { !inProgress && results.map((media) => (
                 <Grid key={media.id} item>
                   <SearchResultCard media={media}
                     onMediaClick={() => this.handleMediaClick(media, results)}
@@ -91,9 +99,8 @@ class Dashboard extends React.Component {
                 </Grid>
               ))}
             </Grid>
-          </Grid>
-        </Grid>
-        }
+          </AccordionDetails>
+        </Accordion>
       </Grid>
     );
   }

@@ -1,4 +1,3 @@
-import FullscreenIcon from '@material-ui/icons/Fullscreen';
 import * as AxiosUtil from './AxiosUtil';
 
 export const IMAGE = 'I';

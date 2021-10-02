@@ -67,7 +67,7 @@ export default function StepperProgress(props) {
   const { index, isFailure } = stepStatus;
 
   useEffect(() => {
-    if (id && index != -1 && !isFailure && index != steps.length) {
+    if (id && index != -1 && !isFailure && index != steps.length && onPollProgress) {
       const interval = setInterval(() => onPollProgress(id), 2000);
       return () => {
         clearInterval(interval);
